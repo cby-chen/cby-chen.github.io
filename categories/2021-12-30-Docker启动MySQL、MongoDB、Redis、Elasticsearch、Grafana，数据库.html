@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Docker启动MySQL、MongoDB、Redis、Elasticsearch、Grafana，数据库</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Docker启动MySQL、MongoDB、Redis、Elasticsearch、Grafana，数据库</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d57a34049f8d46f78a989b92b19bbb1d~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>前言：  </p>
+<p>临时使用数据库时可以使用docker运行，这样可以防止在系统上安装破坏环境，同时使用docker启动会比在系统中安装配置要快速，可以说是最快的方式安装部署并启动数据库。</p>
+<hr>
+<p><strong>docker配置启动运行MySQL</strong>  </p>
+<p>首先创建目录并进入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -p 3306:3306 \\</span><br><span class="line">--name mymysql \\</span><br><span class="line">--restart=always \\</span><br><span class="line">-v $PWD/conf:/etc/mysql/conf.d \\</span><br><span class="line">-v $PWD/logs:/logs \\</span><br><span class="line">-v $PWD/data:/var/lib/mysql \\</span><br><span class="line">-e MYSQL\_ROOT\_PASSWORD=123456 \\</span><br><span class="line">-d mysql:8</span><br></pre></td></tr></table></figure>
+
+<p>--restart&#x3D;always：在容器退出时总是重启容器</p>
+<p>MYSQL_ROOT_PASSWORD&#x3D;123456：root密码123456</p>
+<p>mysql:8  使用MySQL8</p>
+<p>-v $PWD&#x2F;conf:&#x2F;etc&#x2F;mysql&#x2F;conf.d  配置文件</p>
+<p>-v $PWD&#x2F;logs:&#x2F;logs   日志</p>
+<p>-v $PWD&#x2F;data:&#x2F;var&#x2F;lib&#x2F;mysql    数据</p>
+<hr>
+<p><strong>docker配置启动运行phpMyAdmin</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">  -p 8001:80 \\</span><br><span class="line">  -e UPLOAD\_LIMIT=128M \\</span><br><span class="line">  -e MAX\_EXECUTION\_TIME=10000 \\</span><br><span class="line">  --name phpmyadmin \\</span><br><span class="line">  phpmyadmin/phpmyadmin</span><br></pre></td></tr></table></figure>
+
+<p>UPLOAD_LIMIT 和 MAX_EXECUTION_TIME 需要设置一下</p>
+<hr>
+<p>*<em><strong>docker配置启动运行</strong>MongoDB</em>*</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">  -p 27017:27017 \\</span><br><span class="line">  -v mongo-data:/data/db \\</span><br><span class="line">  -v mongo-config:/data/configdb \\</span><br><span class="line">  --name mongo \\</span><br><span class="line">  -e MONGO\_INITDB\_ROOT\_USERNAME=mongoadmin \\</span><br><span class="line">  -e MONGO\_INITDB\_ROOT\_PASSWORD=123123 \\</span><br><span class="line">  -v /data:/mnt/data \\</span><br><span class="line">  mongo</span><br></pre></td></tr></table></figure>
+
+<p>MONGO_INITDB_ROOT_USERNAME 用户名</p>
+<p>MONGO_INITDB_ROOT_PASSWORD 密码</p>
+<p>mongo-data 数据目录</p>
+<p>mongo-config 配置文件目录</p>
+<hr>
+<p>*<em><strong>docker配置启动运行</strong>Mongo Express</em>*</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">-p 8002:8081 \\</span><br><span class="line">--name mongo-express \\</span><br><span class="line">mongo-express</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>*<em><strong>docker配置启动运行</strong>Redis</em>*</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">  -p 6379:6379 \\</span><br><span class="line">  -v redis-data:/data \\</span><br><span class="line">  --name redis \\</span><br><span class="line">  redis</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>*<em><strong>docker配置启动运行</strong>Elasticsearch</em>*</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">  -p 9100:9100 -p 9200:9200 \\</span><br><span class="line">  -e discovery.type=single-node \\</span><br><span class="line">  -v es-data:/usr/share/elasticsearch/data \\</span><br><span class="line">  -v es-log:/usr/share/elasticsearch/logs \\</span><br><span class="line">  --name elasticsearch \\</span><br><span class="line">  elasticsearch</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>*<em><strong>docker配置启动运行</strong>Grafana</em>*</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">  -p 8003:3000 \\</span><br><span class="line">  --link mysql:mysql \\</span><br><span class="line">  --link mongo:mongo \\</span><br><span class="line">  --name grafana \\</span><br><span class="line">  grafana/grafana</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4f8044e051f1458b8a62e9da38458826~tplv-k3u1fbpfcp-zoom-1.image"></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

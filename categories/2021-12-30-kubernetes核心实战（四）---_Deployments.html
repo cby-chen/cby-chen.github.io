@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">kubernetes核心实战（四）--- Deployments</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">kubernetes核心实战（四）--- Deployments</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h4 id="6、Deployments（重点）"><a href="#6、Deployments（重点）" class="headerlink" title="6、Deployments（重点）"></a>6、Deployments（重点）</h4><p>一个 Deployment 控制器为 Pods和 ReplicaSets提供描述性的更新方式。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/47311f0a2c0c4c7d885590895bd3c03d~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>描述 Deployment 中的 desired state，并且 Deployment 控制器以受控速率更改实际状态，以达到期望状态。可以定义 Deployments 以创建新的 ReplicaSets ，或删除现有 Deployments ，并通过新的 Deployments 使用其所有资源。</p>
+<p><strong>用例</strong></p>
+<p>以下是典型的 Deployments 用例：</p>
+<p>创建 Deployment 以展开 ReplicaSet 。ReplicaSet 在后台创建 Pods。检查 ReplicaSet 展开的状态，查看其是否成功。</p>
+<p>声明 Pod 的新状态 通过更新 Deployment 的 PodTemplateSpec。将创建新的 ReplicaSet ，并且 Deployment 管理器以受控速率将 Pod 从旧 ReplicaSet 移动到新 ReplicaSet 。每个新的 ReplicaSet 都会更新 Deployment 的修改历史。</p>
+<p>回滚到较早的 Deployment 版本，如果 Deployment 的当前状态不稳定。每次回滚都会更新 Deployment 的修改。</p>
+<p>扩展 Deployment 以承担更多负载.</p>
+<p>暂停 Deployment 对其 PodTemplateSpec 进行修改，然后恢复它以启动新的展开。</p>
+<p>使用 Deployment 状态 作为卡住展开的指示器。</p>
+<p>清理较旧的 ReplicaSets ，那些不再需要的。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6087ce839fea44a7b1eff7f2e317c366~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h5 id="1）创建-Deployment"><a href="#1）创建-Deployment" class="headerlink" title="1）创建 Deployment"></a>1）创建 Deployment</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# vim deployments.yaml</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# cat deployments.yaml </span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx-deployment</span><br><span class="line">  labels:</span><br><span class="line">    app: nginx</span><br><span class="line">spec:</span><br><span class="line">  replicas: 3</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: nginx</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: nginx</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: nginx</span><br><span class="line">        image: nginx:1.14.2</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 80</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl apply -f deployments.yaml </span><br><span class="line">deployment.apps/nginx-deployment created</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="含义介绍："><a href="#含义介绍：" class="headerlink" title="含义介绍："></a>含义介绍：</h6><p>在该例中：将创建名为 nginx-deployment 的 Deployment ，由 .metadata.name 字段指示。</p>
+<p>Deployment 创建三个复制的 Pods，由 replicas 字段指示。</p>
+<p>selector 字段定义 Deployment 如何查找要管理的 Pods。在这种情况下，只需选择在 Pod 模板（app: nginx）中定义的标签。但是，更复杂的选择规则是可能的，只要 Pod 模板本身满足规则。</p>
+<h6 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h6><p><code>matchLabels</code> 字段是 {key,value} 的映射。单个 {key,value}在 <code>matchLabels</code> 映射中的值等效于 <code>matchExpressions</code> 的元素，其键字段是“key”，运算符为“In”，值数组仅包含“value”。所有要求，从 <code>matchLabels</code> 和 <code>matchExpressions</code>，必须满足才能匹配。</p>
+<h6 id="template-字段包含以下子字段："><a href="#template-字段包含以下子字段：" class="headerlink" title="template 字段包含以下子字段："></a>template 字段包含以下子字段：</h6><p>Pod 标记为app: nginx，使用labels字段。</p>
+<p>Pod 模板规范或 .template.spec 字段指示 Pods 运行一个容器， nginx，运行 nginx Docker Hub版本1.7.9的镜像 。</p>
+<p>创建一个容器并使用name字段将其命名为 nginx。</p>
+<h6 id="查看详细的字段解释："><a href="#查看详细的字段解释：" class="headerlink" title="查看详细的字段解释："></a>查看详细的字段解释：</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~]# kubectl  explain Deployment.spec</span><br><span class="line">KIND:     Deployment</span><br><span class="line">VERSION:  apps/v1</span><br><span class="line"></span><br><span class="line">RESOURCE: spec &lt;Object&gt;</span><br><span class="line"></span><br><span class="line">DESCRIPTION:</span><br><span class="line">     Specification of the desired behavior of the Deployment.</span><br><span class="line"></span><br><span class="line">     DeploymentSpec is the specification of the desired behavior of the</span><br><span class="line">     Deployment.</span><br><span class="line"></span><br><span class="line">FIELDS:</span><br><span class="line">   minReadySeconds&lt;integer&gt;</span><br><span class="line">     Minimum number of seconds for which a newly created pod should be ready</span><br><span class="line">     without any of its container crashing, for it to be considered available.</span><br><span class="line">     Defaults to 0 (pod will be considered available as soon as it is ready)</span><br><span class="line"></span><br><span class="line">   paused&lt;boolean&gt;</span><br><span class="line">     Indicates that the deployment is paused.</span><br><span class="line"></span><br><span class="line">   progressDeadlineSeconds&lt;integer&gt;</span><br><span class="line">     The maximum time in seconds for a deployment to make progress before it is</span><br><span class="line">     considered to be failed. The deployment controller will continue to process</span><br><span class="line">     failed deployments and a condition with a ProgressDeadlineExceeded reason</span><br><span class="line">     will be surfaced in the deployment status. Note that progress will not be</span><br><span class="line">     estimated during the time a deployment is paused. Defaults to 600s.</span><br><span class="line"></span><br><span class="line">   replicas&lt;integer&gt;</span><br><span class="line">     Number of desired pods. This is a pointer to distinguish between explicit</span><br><span class="line">     zero and not specified. Defaults to 1.</span><br><span class="line"></span><br><span class="line">   revisionHistoryLimit&lt;integer&gt;</span><br><span class="line">     The number of old ReplicaSets to retain to allow rollback. This is a</span><br><span class="line">     pointer to distinguish between explicit zero and not specified. Defaults to</span><br><span class="line">     10.</span><br><span class="line"></span><br><span class="line">   selector &lt;Object&gt; -required-</span><br><span class="line">     Label selector for pods. Existing ReplicaSets whose pods are selected by</span><br><span class="line">     this will be the ones affected by this deployment. It must match the pod</span><br><span class="line">     template&#x27;s labels.</span><br><span class="line"></span><br><span class="line">   strategy&lt;Object&gt;</span><br><span class="line">     The deployment strategy to use to replace existing pods with new ones.</span><br><span class="line"></span><br><span class="line">   template &lt;Object&gt; -required-</span><br><span class="line">     Template describes the pods that will be created.</span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="查看pod"><a href="#查看pod" class="headerlink" title="查看pod"></a>查看pod</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl get pod </span><br><span class="line">NAME                                     READY   STATUS        RESTARTS     AGE</span><br><span class="line">ingress-demo-app-694bf5d965-q4l7m        1/1     Terminating   0            23h</span><br><span class="line">ingress-demo-app-694bf5d965-v28sl        1/1     Running       0            3m9s</span><br><span class="line">ingress-demo-app-694bf5d965-v652j        1/1     Running       0            23h</span><br><span class="line">nfs-client-provisioner-dc5789f74-nnk77   1/1     Running       1 (8h ago)   22h</span><br><span class="line">nginx-deployment-66b6c48dd5-5hhjq        1/1     Running       0            3m9s</span><br><span class="line">nginx-deployment-66b6c48dd5-9z2n5        1/1     Running       0            3m19s</span><br><span class="line">nginx-deployment-66b6c48dd5-llq7c        1/1     Running       0            9m10s</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="查看deployments"><a href="#查看deployments" class="headerlink" title="查看deployments"></a>查看deployments</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl get deployments.apps </span><br><span class="line">NAME                     READY   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">ingress-demo-app         2/2     2            2           23h</span><br><span class="line">nfs-client-provisioner   1/1     1            1           22h</span><br><span class="line">nginx-deployment         3/3     3            3           9m45s</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="解释说明："><a href="#解释说明：" class="headerlink" title="解释说明："></a>解释说明：</h6><p>检查集群中的 Deployments 时，将显示以下字段：</p>
+<p>NAME 列出了集群中 Deployments 的名称。</p>
+<p>DESIRED 显示应用程序的所需 副本 数，在创建 Deployment 时定义这些副本。这是 期望状态。</p>
+<p>CURRENT显示当前正在运行的副本数。</p>
+<p>UP-TO-DATE显示已更新以实现期望状态的副本数。</p>
+<p>AVAILABLE显示应用程序可供用户使用的副本数。</p>
+<p>AGE 显示应用程序运行的时间量。</p>
+<h6 id="查看rs"><a href="#查看rs" class="headerlink" title="查看rs"></a>查看rs</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl get replicasets.apps </span><br><span class="line">NAME                               DESIRED   CURRENT   READY   AGE</span><br><span class="line">ingress-demo-app-694bf5d965        2         2         2       23h</span><br><span class="line">nfs-client-provisioner-dc5789f74   1         1         1       23h</span><br><span class="line">nginx-deployment-66b6c48dd5        3         3         3       19m</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="查看pods的标签"><a href="#查看pods的标签" class="headerlink" title="查看pods的标签"></a>查看pods的标签</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl get pods --show-labels</span><br><span class="line">NAME                                     READY   STATUS        RESTARTS     AGE   LABELS</span><br><span class="line">ingress-demo-app-694bf5d965-q4l7m        1/1     Terminating   0            23h   app=ingress-demo-app,pod-template-hash=694bf5d965</span><br><span class="line">ingress-demo-app-694bf5d965-v28sl        1/1     Running       0            15m   app=ingress-demo-app,pod-template-hash=694bf5d965</span><br><span class="line">ingress-demo-app-694bf5d965-v652j        1/1     Running       0            23h   app=ingress-demo-app,pod-template-hash=694bf5d965</span><br><span class="line">nfs-client-provisioner-dc5789f74-nnk77   1/1     Running       1 (8h ago)   23h   app=nfs-client-provisioner,pod-template-hash=dc5789f74</span><br><span class="line">nginx-deployment-66b6c48dd5-48k9j        0/1     Terminating   0            21m   app=nginx,pod-template-hash=66b6c48dd5</span><br><span class="line">nginx-deployment-66b6c48dd5-5hhjq        1/1     Running       0            15m   app=nginx,pod-template-hash=66b6c48dd5</span><br><span class="line">nginx-deployment-66b6c48dd5-9z2n5        1/1     Running       0            15m   app=nginx,pod-template-hash=66b6c48dd5</span><br><span class="line">nginx-deployment-66b6c48dd5-kvzft        0/1     Terminating   0            21m   app=nginx,pod-template-hash=66b6c48dd5</span><br><span class="line">nginx-deployment-66b6c48dd5-llq7c        1/1     Running       0            21m   app=nginx,pod-template-hash=66b6c48dd5</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h5 id="2）更新回滚-Deployment"><a href="#2）更新回滚-Deployment" class="headerlink" title="2）更新回滚 Deployment"></a>2）更新回滚 Deployment</h5><h6 id="命令行行升级使用镜像"><a href="#命令行行升级使用镜像" class="headerlink" title="命令行行升级使用镜像"></a>命令行行升级使用镜像</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl get deployments -o wide</span><br><span class="line">NAME                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS               IMAGES                                                                                    SELECTOR</span><br><span class="line">ingress-demo-app         2/2     2            2           23h   whoami                   traefik/whoami:v1.6.1                                                                     app=ingress-demo-app</span><br><span class="line">nfs-client-provisioner   1/1     1            1           23h   nfs-client-provisioner   registry.cn-hangzhou.aliyuncs.com/lfy_k8s_images/nfs-subdir-external-provisioner:v4.0.2   app=nfs-client-provisioner</span><br><span class="line">nginx-deployment         3/3     3            3           18m   nginx                    nginx:1.14.2                                                                              app=nginx</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl --record deployment.apps/nginx-deployment set image deployment.v1.apps/nginx-deployment nginx=nginx:1.20.1</span><br><span class="line">Flag --record has been deprecated, --record will be removed in the future</span><br><span class="line">deployment.apps/nginx-deployment image updated</span><br><span class="line">deployment.apps/nginx-deployment image updated</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl get deployments -o wide</span><br><span class="line">NAME                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS               IMAGES                                                                                    SELECTOR</span><br><span class="line">ingress-demo-app         2/2     2            2           23h   whoami                   traefik/whoami:v1.6.1                                                                     app=ingress-demo-app</span><br><span class="line">nfs-client-provisioner   1/1     1            1           23h   nfs-client-provisioner   registry.cn-hangzhou.aliyuncs.com/lfy_k8s_images/nfs-subdir-external-provisioner:v4.0.2   app=nfs-client-provisioner</span><br><span class="line">nginx-deployment         3/3     1            3           24m   nginx                    nginx:1.20.1                                                                              app=nginx</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="yaml方式修改镜像"><a href="#yaml方式修改镜像" class="headerlink" title="yaml方式修改镜像"></a>yaml方式修改镜像</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl edit deployments.apps nginx-deployment</span><br><span class="line">Edit cancelled, no changes made.</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="查看更新过程"><a href="#查看更新过程" class="headerlink" title="查看更新过程"></a>查看更新过程</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl rollout status deployment.v1.apps/nginx-deployment</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 1 out of 3 new replicas have been updated...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 1 out of 3 new replicas have been updated...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 1 out of 3 new replicas have been updated...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 2 out of 3 new replicas have been updated...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 2 out of 3 new replicas have been updated...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 2 out of 3 new replicas have been updated...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">deployment &quot;nginx-deployment&quot; successfully rolled out</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="查看详细信息"><a href="#查看详细信息" class="headerlink" title="查看详细信息"></a>查看详细信息</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl describe deployments</span><br><span class="line">Name:                   ingress-demo-app</span><br><span class="line">Namespace:              default</span><br><span class="line">CreationTimestamp:      Tue, 16 Nov 2021 13:28:26 +0800</span><br><span class="line">Labels:                 app=ingress-demo-app</span><br><span class="line">Annotations:            deployment.kubernetes.io/revision: 1</span><br><span class="line">Selector:               app=ingress-demo-app</span><br><span class="line">Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable</span><br><span class="line">StrategyType:           RollingUpdate</span><br><span class="line">MinReadySeconds:        0</span><br><span class="line">RollingUpdateStrategy:  25% max unavailable, 25% max surge</span><br><span class="line">Pod Template:</span><br><span class="line">  Labels:  app=ingress-demo-app</span><br><span class="line">  Containers:</span><br><span class="line">   whoami:</span><br><span class="line">    Image:        traefik/whoami:v1.6.1</span><br><span class="line">    Port:         80/TCP</span><br><span class="line">    Host Port:    0/TCP</span><br><span class="line">    Environment:  &lt;none&gt;</span><br><span class="line">    Mounts:       &lt;none&gt;</span><br><span class="line">  Volumes:        &lt;none&gt;</span><br><span class="line">Conditions:</span><br><span class="line">  Type           Status  Reason</span><br><span class="line">  ----           ------  ------</span><br><span class="line">  Progressing    True    NewReplicaSetAvailable</span><br><span class="line">  Available      True    MinimumReplicasAvailable</span><br><span class="line">OldReplicaSets:  &lt;none&gt;</span><br><span class="line">NewReplicaSet:   ingress-demo-app-694bf5d965 (2/2 replicas created)</span><br><span class="line">Events:</span><br><span class="line">  Type    Reason             Age   From                   Message</span><br><span class="line">  ----    ------             ----  ----                   -------</span><br><span class="line">  Normal  ScalingReplicaSet  23h   deployment-controller  Scaled up replica set ingress-demo-app-694bf5d965 to 2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Name:               nfs-client-provisioner</span><br><span class="line">Namespace:          default</span><br><span class="line">CreationTimestamp:  Tue, 16 Nov 2021 14:07:33 +0800</span><br><span class="line">Labels:             app=nfs-client-provisioner</span><br><span class="line">Annotations:        deployment.kubernetes.io/revision: 1</span><br><span class="line">Selector:           app=nfs-client-provisioner</span><br><span class="line">Replicas:           1 desired | 1 updated | 1 total | 1 available | 0 unavailable</span><br><span class="line">StrategyType:       Recreate</span><br><span class="line">MinReadySeconds:    0</span><br><span class="line">Pod Template:</span><br><span class="line">  Labels:           app=nfs-client-provisioner</span><br><span class="line">  Service Account:  nfs-client-provisioner</span><br><span class="line">  Containers:</span><br><span class="line">   nfs-client-provisioner:</span><br><span class="line">    Image:      registry.cn-hangzhou.aliyuncs.com/lfy_k8s_images/nfs-subdir-external-provisioner:v4.0.2</span><br><span class="line">    Port:       &lt;none&gt;</span><br><span class="line">    Host Port:  &lt;none&gt;</span><br><span class="line">    Environment:</span><br><span class="line">      PROVISIONER_NAME:  k8s-sigs.io/nfs-subdir-external-provisioner</span><br><span class="line">      NFS_SERVER:        192.168.1.66</span><br><span class="line">      NFS_PATH:          /nfs/</span><br><span class="line">    Mounts:</span><br><span class="line">      /persistentvolumes from nfs-client-root (rw)</span><br><span class="line">  Volumes:</span><br><span class="line">   nfs-client-root:</span><br><span class="line">    Type:      NFS (an NFS mount that lasts the lifetime of a pod)</span><br><span class="line">    Server:    192.168.1.66</span><br><span class="line">    Path:      /nfs/</span><br><span class="line">    ReadOnly:  false</span><br><span class="line">Conditions:</span><br><span class="line">  Type           Status  Reason</span><br><span class="line">  ----           ------  ------</span><br><span class="line">  Progressing    True    NewReplicaSetAvailable</span><br><span class="line">  Available      True    MinimumReplicasAvailable</span><br><span class="line">OldReplicaSets:  &lt;none&gt;</span><br><span class="line">NewReplicaSet:   nfs-client-provisioner-dc5789f74 (1/1 replicas created)</span><br><span class="line">Events:</span><br><span class="line">  Type    Reason             Age   From                   Message</span><br><span class="line">  ----    ------             ----  ----                   -------</span><br><span class="line">  Normal  ScalingReplicaSet  23h   deployment-controller  Scaled up replica set nfs-client-provisioner-dc5789f74 to 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Name:                   nginx-deployment</span><br><span class="line">Namespace:              default</span><br><span class="line">CreationTimestamp:      Wed, 17 Nov 2021 12:54:46 +0800</span><br><span class="line">Labels:                 app=nginx</span><br><span class="line">Annotations:            deployment.kubernetes.io/revision: 3</span><br><span class="line">                        kubernetes.io/change-cause:</span><br><span class="line">                          kubectl deployment.apps/nginx-deployment set image deployment.v1.apps/nginx-deployment nginx=nginx:1.20.1 --record=true</span><br><span class="line">Selector:               app=nginx</span><br><span class="line">Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable</span><br><span class="line">StrategyType:           RollingUpdate</span><br><span class="line">MinReadySeconds:        0</span><br><span class="line">RollingUpdateStrategy:  25% max unavailable, 25% max surge</span><br><span class="line">Pod Template:</span><br><span class="line">  Labels:  app=nginx</span><br><span class="line">  Containers:</span><br><span class="line">   nginx:</span><br><span class="line">    Image:        nginx:1.16.1</span><br><span class="line">    Port:         80/TCP</span><br><span class="line">    Host Port:    0/TCP</span><br><span class="line">    Environment:  &lt;none&gt;</span><br><span class="line">    Mounts:       &lt;none&gt;</span><br><span class="line">  Volumes:        &lt;none&gt;</span><br><span class="line">Conditions:</span><br><span class="line">  Type           Status  Reason</span><br><span class="line">  ----           ------  ------</span><br><span class="line">  Available      True    MinimumReplicasAvailable</span><br><span class="line">  Progressing    True    NewReplicaSetAvailable</span><br><span class="line">OldReplicaSets:  &lt;none&gt;</span><br><span class="line">NewReplicaSet:   nginx-deployment-559d658b74 (3/3 replicas created)</span><br><span class="line">Events:</span><br><span class="line">  Type    Reason             Age                From                   Message</span><br><span class="line">  ----    ------             ----               ----                   -------</span><br><span class="line">  Normal  ScalingReplicaSet  30m                deployment-controller  Scaled up replica set nginx-deployment-66b6c48dd5 to 3</span><br><span class="line">  Normal  ScalingReplicaSet  5m55s              deployment-controller  Scaled up replica set nginx-deployment-58b9b8ff79 to 1</span><br><span class="line">  Normal  ScalingReplicaSet  5m27s              deployment-controller  Scaled down replica set nginx-deployment-66b6c48dd5 to 2</span><br><span class="line">  Normal  ScalingReplicaSet  5m27s              deployment-controller  Scaled up replica set nginx-deployment-58b9b8ff79 to 2</span><br><span class="line">  Normal  ScalingReplicaSet  5m                 deployment-controller  Scaled down replica set nginx-deployment-66b6c48dd5 to 1</span><br><span class="line">  Normal  ScalingReplicaSet  5m                 deployment-controller  Scaled up replica set nginx-deployment-58b9b8ff79 to 3</span><br><span class="line">  Normal  ScalingReplicaSet  4m56s              deployment-controller  Scaled down replica set nginx-deployment-66b6c48dd5 to 0</span><br><span class="line">  Normal  ScalingReplicaSet  78s                deployment-controller  Scaled up replica set nginx-deployment-559d658b74 to 1</span><br><span class="line">  Normal  ScalingReplicaSet  63s                deployment-controller  Scaled down replica set nginx-deployment-58b9b8ff79 to 2</span><br><span class="line">  Normal  ScalingReplicaSet  63s                deployment-controller  Scaled up replica set nginx-deployment-559d658b74 to 2</span><br><span class="line">  Normal  ScalingReplicaSet  49s (x3 over 61s)  deployment-controller  (combined from similar events): Scaled down replica set nginx-deployment-58b9b8ff79 to 0</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h5 id="3）-Deployment历史记录"><a href="#3）-Deployment历史记录" class="headerlink" title="3） Deployment历史记录"></a>3） Deployment历史记录</h5><h6 id="查看历史"><a href="#查看历史" class="headerlink" title="查看历史"></a>查看历史</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl rollout history deployment.v1.apps/nginx-deployment</span><br><span class="line">deployment.apps/nginx-deployment </span><br><span class="line">REVISION  CHANGE-CAUSE</span><br><span class="line">1         &lt;none&gt;</span><br><span class="line">2         kubectl deployment.apps/nginx-deployment set image deployment.v1.apps/nginx-deployment nginx=nginx:1.20.1 --record=true</span><br><span class="line">3         kubectl deployment.apps/nginx-deployment set image deployment.v1.apps/nginx-deployment nginx=nginx:1.20.1 --record=true</span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="回滚到上次"><a href="#回滚到上次" class="headerlink" title="回滚到上次"></a>回滚到上次</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl rollout undo deployment.v1.apps/nginx-deployment</span><br><span class="line">deployment.apps/nginx-deployment rolled back</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl rollout status deployment.v1.apps/nginx-deployment</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">deployment &quot;nginx-deployment&quot; successfully rolled out</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="回滚到指定版本"><a href="#回滚到指定版本" class="headerlink" title="回滚到指定版本"></a>回滚到指定版本</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl rollout undo deployment.v1.apps/nginx-deployment --to-revision=3</span><br><span class="line">deployment.apps/nginx-deployment rolled back</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl rollout status deployment.v1.apps/nginx-deployment</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 2 out of 3 new replicas have been updated...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 2 out of 3 new replicas have been updated...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 2 out of 3 new replicas have been updated...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">Waiting for deployment &quot;nginx-deployment&quot; rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">deployment &quot;nginx-deployment&quot; successfully rolled out</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h5 id="4）缩放-Deployment"><a href="#4）缩放-Deployment" class="headerlink" title="4）缩放 Deployment"></a>4）缩放 Deployment</h5><h6 id="扩容到十个pod"><a href="#扩容到十个pod" class="headerlink" title="扩容到十个pod"></a>扩容到十个pod</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl scale deployment.v1.apps/nginx-deployment --replicas=10</span><br><span class="line">deployment.apps/nginx-deployment scaled</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  get deployments.apps</span><br><span class="line">NAME                     READY   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">ingress-demo-app         0/2     2            0           24h</span><br><span class="line">nfs-client-provisioner   0/1     1            0           23h</span><br><span class="line">nginx-deployment         5/10    10           5           45m</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p>假设启用水平自动缩放 Pod在集群中，可以为 Deployment 设置自动缩放器，并选择最小和最大 要基于现有 Pods 的 CPU 利用率运行的 Pods。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl autoscale deployment.v1.apps/nginx-deployment --min=10 --max=15 --cpu-percent=80</span><br><span class="line">horizontalpodautoscaler.autoscaling/nginx-deployment autoscaled</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8fa52ad147be4e6fba60dc8c149f734b~tplv-k3u1fbpfcp-zoom-1.image">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

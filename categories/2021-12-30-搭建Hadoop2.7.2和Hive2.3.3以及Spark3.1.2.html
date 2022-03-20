@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">搭建Hadoop2.7.2和Hive2.3.3以及Spark3.1.2</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">搭建Hadoop2.7.2和Hive2.3.3以及Spark3.1.2</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p><strong>Hadoop 简介</strong></p>
+<p>Hadoop是一个用Java编写的Apache开源框架，允许使用简单的编程模型跨计算机集群分布式处理大型数据集。Hadoop框架工作的应用程序在跨计算机集群提供分布式存储和计算的环境中工作。Hadoop旨在从单个服务器扩展到数千个机器，每个都提供本地计算和存储。</p>
+<p><strong>Hive简介</strong></p>
+<p>Apache Hive是一个构建于Hadoop顶层的数据仓库，可以将结构化的数据文件映射为一张数据库表，并提供简单的SQL查询功能，可以将SQL语句转换为MapReduce任务进行运行。需要注意的是，Hive它并不是数据库。</p>
+<p>Hive依赖于HDFS和MapReduce，其对HDFS的操作类似于SQL，我们称之为HQL，它提供了丰富的SQL查询方式来分析存储在HDFS中的数据。HQL可以编译转为MapReduce作业，完成查询、汇总、分析数据等工作。这样一来，即使不熟悉MapReduce 的用户也可以很方便地利用SQL 语言查询、汇总、分析数据。而MapReduce开发人员可以把己写的mapper 和reducer 作为插件来支持Hive 做更复杂的数据分析。</p>
+<p><strong>Apache Spark 简介</strong></p>
+<p>用于大数据工作负载的分布式开源处理系统</p>
+<p>Apache Spark 是一种用于大数据工作负载的分布式开源处理系统。它使用内存中缓存和优化的查询执行方式，可针对任何规模的数据进行快速分析查询。它提供使用 Java、Scala、Python 和 R 语言的开发 API，支持跨多个工作负载重用代码—批处理、交互式查询、实时分析、机器学习和图形处理等。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6afdfd92a4324cb1bfe1d8f726d59201~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><strong>本文将先搭建 jdk1.8 + MySQL5.7基础环境</strong></p>
+<p><strong>之后搭建Hadoop2.7.2和Hive2.3.3以及Spark3.1.2</strong></p>
+<p><strong>此文章搭建为单机版</strong>  </p>
+<p><strong>1.创建目录并解压jdk安装包</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkdir  jdk</span><br><span class="line">[root@localhost ~]# cd jdk/</span><br><span class="line">[root@localhost jdk]# ls</span><br><span class="line">jdk-8u202-linux-x64.tar.gz</span><br><span class="line">[root@localhost jdk]# ll</span><br><span class="line">total 189496</span><br><span class="line">-rw-r--r--. 1 root root 194042837 Oct 18 12:05 jdk-8u202-linux-x64.tar.gz</span><br><span class="line">[root@localhost jdk]# </span><br><span class="line">[root@localhost jdk]# tar xvf jdk-8u202-linux-x64.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.配置环境变量</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/profile</span><br><span class="line">[root@localhost ~]# tail -n 3 /etc/profile</span><br><span class="line">export JAVA_HOME=/root/jdk/jdk1.8.0_202/</span><br><span class="line">export PATH=$JAVA_HOME/bin:$PATH</span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.下载安装MySQL并设置为开机自启</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkdir mysql</span><br><span class="line">[root@localhost ~]# cd mysql</span><br><span class="line">[root@localhost mysql]# wget https://downloads.mysql.com/archives/get/p/23/file/mysql-5.7.35-1.el7.x86_64.rpm-bundle.tar</span><br><span class="line">[root@localhost mysql]# tar xvf mysql-5.7.35-1.el7.x86_64.rpm-bundle.tar </span><br><span class="line">[root@localhost mysql]# yum install ./*.rpm</span><br><span class="line">[root@localhost mysql]# systemctl start mysqld.service </span><br><span class="line">[root@localhost mysql]# </span><br><span class="line">[root@localhost mysql]# systemctl enable mysqld.service </span><br><span class="line">[root@localhost mysql]# </span><br><span class="line">[root@localhost mysql]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>4.查看MySQL默认密码，并修改默认密码，同时创建新的用户，将其设置为可以远程登录</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql]# sudo grep &#x27;temporary password&#x27; /var/log/mysqld.log</span><br><span class="line">2021-10-18T06:12:35.519726Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: eNHu&lt;sXHt3rq</span><br><span class="line">[root@localhost mysql]# </span><br><span class="line">[root@localhost mysql]# </span><br><span class="line">[root@localhost mysql]# mysql -u root -p </span><br><span class="line">Enter password: </span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 9</span><br><span class="line">Server version: 8.0.25</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2021, Oracle and/or its affiliates.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and/or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Type &#x27;help;&#x27; or &#x27;\h&#x27; for help. Type &#x27;\c&#x27; to clear the current input statement.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; </span><br><span class="line">mysql&gt; ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;Cby123..&#x27;;</span><br><span class="line">Query OK, 0 rows affected (0.02 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; </span><br><span class="line">mysql&gt; </span><br><span class="line">mysql&gt; use mysql;</span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; </span><br><span class="line">mysql&gt; update user set host=&#x27;%&#x27; where user =&#x27;root&#x27;;</span><br><span class="line">Query OK, 1 row affected (0.01 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; set global validate_password_policy=0;</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; set global validate_password_mixed_case_count=0;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt;  set global validate_password_number_count=3;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; set global validate_password_special_char_count=0;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; set global validate_password_length=3;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; SHOW VARIABLES LIKE &#x27;validate_password%&#x27;;</span><br><span class="line">+--------------------------------------+-------+</span><br><span class="line">| Variable_name                        | Value |</span><br><span class="line">+--------------------------------------+-------+</span><br><span class="line">| validate_password_check_user_name    | OFF   |</span><br><span class="line">| validate_password_dictionary_file    |       |</span><br><span class="line">| validate_password_length             | 3     |</span><br><span class="line">| validate_password_mixed_case_count   | 0     |</span><br><span class="line">| validate_password_number_count       | 3     |</span><br><span class="line">| validate_password_policy             | LOW   |</span><br><span class="line">| validate_password_special_char_count | 0     |</span><br><span class="line">+--------------------------------------+-------+</span><br><span class="line">7 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; create user &#x27;cby&#x27;@&#x27;%&#x27; identified by &#x27;cby&#x27;;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; grant all on *.* to &#x27;cby&#x27;@&#x27;%&#x27;;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; FLUSH PRIVILEGES;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;WITH GRANT OPTION;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; CREATE DATABASE dss_dev;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; </span><br><span class="line">mysql&gt; select host,user,plugin from user;</span><br><span class="line">+-----------+---------------+-----------------------+</span><br><span class="line">| host      | user          | plugin                |</span><br><span class="line">+-----------+---------------+-----------------------+</span><br><span class="line">| %         | root          | mysql_native_password |</span><br><span class="line">| localhost | mysql.session | mysql_native_password |</span><br><span class="line">| localhost | mysql.sys     | mysql_native_password |</span><br><span class="line">+-----------+---------------+-----------------------+</span><br><span class="line">3 rows in set (0.01 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注：若上面root不是mysql_native_password使用以下命令将其改掉</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">update user set plugin=&#x27;mysql_native_password&#x27; where user=&#x27;root&#x27;;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/732afa3a5c5a4b23bc1fdfba94105597~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><strong>5.添加hosts解析，同时设置免密登录</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkdir Hadoop</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# vim /etc/hosts</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# cat /etc/hosts</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">127.0.0.1 namenode</span><br><span class="line">[root@localhost ~]# ssh-keygen</span><br><span class="line">[root@localhost ~]# ssh-copy-id -i ~/.ssh/id_rsa.pub root@127.0.0.1</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>6.下载Hadoop，解压后创建所需目录</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cd Hadoop/</span><br><span class="line">[root@localhost Hadoop]# ls</span><br><span class="line">[root@localhost Hadoop]# wget https://archive.apache.org/dist/hadoop/core/hadoop-2.7.2/hadoop-2.7.2.tar.gz</span><br><span class="line">[root@localhost Hadoop]# tar xvf hadoop-2.7.2.tar.gz </span><br><span class="line">[root@localhost Hadoop]# </span><br><span class="line">[root@localhost Hadoop]# mkdir  -p /root/Hadoop/hadoop-2.7.2/hadoopinfra/hdfs/namenode</span><br><span class="line">[root@localhost Hadoop]# </span><br><span class="line">[root@localhost Hadoop]# </span><br><span class="line">[root@localhost Hadoop]# mkdir  -p /root/Hadoop/hadoop-2.7.2/hadoopinfra/hdfs/datanode</span><br></pre></td></tr></table></figure>
+
+<p><strong>7.添加Hadoop环境变量</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/profile</span><br><span class="line">[root@localhost ~]# tail -n 8 /etc/profile</span><br><span class="line">export HADOOP_HOME=/root/Hadoop/hadoop-2.7.2/</span><br><span class="line">export HADOOP_INSTALL=$HADOOP_HOME</span><br><span class="line">export HADOOP_MAPRED_HOME=$HADOOP_HOME</span><br><span class="line">export HADOOP_COMMON_HOME=$HADOOP_HOME</span><br><span class="line">export HADOOP_HDFS_HOME=$HADOOP_HOME</span><br><span class="line">export YARN_HOME=$HADOOP_HOME</span><br><span class="line">export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native</span><br><span class="line">export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><strong>8.修改Hadoop配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cd Hadoop/hadoop-2.7.2/</span><br><span class="line">[root@localhost hadoop]# vim /root/Hadoop/hadoop-2.7.2/etc/hadoop/core-site.xml</span><br><span class="line">[root@localhost hadoop]# </span><br><span class="line">[root@localhost hadoop]# </span><br><span class="line">[root@localhost hadoop]# tail /root/Hadoop/hadoop-2.7.2/etc/hadoop/core-site.xml</span><br><span class="line">&lt;!-- Put site-specific property overrides in this file. --&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;!-- 指定HDFS中NameNode的地址 --&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hdfs://127.0.0.1:9000&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;!-- 指定Hadoop运行时产生文件的存储目录 --&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/home/hadoop/hadoop-2.7.2/data/tmp&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>9.修改Hadoop的hdfs目录配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost hadoop]# vim /root/Hadoop/hadoop-2.7.2/etc/hadoop/hdfs-site.xml </span><br><span class="line">[root@localhost hadoop]# </span><br><span class="line">[root@localhost hadoop]# </span><br><span class="line">[root@localhost hadoop]# </span><br><span class="line">[root@localhost hadoop]# tail -n 15  /root/Hadoop/hadoop-2.7.2/etc/hadoop/hdfs-site.xml </span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">   &lt;property&gt; </span><br><span class="line">      &lt;name&gt;dfs.replication&lt;/name&gt; </span><br><span class="line">      &lt;value&gt;1&lt;/value&gt; </span><br><span class="line">   &lt;/property&gt; </span><br><span class="line">   &lt;property&gt; </span><br><span class="line">      &lt;name&gt;dfs.name.dir&lt;/name&gt; </span><br><span class="line">      &lt;value&gt;/root/Hadoop/hadoop-2.7.2/hadoopinfra/hdfs/namenode&lt;/value&gt; </span><br><span class="line">   &lt;/property&gt; </span><br><span class="line">   &lt;property&gt; </span><br><span class="line">      &lt;name&gt;dfs.data.dir&lt;/name&gt;</span><br><span class="line">      &lt;value&gt;/root/Hadoop/hadoop-2.7.2/hadoopinfra/hdfs/datanode&lt;/value&gt; </span><br><span class="line">   &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>10.修改Hadoop的yarn配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost hadoop]# </span><br><span class="line">[root@localhost hadoop]# vim  /root/Hadoop/hadoop-2.7.2/etc/hadoop/yarn-site.xml</span><br><span class="line">[root@localhost hadoop]# </span><br><span class="line">[root@localhost hadoop]# </span><br><span class="line">[root@localhost hadoop]# tail -n 6 /root/Hadoop/hadoop-2.7.2/etc/hadoop/yarn-site.xml</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   &lt;property&gt; </span><br><span class="line">      &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt; </span><br><span class="line">      &lt;value&gt;mapreduce_shuffle&lt;/value&gt; </span><br><span class="line">   &lt;/property&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost hadoop]# </span><br><span class="line">[root@localhost hadoop]# cp /root/Hadoop/hadoop-2.7.2/etc/hadoop/mapred-site.xml.template /root/Hadoop/hadoop-2.7.2/etc/hadoop/mapred-site.xml</span><br><span class="line">[root@localhost hadoop]# vim /root/Hadoop/hadoop-2.7.2/etc/hadoop/mapred-site.xml</span><br><span class="line">[root@localhost hadoop]# </span><br><span class="line">[root@localhost hadoop]# </span><br><span class="line">[root@localhost hadoop]# tail /root/Hadoop/hadoop-2.7.2/etc/hadoop/mapred-site.xml</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">   &lt;property&gt; </span><br><span class="line">      &lt;name&gt;mapreduce.framework.name&lt;/name&gt; </span><br><span class="line">      &lt;value&gt;yarn&lt;/value&gt; </span><br><span class="line">   &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">[root@localhost hadoop]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>11.修改Hadoop环境配置文件</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost hadoop]# vim /root/Hadoop/hadoop-2.7.2/etc/hadoop/hadoop-env.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">修改JAVA_HOME</span><br><span class="line">export JAVA_HOME=/root/jdk/jdk1.8.0_202/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# hdfs namenode -format</span><br><span class="line">[root@localhost ~]# start-dfs.sh </span><br><span class="line">[root@localhost ~]# start-yarn.sh</span><br></pre></td></tr></table></figure>
+
+<p><strong>若重置太多次会导致clusterID不匹配，datanode起不来，删除版本后在初始化启动</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# rm -rf /root/Hadoop/hadoop-2.7.2/hadoopinfra/hdfs/datanode/current/VERSION </span><br><span class="line">[root@localhost ~]# hadoop namenode -format</span><br><span class="line">[root@localhost ~]# hdfs namenode -format</span><br><span class="line">[root@localhost ~]# start-dfs.sh </span><br><span class="line">[root@localhost ~]# start-yarn.sh</span><br></pre></td></tr></table></figure>
+
+<p><strong>在浏览器访问Hadoop</strong></p>
+<p>访问Hadoop的默认端口号为50070.使用以下网址，以获取浏览器Hadoop服务。</p>
+<p><strong><a target="_blank" rel="noopener" href="http://localhost:50070/">http://localhost:50070/</a></strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e6e5d35c40ba4ab1824e48f88a081536~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p> <strong>验证集群的所有应用程序</strong></p>
+<p>访问集群中的所有应用程序的默认端口号为8088。使用以下URL访问该服务。</p>
+<p><strong><a target="_blank" rel="noopener" href="http://localhost:8088/">http://localhost:8088/</a></strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a8ef9393ee3c422c8c1a3e1df487ef62~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><strong>12.创建hive目录并解压</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkdir hive</span><br><span class="line">[root@localhost ~]# cd hive</span><br><span class="line">[root@localhost hive]# wget https://archive.apache.org/dist/hive/hive-2.3.3/apache-hive-2.3.3-bin.tar.gz</span><br><span class="line">[root@localhost hive]# tar xvf apache-hive-2.3.3-bin.tar.gz </span><br><span class="line">[root@localhost hive]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>13.备份hive配置文件</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost hive]# cd /root/hive/apache-hive-2.3.3-bin/conf/</span><br><span class="line">[root@localhost conf]# cp hive-env.sh.template hive-env.sh</span><br><span class="line">[root@localhost conf]# cp hive-default.xml.template hive-site.xml</span><br><span class="line">[root@localhost conf]# cp hive-log4j2.properties.template hive-log4j2.properties</span><br><span class="line">[root@localhost conf]# cp hive-exec-log4j2.properties.template hive-exec-log4j2.properties</span><br></pre></td></tr></table></figure>
+
+<p><strong>14.在Hadoop中创建文件夹并设置权限</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost conf]# hadoop fs -mkdir -p /data/hive/warehouse</span><br><span class="line">21/10/18 14:27:03 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">[root@localhost conf]# </span><br><span class="line">[root@localhost conf]# hadoop fs -mkdir /data/hive/tmp</span><br><span class="line">21/10/18 14:27:12 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">[root@localhost conf]# </span><br><span class="line">[root@localhost conf]# hadoop fs -mkdir /data/hive/log</span><br><span class="line">21/10/18 14:27:18 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">[root@localhost conf]# </span><br><span class="line">[root@localhost conf]# hadoop fs -chmod -R 777 /data/hive/warehouse</span><br><span class="line">21/10/18 14:27:49 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">[root@localhost conf]# hadoop fs -chmod -R 777 /data/hive/tmp</span><br><span class="line">21/10/18 14:27:50 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">[root@localhost conf]# hadoop fs -chmod -R 777 /data/hive/log</span><br><span class="line">21/10/18 14:27:51 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">[root@localhost conf]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>15.修改hive配置文件</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost conf]# vim hive-site.xml</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">hive 配置入下：</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hive.exec.scratchdir&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;hdfs://127.0.0.1:9000/data/hive/tmp&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">   &lt;name&gt;hive.metastore.warehouse.dir&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;hdfs://127.0.0.1:9000/data/hive/warehouse&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hive.querylog.location&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;hdfs://127.0.0.1:9000/data/hive/log&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!—该配置是关闭hive元数据版本认证，否则会在启动spark程序时报错--&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hive.metastore.schema.verification&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;false&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">配置mysql IP 端口以及放元数据的库名称</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;jdbc:mysql://127.0.0.1:3306/hive?createDatabaseIfNotExist=true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;!—配置mysql启动器名称 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;</span><br><span class="line">   &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;!—配置连接mysql用户名 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;root&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;!—配置连接mysql用户名登录密码--&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;Cby123..&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>修改配置文件中 system:java.io.tmpdir 和 system:user.name 相关信息，改为实际目录和用户名，或者加入如下配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;system:java.io.tmpdir&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/tmp/hive/java&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;system:user.name&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;$&#123;user.name&#125;&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>并修改临时路径 ：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.exec.local.scratchdir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/root/hive/apache-hive-2.3.3-bin/tmp/$&#123;system:user.name&#125;&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;Local scratch space for Hive jobs&lt;/description&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.downloaded.resources.dir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/root/hive/apache-hive-2.3.3-bin/tmp/$&#123;hive.session.id&#125;_resources&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;Temporary local directory for added resources in the remote file system.&lt;/description&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.server2.logging.operation.log.location&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/root/hive/apache-hive-2.3.3-bin/tmp/root/operation_logs&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;Top level directory where operation logs are stored if logging functionality is enabled&lt;/description&gt;</span><br><span class="line">  &lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>16.配置hive中jdbc的MySQL驱动</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost lib]# cd /root/hive/apache-hive-2.3.3-bin/lib/</span><br><span class="line">[root@localhost lib]# wget https://downloads.mysql.com/archives/get/p/3/file/mysql-connector-java-5.1.49.tar.gz</span><br><span class="line">[root@localhost lib]# tar xvf mysql-connector-java-5.1.49.tar.gz </span><br><span class="line">[root@localhost lib]# cp mysql-connector-java-5.1.49/mysql-connector-java-5.1.49.jar .</span><br><span class="line">[root@localhost bin]# </span><br><span class="line">[root@localhost bin]# vim /root/hive/apache-hive-2.3.3-bin/conf/hive-env.sh</span><br><span class="line">[root@localhost bin]# tail -n 3 /root/hive/apache-hive-2.3.3-bin/conf/hive-env.sh</span><br><span class="line">export HADOOP_HOME=/root/Hadoop/hadoop-2.7.2/</span><br><span class="line">export HIVE_CONF_DIR=/root/hive/apache-hive-2.3.3-bin/conf</span><br><span class="line">export HIVE_AUX_JARS_PATH=/root/hive/apache-hive-2.3.3-bin/lib</span><br><span class="line">[root@localhost bin]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>17.配置hive环境变量</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/profile</span><br><span class="line">[root@localhost ~]# tail -n 6 /etc/profile</span><br><span class="line">export HADOOP_HOME=/root/Hadoop/hadoop-2.7.2/</span><br><span class="line">export HIVE_CONF_DIR=/root/hive/apache-hive-2.3.3-bin/conf</span><br><span class="line">export HIVE_AUX_JARS_PATH=/root/hive/apache-hive-2.3.3-bin/lib</span><br><span class="line">export HIVE_PATH=/root/hive/apache-hive-2.3.3-bin/</span><br><span class="line">export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin:$HIVE_PATH/bin</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost bin]# ./schematool -dbType mysql -initSchema</span><br></pre></td></tr></table></figure>
+
+<p><strong>初始化完成后修改MySQL链接信息，之后配置mysql IP 端口以及放元数据的库名称</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost conf]# vim hive-site.xml</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;jdbc:mysql://127.0.0.1:3306/hive?characterEncoding=utf8&amp;amp;useSSL=false&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">[root@localhost bin]# nohup hive --service metastore &amp;</span><br><span class="line">[root@localhost bin]# nohup hive --service hiveserver2 &amp;</span><br></pre></td></tr></table></figure>
+
+<p>**18.创建spark目录并下载所需文件<br>**</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkdir  spark</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# cd spark</span><br><span class="line">[root@localhost spark]# </span><br><span class="line">[root@localhost spark]# wget https://dlcdn.apache.org/spark/spark-3.1.2/spark-3.1.2-bin-without-hadoop.tgz --no-check-certificate</span><br><span class="line">[root@localhost spark]# tar xvf  spark-3.1.2-bin-without-hadoop.tgz</span><br></pre></td></tr></table></figure>
+
+<p><strong>19.配置spark环境变量以及备份配置文件</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/profile</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# tail -n 3 /etc/profile</span><br><span class="line">export SPARK_HOME=/root/spark/spark-3.1.2-bin-without-hadoop/</span><br><span class="line">export PATH=$PATH:$SPARK_HOME/bin</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost spark]# cd /root/spark/spark-3.1.2-bin-without-hadoop/conf/</span><br><span class="line">[root@localhost conf]# cp spark-env.sh.template spark-env.sh</span><br><span class="line">[root@localhost conf]# cp spark-defaults.conf.template spark-defaults.conf</span><br><span class="line">[root@localhost conf]# cp metrics.properties.template metrics.properties</span><br></pre></td></tr></table></figure>
+
+<p><strong>20.配置程序的环境变量</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost conf]# cp workers.template workers</span><br><span class="line">[root@localhost conf]# vim spark-env.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">export JAVA_HOME=/root/jdk/jdk1.8.0_202</span><br><span class="line">export HADOOP_HOME=/root/Hadoop/hadoop-2.7.2</span><br><span class="line">export HADOOP_CONF_DIR=/root/Hadoop/hadoop-2.7.2/etc/hadoop</span><br><span class="line">export SPARK_DIST_CLASSPATH=$(/root/Hadoop/hadoop-2.7.2/bin/hadoop classpath)</span><br><span class="line">export SPARK_MASTER_HOST=127.0.0.1</span><br><span class="line">export SPARK_MASTER_PORT=7077</span><br><span class="line">export SPARK_HISTORY_OPTS=&quot;-Dspark.history.ui.port=18080 -</span><br><span class="line">Dspark.history.retainedApplications=50 -</span><br><span class="line">Dspark.history.fs.logDirectory=hdfs://127.0.0.1:9000/spark-eventlog&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>21.修改默认的配置文件</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost conf]# vim spark-defaults.conf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">spark.master                     spark://127.0.0.1:7077</span><br><span class="line">spark.eventLog.enabled           true</span><br><span class="line">spark.eventLog.dir               hdfs://127.0.0.1:9000/spark-eventlog</span><br><span class="line">spark.serializer                 org.apache.spark.serializer.KryoSerializer</span><br><span class="line">spark.driver.memory              3g</span><br><span class="line">spark.eventLog.enabled           true</span><br><span class="line">spark.eventLog.dir               hdfs://127.0.0.1:9000/spark-eventlog</span><br><span class="line">spark.eventLog.compress          true</span><br></pre></td></tr></table></figure>
+
+<p><strong>22.配置工作节点</strong>  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost conf]# vim workers</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost conf]# cat workers</span><br><span class="line">127.0.0.1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost conf]# </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost sbin]# /root/spark/spark-3.1.2-bin-without-hadoop/sbin/start-all.sh</span><br></pre></td></tr></table></figure>
+
+<p> <strong>验证应用程序</strong></p>
+<p>访问集群中的所有应用程序的默认端口号为8080。使用以下URL访问该服务。</p>
+<p><strong><a target="_blank" rel="noopener" href="http://localhost:8080/">http://localhost:8080/</a></strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/35679b2bcb784216a1ec18a153319e61~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3fa0c9539aeb49eca25a60861911abd7~tplv-k3u1fbpfcp-zoom-1.image" alt="Linux运维交流社区"></p>
+<p><strong>Linux运维交流社区</strong></p>
+<p>Linux运维交流社区，互联网新闻以及技术交流。</p>
+<p>41篇原创内容</p>
+<p>公众号</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c010a1ccc0094b208340e06f26566146~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

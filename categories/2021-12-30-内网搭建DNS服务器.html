@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">内网搭建DNS服务器</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">内网搭建DNS服务器</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="DNS-Domain-Name-Service，域名解析服务"><a href="#DNS-Domain-Name-Service，域名解析服务" class="headerlink" title="DNS:Domain Name Service，域名解析服务"></a>DNS:Domain Name Service，域名解析服务</h1><p>监听端口：udp&#x2F;53，tcp&#x2F;53</p>
+<p>应用程序：bind</p>
+<p>根域：.</p>
+<p>一级域：</p>
+<p>组织域：.com, .org, .net, .mil, .edu, .gov, .info, .cc, .me, .tv</p>
+<p>国家域：.cn, .us, .uk, .jp, .tw, .hk, .iq, .ir</p>
+<p>反向域：.in-addr.arpa</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3d0171623b2441a4b070fe95db0a1a4e~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><strong>DNS 记录类型</strong>：DNS 域名数据库由资源记录和区文件指令组成。</p>
+<p><strong>SOA 记录</strong>：起始授权机构记录，SOA 备注说明了众多 NS（name server）记录中谁是主名称服务器，不参与功能，但是不能缺少。</p>
+<p><strong>NS 记录</strong>：域授权记录，当请求到达根域的时候，通过 NS 记录找到对应的域。</p>
+<p><strong>A 记录</strong>：当通过 NS 记录到达域以后，比如访问 <a target="_blank" rel="noopener" href="http://www.baidu.com,通过/">www.baidu.com，通过</a> NS 我们找到了 baidu.com，此时就需要通过 A 记录找到 www。</p>
+<p><strong>MX</strong>：将该域下的所有邮件服务器地址指向邮件服务器。</p>
+<p><strong>AAAA 记录</strong>：A 记录处理 IPV4，AAAA 处理 IPV6。</p>
+<p><strong>PTR 记录</strong>：反向解析，将 IP 解析成域名。</p>
+<p><strong>CNAME</strong>：别名记录，允许多个名字映射到另外一个域名。比如我们 ping 百度的时候可以发现返回其实是 <a target="_blank" rel="noopener" href="http://www.a.shifen.com/">www.a.shifen.com</a> 这个域名返回。所有 <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> 其实是个别名。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d28428c41d754b6cac837fc3abf9f32a~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<h1 id="安装dns服务并配置"><a href="#安装dns服务并配置" class="headerlink" title="安装dns服务并配置"></a>安装dns服务并配置</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@jhr-hub ~]# yum -y install bind-utils bind bind-devel bind-libs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@jhr-hub ~]# vim /etc/named.rfc1912.zones</span><br><span class="line">[root@jhr-hub ~]# </span><br><span class="line">[root@jhr-hub ~]# </span><br><span class="line">[root@jhr-hub ~]# </span><br><span class="line">[root@jhr-hub ~]# tail -n 10 /etc/named.rfc1912.zones</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">zone &quot;chenby.cn&quot; IN &#123;     </span><br><span class="line">        type master;</span><br><span class="line">        file &quot;chenby.cn.zone&quot;;  </span><br><span class="line">&#125;;</span><br><span class="line">[root@jhr-hub ~]# </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@jhr-hub ~]# cd /var/named/</span><br><span class="line">[root@jhr-hub named]# ls</span><br><span class="line">data  dynamic  named.ca  named.empty  named.localhost  named.loopback  pakho.zone  slaves</span><br><span class="line">[root@jhr-hub named]# </span><br><span class="line">[root@jhr-hub named]# cp named.localhost chenby.cn.zone</span><br><span class="line">[root@jhr-hub named]# </span><br><span class="line">[root@jhr-hub named]# chown named.named chenby.cn.zone</span><br><span class="line">[root@jhr-hub named]# </span><br><span class="line">[root@jhr-hub named]# vim chenby.cn.zone</span><br><span class="line">[root@jhr-hub named]#</span><br></pre></td></tr></table></figure>
+
+<h1 id="检查配置文件"><a href="#检查配置文件" class="headerlink" title="检查配置文件"></a>检查配置文件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@jhr-hub named]# named-checkconf /etc/named.conf</span><br><span class="line">[root@jhr-hub named]# </span><br><span class="line">[root@jhr-hub named]# </span><br><span class="line">[root@jhr-hub named]# named-checkzone chenby.cn /var/named/chenby.cn.zone </span><br><span class="line">zone chenby.cn/IN: loaded serial 0</span><br><span class="line">OK</span><br><span class="line">[root@jhr-hub named]#</span><br></pre></td></tr></table></figure>
+
+<h1 id="启动服务，并设置开机自启"><a href="#启动服务，并设置开机自启" class="headerlink" title="启动服务，并设置开机自启"></a>启动服务，并设置开机自启</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">[root@jhr-hub named]# systemctl restart named</span><br><span class="line">[root@jhr-hub named]# </span><br><span class="line">[root@jhr-hub named]# systemctl enable named</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/named.service to /usr/lib/systemd/system/named.service.</span><br><span class="line">[root@jhr-hub named]# </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">测试是否可行</span><br><span class="line"></span><br><span class="line">[root@jhr-hub named]# dig @3.7.191.1 www.chenby.cn</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.11.4-P2-RedHat-9.11.4-26.P2.el7_9.7 &lt;&lt;&gt;&gt; @3.7.191.1 www.chenby.cn</span><br><span class="line">; (1 server found)</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 5275</span><br><span class="line">;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">;; OPT PSEUDOSECTION:</span><br><span class="line">; EDNS: version: 0, flags:; udp: 4096</span><br><span class="line">;; QUESTION SECTION:</span><br><span class="line">;www.chenby.cn.                 IN      A</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">;; ANSWER SECTION:</span><br><span class="line">www.chenby.cn.          86400   IN      A       3.7.191.1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">;; AUTHORITY SECTION:</span><br><span class="line">chenby.cn.              86400   IN      NS      chenby.cn.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">;; ADDITIONAL SECTION:</span><br><span class="line">chenby.cn.              86400   IN      A       127.0.0.1</span><br><span class="line">chenby.cn.              86400   IN      AAAA    ::1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">;; Query time: 0 msec</span><br><span class="line">;; SERVER: 3.7.191.1#53(3.7.191.1)</span><br><span class="line">;; WHEN: Thu Dec 09 14:44:51 CST 2021</span><br><span class="line">;; MSG SIZE  rcvd: 116</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@jhr-hub named]#</span><br></pre></td></tr></table></figure>
+
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><h1 id="1-name-conf文件详解"><a href="#1-name-conf文件详解" class="headerlink" title="1.name.conf文件详解"></a>1.name.conf文件详解</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">options &#123;</span><br><span class="line">listen-on port 53 &#123; 127.0.0.1; &#125;;      //设置named服务器监听端口及IP地址</span><br><span class="line">listen-on-v6 port 53 &#123; ::1; &#125;;</span><br><span class="line">directory       &quot;/var/named&quot;;    //设置区域数据库文件的默认存放地址</span><br><span class="line">dump-file       &quot;/var/named/data/cache_dump.db&quot;;</span><br><span class="line">statistics-file &quot;/var/named/data/named_stats.txt&quot;;</span><br><span class="line">memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">allow-query     &#123; any; &#125;;   //允许DNS查询客户端</span><br><span class="line">allow-query-cache &#123; any; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">logging &#123;</span><br><span class="line">channel default_debug &#123;</span><br><span class="line">file &quot;data/named.run&quot;;</span><br><span class="line">severity dynamic;</span><br><span class="line">&#125;;</span><br><span class="line">&#125;;</span><br><span class="line">view localhost_resolver &#123;</span><br><span class="line">match-clients      &#123; any; &#125;;</span><br><span class="line">match-destinations &#123; any; &#125;;</span><br><span class="line">recursion yes;                  //设置允许递归查询</span><br><span class="line">include &quot;/etc/named.rfc1912.zones&quot;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-区域配置文件-x2F-etc-x2F-named-rfc1912-zones"><a href="#2-区域配置文件-x2F-etc-x2F-named-rfc1912-zones" class="headerlink" title="2.区域配置文件&#x2F;etc&#x2F;named.rfc1912.zones"></a>2.区域配置文件&#x2F;etc&#x2F;named.rfc1912.zones</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">zone &quot;.&quot; IN &#123;    //定义了根域</span><br><span class="line">type hint;       //定义服务器类型为hint</span><br><span class="line">file &quot;named.ca&quot;;  //定义根域的配置文件名</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">zone &quot;localdomain&quot; IN &#123;   //定义正向DNS区域</span><br><span class="line">type master;              //定义区域类型</span><br><span class="line">file &quot;localdomain.zone&quot;;  //设置对应的正向区域地址数据库文件</span><br><span class="line">allow-update &#123; none; &#125;;   //设置允许动态更新的客户端地址（none为禁止）</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">zone &quot;localhost&quot; IN &#123;</span><br><span class="line">type master;</span><br><span class="line">file &quot;localhost.zone&quot;;</span><br><span class="line">allow-update &#123; none; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">zone &quot;0.0.127.in-addr.arpa&quot; IN &#123;   //设置反向DNS区域</span><br><span class="line">type master;</span><br><span class="line">file &quot;named.local&quot;;</span><br><span class="line">allow-update &#123; none; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-根域配置文件named-ca"><a href="#3-根域配置文件named-ca" class="headerlink" title="3.根域配置文件named.ca"></a>3.根域配置文件named.ca</h1><p>根域配置文件设定根域的域名数据库，包括根域中13台DNS服务器的信息。几乎所有系统的这个文件都是一样的，用户不需要进行修改。</p>
+<h1 id="4-正向域名解析数据库文件"><a href="#4-正向域名解析数据库文件" class="headerlink" title="4.正向域名解析数据库文件"></a>4.正向域名解析数据库文件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">TTL 600</span></span><br><span class="line">@        IN   SOA    dns.cwlinux.com   dnsadmin.cwlinux.com. (//SOA字段</span><br><span class="line">                          2015031288   //版本号    同步一次  +1</span><br><span class="line">                             1H        //更新时间</span><br><span class="line">                             2M        // 更新失败，重试更新时间</span><br><span class="line">                             2D        // 更新失败多长时间后此DNS失效时间</span><br><span class="line">                             1D        //解析不到请求不予回复时间</span><br><span class="line">)</span><br><span class="line">         IN    NS   dns            //有两域名服务器</span><br><span class="line">         IN    NS   ns2</span><br><span class="line">         IN    MX  10 mial        // 定义邮件服务器，10指优先级  0-99 数字越小优先级越高</span><br><span class="line">ns2      IN    A    192.168.1.113  //ns2域名服务器的ip地址</span><br><span class="line">dns      IN    A    192.168.1.10   //dns域名服务器的ip地址</span><br><span class="line">mail     IN    A    192.168.1.111   //邮件服务器的ip地址</span><br><span class="line">www      IN    A    192.168.1.112   //www.cwlinux.com的ip地址</span><br><span class="line">pop      IN   CNAME  mail         //pop的正式名字是mail</span><br><span class="line">ftp      IN   CNAME  www         //ftp的正式名字是www</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-反向域名解析数据库文件"><a href="#5-反向域名解析数据库文件" class="headerlink" title="5.反向域名解析数据库文件"></a>5.反向域名解析数据库文件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">TTL 600</span></span><br><span class="line">@         IN   SOA    dns.cwlinux.com.   dnsadmin.cwlinux.com. (</span><br><span class="line">                             2014031224</span><br><span class="line">                             1H</span><br><span class="line">                             2M</span><br><span class="line">                             2D</span><br><span class="line">                             1D</span><br><span class="line">)</span><br><span class="line">         IN   NS      dns.cwlinux.com.</span><br><span class="line">10       IN   PTR     dns.cwlinux.com.     //反向解析PTR格式</span><br><span class="line">111       IN   PTR     mail.cwlinux.com.</span><br><span class="line">112       IN   PTR     www.cwlinux.com.</span><br><span class="line">// 声明域的时候已经有了，192.168.1 所以我们只需要输入10即代表192.168.1.10jc</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e089abc85d4e4ae780d6c279920d3203~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>Linux运维交流社区</strong></p>
+<p>Linux运维交流社区，互联网新闻以及技术交流。</p>
+<p>71篇原创内容</p>
+<p>公众号</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2610ee80e6064d94a0f79dcdccf19b0b~tplv-k3u1fbpfcp-zoom-1.image" alt="图片">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

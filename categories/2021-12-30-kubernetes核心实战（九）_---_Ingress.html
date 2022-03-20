@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">kubernetes核心实战（九） --- Ingress</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">kubernetes核心实战（九） --- Ingress</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h4 id="14、Ingress"><a href="#14、Ingress" class="headerlink" title="14、Ingress"></a>14、Ingress</h4><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/90d8f35932b0479b850193b4a02195a0~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h5 id="检查是否有安装"><a href="#检查是否有安装" class="headerlink" title="检查是否有安装"></a>检查是否有安装</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl get pod,svc -n ingress-nginx</span><br><span class="line">NAME                                           READY   STATUS      RESTARTS   AGE</span><br><span class="line">pod/ingress-nginx-admission-create--1-74mtg    0/1     Completed   0          172m</span><br><span class="line">pod/ingress-nginx-admission-patch--1-5qrct     0/1     Completed   0          172m</span><br><span class="line">pod/ingress-nginx-controller-f97bd58b5-vr8c2   1/1     Running     0          172m</span><br><span class="line"></span><br><span class="line">NAME                                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE</span><br><span class="line">service/ingress-nginx-controller             NodePort    10.96.109.80    &lt;none&gt;        80:30127/TCP,443:36903/TCP   172m</span><br><span class="line">service/ingress-nginx-controller-admission   ClusterIP   10.96.215.201   &lt;none&gt;        443/TCP                      172m</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p>若未安装可以查看官网文档：<a target="_blank" rel="noopener" href="https://kubernetes.github.io/ingress-nginx/deploy/">https://kubernetes.github.io/ingress-nginx/deploy/</a></p>
+<h5 id="创建环境："><a href="#创建环境：" class="headerlink" title="创建环境："></a>创建环境：</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# vim ingress.yaml</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# cat ingress.yaml</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: hello-server</span><br><span class="line">spec:</span><br><span class="line">  replicas: 2</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: hello-server</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: hello-server</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: hello-server</span><br><span class="line">        image: registry.cn-hangzhou.aliyuncs.com/lfy_k8s_images/hello-server</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 9000</span><br><span class="line">---</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: nginx-demo</span><br><span class="line">  name: nginx-demo</span><br><span class="line">spec:</span><br><span class="line">  replicas: 2</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: nginx-demo</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: nginx-demo</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - image: nginx</span><br><span class="line">        name: nginx</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: nginx-demo</span><br><span class="line">  name: nginx-demo</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    app: nginx-demo</span><br><span class="line">  ports:</span><br><span class="line">  - port: 8000</span><br><span class="line">    protocol: TCP</span><br><span class="line">    targetPort: 80</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: hello-server</span><br><span class="line">  name: hello-server</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    app: hello-server</span><br><span class="line">  ports:</span><br><span class="line">  - port: 8000</span><br><span class="line">    protocol: TCP</span><br><span class="line">    targetPort: 9000</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  apply  -f ingress.yaml </span><br><span class="line">deployment.apps/hello-server created</span><br><span class="line">deployment.apps/nginx-demo created</span><br><span class="line">service/nginx-demo created</span><br><span class="line">service/hello-server created</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="查看四层负载并测试"><a href="#查看四层负载并测试" class="headerlink" title="查看四层负载并测试"></a>查看四层负载并测试</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  get service</span><br><span class="line">NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE</span><br><span class="line">hello-server       ClusterIP   10.96.246.46    &lt;none&gt;        8000/TCP         21s</span><br><span class="line">ingress-demo-app   ClusterIP   10.96.145.40    &lt;none&gt;        80/TCP           3h1m</span><br><span class="line">kubernetes         ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP          3h3m</span><br><span class="line">my-dep             NodePort    10.96.241.162   &lt;none&gt;        8000:32306/TCP   23m</span><br><span class="line">nginx              ClusterIP   None            &lt;none&gt;        80/TCP           115m</span><br><span class="line">nginx-demo         ClusterIP   10.96.162.193   &lt;none&gt;        8000/TCP         21s</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# curl  -I 10.96.162.193:8000</span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Server: nginx/1.21.4</span><br><span class="line">Date: Wed, 17 Nov 2021 09:49:40 GMT</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Content-Length: 615</span><br><span class="line">Last-Modified: Tue, 02 Nov 2021 14:49:22 GMT</span><br><span class="line">Connection: keep-alive</span><br><span class="line">ETag: &quot;61814ff2-267&quot;</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# curl  -I 10.96.246.46:8000</span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Date: Wed, 17 Nov 2021 09:49:52 GMT</span><br><span class="line">Content-Length: 12</span><br><span class="line">Content-Type: text/plain; charset=utf-8</span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h5 id="创建七层"><a href="#创建七层" class="headerlink" title="创建七层"></a>创建七层</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# vim ingress-7.yaml</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# cat ingress-7.yaml</span><br><span class="line">apiVersion: networking.k8s.io/v1</span><br><span class="line">kind: Ingress  </span><br><span class="line">metadata:</span><br><span class="line">  name: ingress-host-bar</span><br><span class="line">spec:</span><br><span class="line">  ingressClassName: nginx</span><br><span class="line">  rules:</span><br><span class="line">  - host: &quot;hello.chenby.cn&quot;</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - pathType: Prefix</span><br><span class="line">        path: &quot;/&quot;</span><br><span class="line">        backend:</span><br><span class="line">          service:</span><br><span class="line">            name: hello-server</span><br><span class="line">            port:</span><br><span class="line">              number: 8000</span><br><span class="line">  - host: &quot;demo.chenby.cn&quot;</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - pathType: Prefix</span><br><span class="line">        path: &quot;/nginx&quot;  # 把请求会转给下面的服务，下面的服务一定要能处理这个路径，不能处理就是404</span><br><span class="line">        backend:</span><br><span class="line">          service:</span><br><span class="line">            name: nginx-demo  ## java，比如使用路径重写，去掉前缀nginx</span><br><span class="line">            port:</span><br><span class="line">              number: 8000</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  apply  -f ingress-7.yaml </span><br><span class="line">ingress.networking.k8s.io/ingress-host-bar created</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  get ingress</span><br><span class="line">NAME               CLASS    HOSTS                            ADDRESS        PORTS   AGE</span><br><span class="line">ingress-demo-app   &lt;none&gt;   app.demo.com                     192.168.1.62   80      3h14m</span><br><span class="line">ingress-host-bar   nginx    hello.chenby.cn,demo.chenby.cn   192.168.1.62   80      9m50s</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  describe ingress  ingress-host-bar </span><br><span class="line">Name:             ingress-host-bar</span><br><span class="line">Namespace:        default</span><br><span class="line">Address:          192.168.1.62</span><br><span class="line">Default backend:  default-http-backend:80 (10.244.2.7:8080)</span><br><span class="line">Rules:</span><br><span class="line">  Host             Path  Backends</span><br><span class="line">  ----             ----  --------</span><br><span class="line">  hello.chenby.cn  </span><br><span class="line">                   /   hello-server:8000 (10.244.2.47:9000,10.244.2.48:9000)</span><br><span class="line">  demo.chenby.cn   </span><br><span class="line">                   /nginx   nginx-demo:8000 (10.244.0.13:80,10.244.1.34:80)</span><br><span class="line">Annotations:       &lt;none&gt;</span><br><span class="line">Events:</span><br><span class="line">  Type    Reason  Age                    From                      Message</span><br><span class="line">  ----    ------  ----                   ----                      -------</span><br><span class="line">  Normal  Sync    6m26s (x2 over 6m50s)  nginx-ingress-controller  Scheduled for sync</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="电脑上写死hosts"><a href="#电脑上写死hosts" class="headerlink" title="电脑上写死hosts"></a>电脑上写死hosts</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  get service ingress-demo-app </span><br><span class="line">NAME               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE</span><br><span class="line">ingress-demo-app   ClusterIP   10.96.145.40   &lt;none&gt;        80/TCP    3h15m</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">10.96.145.40 hello.chenby.cn </span><br><span class="line">10.96.145.40 demo.chenby.cn</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h6 id="测试访问"><a href="#测试访问" class="headerlink" title="测试访问"></a>测试访问</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# curl hello.chenby.cn</span><br><span class="line">Hostname: ingress-demo-app-694bf5d965-8rh7f</span><br><span class="line">IP: 127.0.0.1</span><br><span class="line">IP: 10.244.1.6</span><br><span class="line">RemoteAddr: 192.168.1.61:49809</span><br><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: hello.chenby.cn</span><br><span class="line">User-Agent: curl/7.68.0</span><br><span class="line">Accept: */*</span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# curl demo.chenby.cn</span><br><span class="line">Hostname: ingress-demo-app-694bf5d965-swkpb</span><br><span class="line">IP: 127.0.0.1</span><br><span class="line">IP: 10.244.2.4</span><br><span class="line">RemoteAddr: 192.168.1.61:57797</span><br><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: demo.chenby.cn</span><br><span class="line">User-Agent: curl/7.68.0</span><br><span class="line">Accept: */*</span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<h5 id="url-重写"><a href="#url-重写" class="headerlink" title="url 重写"></a>url 重写</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# vim ingress-url</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# cat ingress-url.yaml</span><br><span class="line">apiVersion: networking.k8s.io/v1</span><br><span class="line">kind: Ingress  </span><br><span class="line">metadata:</span><br><span class="line">  annotations:</span><br><span class="line">    nginx.ingress.kubernetes.io/rewrite-target: /$2</span><br><span class="line">  name: ingress-host-bar</span><br><span class="line">spec:</span><br><span class="line">  ingressClassName: nginx</span><br><span class="line">  rules:</span><br><span class="line">  - host: &quot;hello.chenby.cn&quot;</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - pathType: Prefix</span><br><span class="line">        path: &quot;/&quot;</span><br><span class="line">        backend:</span><br><span class="line">          service:</span><br><span class="line">            name: hello-server</span><br><span class="line">            port:</span><br><span class="line">              number: 8000</span><br><span class="line">  - host: &quot;demo.chenby.cn&quot;</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - pathType: Prefix</span><br><span class="line">        path: &quot;/nginx(/|$)(.*)&quot;  # 把请求会转给下面的服务，下面的服务一定要能处理这个路径，不能处理就是404</span><br><span class="line">        backend:</span><br><span class="line">          service:</span><br><span class="line">            name: nginx-demo  ## java，比如使用路径重写，去掉前缀nginx</span><br><span class="line">            port:</span><br><span class="line">              number: 8000</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  apply -f ingress-url.yaml </span><br><span class="line">ingress.networking.k8s.io/ingress-host-bar created</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# curl hello.chenby.cn</span><br><span class="line">Hostname: ingress-demo-app-694bf5d965-8rh7f</span><br><span class="line">IP: 127.0.0.1</span><br><span class="line">IP: 10.244.1.6</span><br><span class="line">RemoteAddr: 192.168.1.61:42303</span><br><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: hello.chenby.cn</span><br><span class="line">User-Agent: curl/7.68.0</span><br><span class="line">Accept: */*</span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# curl demo.chenby.cn</span><br><span class="line">Hostname: ingress-demo-app-694bf5d965-swkpb</span><br><span class="line">IP: 127.0.0.1</span><br><span class="line">IP: 10.244.2.4</span><br><span class="line">RemoteAddr: 192.168.1.61:1108</span><br><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: demo.chenby.cn</span><br><span class="line">User-Agent: curl/7.68.0</span><br><span class="line">Accept: */*</span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h6 id="流量限制"><a href="#流量限制" class="headerlink" title="流量限制"></a>流量限制</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# vim ingress-limit</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# cat ingress-limit.yaml</span><br><span class="line">apiVersion: networking.k8s.io/v1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: ingress-limit-rate</span><br><span class="line">  annotations:</span><br><span class="line">    nginx.ingress.kubernetes.io/limit-rps: &quot;1&quot;</span><br><span class="line">spec:</span><br><span class="line">  ingressClassName: nginx</span><br><span class="line">  rules:</span><br><span class="line">  - host: &quot;haha.chenby.cn&quot;</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - pathType: Exact</span><br><span class="line">        path: &quot;/&quot;</span><br><span class="line">        backend:</span><br><span class="line">          service:</span><br><span class="line">            name: nginx-demo</span><br><span class="line">            port:</span><br><span class="line">              number: 8000</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl apply -f ingress-limit.yaml </span><br><span class="line">ingress.networking.k8s.io/ingress-limit-rate created</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# vim /etc/hosts</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# curl haha.chenby.cn</span><br><span class="line">Hostname: ingress-demo-app-694bf5d965-8rh7f</span><br><span class="line">IP: 127.0.0.1</span><br><span class="line">IP: 10.244.1.6</span><br><span class="line">RemoteAddr: 192.168.1.61:1676</span><br><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: haha.chenby.cn</span><br><span class="line">User-Agent: curl/7.68.0</span><br><span class="line">Accept: */*</span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p>注：可以将server 改为nodeport 即可在外部访问，将 type 改为 NodePort</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  get service ingress-demo-app </span><br><span class="line">NAME               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE</span><br><span class="line">ingress-demo-app   ClusterIP   10.96.145.40   &lt;none&gt;        80/TCP    6h27m</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  edit service ingress-demo-app </span><br><span class="line">service/ingress-demo-app edited</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  get service ingress-demo-app </span><br><span class="line">NAME               TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE</span><br><span class="line">ingress-demo-app   NodePort   10.96.145.40   &lt;none&gt;        80:30975/TCP   6h28m</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Docker容器中使用GPU</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Docker容器中使用GPU</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p><strong>背景</strong></p>
+<p>容器封装了应用程序的依赖项，以提供可重复和可靠的应用程序和服务执行，而无需整个虚拟机的开销。如果您曾经花了一天的时间为一个科学或 深度学习 应用程序提供一个包含大量软件包的服务器，或者已经花费数周的时间来确保您的应用程序可以在多个 linux 环境中构建和部署，那么 Docker 容器非常值得您花费时间。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/392fd0434e4c4e4298215235ff8d5ef9~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>安装添加docker源</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# sudo yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">Loaded plugins: fastestmirror, langpacks</span><br><span class="line">adding repo from: https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">grabbing file https://download.docker.com/linux/centos/docker-ce.repo to /etc/yum.repos.d/docker-ce.repo</span><br><span class="line">repo saved to /etc/yum.repos.d/docker-ce.repo</span><br><span class="line">[root@localhost ~]#</span><br><span class="line">[root@localhost ~]# cat /etc/yum.repos.d/docker-ce.repo</span><br><span class="line">[docker-ce-stable]</span><br><span class="line">name=Docker CE Stable - $basearch</span><br><span class="line">baseurl=https://download.docker.com/linux/centos/$releasever/$basearch/stable</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://download.docker.com/linux/centos/gpg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[docker-ce-stable-debuginfo]</span><br><span class="line">name=Docker CE Stable - Debuginfo $basearch</span><br><span class="line">baseurl=https://download.docker.com/linux/centos/$releasever/debug-$basearch/stable</span><br><span class="line">enabled=0</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://download.docker.com/linux/centos/gpg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[docker-ce-stable-source]</span><br><span class="line">name=Docker CE Stable - Sources</span><br><span class="line">baseurl=https://download.docker.com/linux/centos/$releasever/source/stable</span><br><span class="line">enabled=0</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://download.docker.com/linux/centos/gpg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[docker-ce-test]</span><br><span class="line">name=Docker CE Test - $basearch</span><br><span class="line">baseurl=https://download.docker.com/linux/centos/$releasever/$basearch/test</span><br><span class="line">enabled=0</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://download.docker.com/linux/centos/gpg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[docker-ce-test-debuginfo]</span><br><span class="line">name=Docker CE Test - Debuginfo $basearch</span><br><span class="line">baseurl=https://download.docker.com/linux/centos/$releasever/debug-$basearch/test</span><br><span class="line">enabled=0</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://download.docker.com/linux/centos/gpg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[docker-ce-test-source]</span><br><span class="line">name=Docker CE Test - Sources</span><br><span class="line">baseurl=https://download.docker.com/linux/centos/$releasever/source/test</span><br><span class="line">enabled=0</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://download.docker.com/linux/centos/gpg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[docker-ce-nightly]</span><br><span class="line">name=Docker CE Nightly - $basearch</span><br><span class="line">baseurl=https://download.docker.com/linux/centos/$releasever/$basearch/nightly</span><br><span class="line">enabled=0</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://download.docker.com/linux/centos/gpg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[docker-ce-nightly-debuginfo]</span><br><span class="line">name=Docker CE Nightly - Debuginfo $basearch</span><br><span class="line">baseurl=https://download.docker.com/linux/centos/$releasever/debug-$basearch/nightly</span><br><span class="line">enabled=0</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://download.docker.com/linux/centos/gpg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[docker-ce-nightly-source]</span><br><span class="line">name=Docker CE Nightly - Sources</span><br><span class="line">baseurl=https://download.docker.com/linux/centos/$releasever/source/nightly</span><br><span class="line">enabled=0</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://download.docker.com/linux/centos/gpg</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>下载安装包</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cd docker</span><br><span class="line">[root@localhost docker]#</span><br><span class="line">[root@localhost docker]# repotrack docker-ce</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装docker 并设置开机自启</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost docker]# yum install ./*</span><br><span class="line">[root@localhost docker]# systemctl  start docker</span><br><span class="line">[root@localhost docker]#</span><br><span class="line">[root@localhost docker]# systemctl  enable docker</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.</span><br><span class="line">[root@localhost docker]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>配置nvidia-docker的源</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost docker]# distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \</span><br><span class="line">&gt;    &amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo</span><br><span class="line">[root@localhost docker]# cat /etc/yum.repos.d/nvidia-docker.repo</span><br><span class="line">[libnvidia-container]</span><br><span class="line">name=libnvidia-container</span><br><span class="line">baseurl=https://nvidia.github.io/libnvidia-container/stable/centos7/$basearch</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://nvidia.github.io/libnvidia-container/gpgkey</span><br><span class="line">sslverify=1</span><br><span class="line">sslcacert=/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[libnvidia-container-experimental]</span><br><span class="line">name=libnvidia-container-experimental</span><br><span class="line">baseurl=https://nvidia.github.io/libnvidia-container/experimental/centos7/$basearch</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=0</span><br><span class="line">gpgkey=https://nvidia.github.io/libnvidia-container/gpgkey</span><br><span class="line">sslverify=1</span><br><span class="line">sslcacert=/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[nvidia-container-runtime]</span><br><span class="line">name=nvidia-container-runtime</span><br><span class="line">baseurl=https://nvidia.github.io/nvidia-container-runtime/stable/centos7/$basearch</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://nvidia.github.io/nvidia-container-runtime/gpgkey</span><br><span class="line">sslverify=1</span><br><span class="line">sslcacert=/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[nvidia-container-runtime-experimental]</span><br><span class="line">name=nvidia-container-runtime-experimental</span><br><span class="line">baseurl=https://nvidia.github.io/nvidia-container-runtime/experimental/centos7/$basearch</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=0</span><br><span class="line">gpgkey=https://nvidia.github.io/nvidia-container-runtime/gpgkey</span><br><span class="line">sslverify=1</span><br><span class="line">sslcacert=/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[nvidia-docker]</span><br><span class="line">name=nvidia-docker</span><br><span class="line">baseurl=https://nvidia.github.io/nvidia-docker/centos7/$basearch</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://nvidia.github.io/nvidia-docker/gpgkey</span><br><span class="line">sslverify=1</span><br><span class="line">sslcacert=/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line">[root@localhost docker]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装下载nvidia-docker</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkdir nvidia-docker2</span><br><span class="line">[root@localhost ~]# cd nvidia-docker2</span><br><span class="line">[root@localhost nvidia-docker2]# yum update -y</span><br><span class="line">[root@localhost nvidia-docker2]# repotrack nvidia-docker2</span><br><span class="line">[root@localhost nvidia-docker2]# yum install ./*</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# mkdir nvidia-container-toolkit</span><br><span class="line">[root@localhost ~]# cd nvidia-container-toolkit</span><br><span class="line">[root@localhost nvidia-container-toolkit]# repotrack nvidia-container-toolkit</span><br><span class="line">[root@ai-rd nvidia-container-toolkit]# yum install ./*</span><br></pre></td></tr></table></figure>
+
+<p><strong>下载镜像，并保存</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# docker pull nvidia/cuda:11.0-base</span><br><span class="line">11.0-base: Pulling from nvidia/cuda</span><br><span class="line">54ee1f796a1e: Pull complete</span><br><span class="line">f7bfea53ad12: Pull complete</span><br><span class="line">46d371e02073: Pull complete</span><br><span class="line">b66c17bbf772: Pull complete</span><br><span class="line">3642f1a6dfb3: Pull complete</span><br><span class="line">e5ce55b8b4b9: Pull complete</span><br><span class="line">155bc0332b0a: Pull complete</span><br><span class="line">Digest: sha256:774ca3d612de15213102c2dbbba55df44dc5cf9870ca2be6c6e9c627fa63d67a</span><br><span class="line">Status: Downloaded newer image for nvidia/cuda:11.0-base</span><br><span class="line">docker.io/nvidia/cuda:11.0-base</span><br><span class="line">[root@localhost ~]#</span><br><span class="line">[root@localhost ~]# docker images</span><br><span class="line">REPOSITORY    TAG         IMAGE ID       CREATED         SIZE</span><br><span class="line">nvidia/cuda   11.0-base   2ec708416bb8   15 months ago   122MB</span><br><span class="line">[root@localhost ~]#</span><br><span class="line">[root@localhost ~]# docker save -o cuda-11.0.tar nvidia/cuda:11.0-base</span><br><span class="line">[root@localhost ~]#</span><br><span class="line">[root@localhost ~]# ls cuda-11.0.tar</span><br><span class="line">cuda-11.0.tar</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>在要测试的服务器上导入镜像</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@ai-rd cby]# docker load -i cuda-11.0.tar</span><br><span class="line">2ce3c188c38d: Loading layer [==================================================&gt;]  75.23MB/75.23MB</span><br><span class="line">ad44aa179b33: Loading layer [==================================================&gt;]  1.011MB/1.011MB</span><br><span class="line">35a91a75d24b: Loading layer [==================================================&gt;]  15.36kB/15.36kB</span><br><span class="line">a4399aeb9a0e: Loading layer [==================================================&gt;]  3.072kB/3.072kB</span><br><span class="line">fa39d0e9f3dc: Loading layer [==================================================&gt;]  18.84MB/18.84MB</span><br><span class="line">232fb43df6ad: Loading layer [==================================================&gt;]  30.08MB/30.08MB</span><br><span class="line">0da51e35db05: Loading layer [==================================================&gt;]  22.53kB/22.53kB</span><br><span class="line">Loaded image: nvidia/cuda:11.0-base</span><br><span class="line">[root@ai-rd cby]#</span><br><span class="line">[root@ai-rd cby]# docker images | grep cuda</span><br><span class="line">nvidia/cuda                          11.0-base   2ec708416bb8   15 months ago   122MB</span><br><span class="line">[root@ai-rd cby]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装升级内核</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@ai-rd cby]# yum install kernel-headers</span><br><span class="line">[root@ai-rd cby]# yum install kernel-devel</span><br><span class="line">[root@ai-rd cby]# yum update kernel*</span><br></pre></td></tr></table></figure>
+
+<p><strong>禁用模块，并升级boot</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@ai-rd cby]# vim /etc/modprobe.d/blacklist-nouveau.conf</span><br><span class="line">[root@ai-rd cby]# cat /etc/modprobe.d/blacklist-nouveau.conf</span><br><span class="line">blacklist nouveau</span><br><span class="line">options nouveau modeset=0</span><br><span class="line">[root@ai-rd cby]#</span><br><span class="line">[root@ai-rd cby]# mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r).img.bak</span><br><span class="line">[root@ai-rd cby]# sudo dracut -v /boot/initramfs-$(uname -r).img $(uname -r)</span><br></pre></td></tr></table></figure>
+
+<p><strong>下载驱动并安装</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# wget https://cn.download.nvidia.cn/tesla/450.156.00/NVIDIA-Linux-x86_64-450.156.00.run</span><br><span class="line">[root@ai-rd cby]# chmod +x NVIDIA-Linux-x86_64-450.156.00.run</span><br><span class="line">[root@ai-rd cby]# ./NVIDIA-Linux-x86_64-450.156.00.run</span><br></pre></td></tr></table></figure>
+
+<p><strong>配置docker</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@ai-rd ~]# vim /etc/docker/daemon.json</span><br><span class="line">[root@ai-rd ~]# cat /etc/docker/daemon.json</span><br><span class="line">&#123;</span><br><span class="line">    &quot;runtimes&quot;: &#123;</span><br><span class="line">        &quot;nvidia&quot;: &#123;</span><br><span class="line">            &quot;path&quot;: &quot;nvidia-container-runtime&quot;,</span><br><span class="line">            &quot;runtimeArgs&quot;: []</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@ai-rd ~]#</span><br><span class="line">[root@ai-rd ~]# systemctl daemon-reload</span><br><span class="line">[root@ai-rd ~]#</span><br><span class="line">[root@ai-rd ~]#</span><br><span class="line">[root@ai-rd ~]#</span><br><span class="line">[root@ai-rd ~]# systemctl  restart docker</span><br><span class="line">[root@ai-rd ~]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>测试docker中的调用情况</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@ai-rd ~]#</span><br><span class="line">[root@ai-rd ~]# sudo docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi</span><br><span class="line">Tue Nov 23 06:03:04 2021      </span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI 450.156.00   Driver Version: 450.156.00   CUDA Version: 11.0     |</span><br><span class="line">|-------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                               |                      |               MIG M. |</span><br><span class="line">|===============================+======================+======================|</span><br><span class="line">|   0  Tesla T4            Off  | 00000000:86:00.0 Off |                    0 |</span><br><span class="line">| N/A   90C    P0    34W /  70W |      0MiB / 15109MiB |      6%      Default |</span><br><span class="line">|                               |                      |                  N/A |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line"></span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                                  |</span><br><span class="line">|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |</span><br><span class="line">|        ID   ID                                                   Usage      |</span><br><span class="line">|=============================================================================|</span><br><span class="line">|  No running processes found                                                 |</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">[root@ai-rd ~]#</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/966a8be815a448feae71b0cebcd47020~tplv-k3u1fbpfcp-zoom-1.image">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

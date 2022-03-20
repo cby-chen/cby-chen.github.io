@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">使用 Istioctl 安装 istio</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">使用 Istioctl 安装 istio</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p>使用 Istioctl 安装 istio</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8c57e2d07c5e47588442dd1cefd04dab~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><strong>下载 Istio</strong></p>
+<p>转到 Istio 发布 页面，下载针对你操作系统的安装文件， 或用自动化工具下载并提取最新版本（Linux 或 macOS）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~]# curl -L https://istio.io/downloadIstio | sh -</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>若无法下载可以手动写入文件进行执行  </p>
+<p><strong>脚本内容：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line"></span><br><span class="line"># Copyright Istio Authors</span><br><span class="line">#</span><br><span class="line"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span><br><span class="line"># you may not use this file except in compliance with the License.</span><br><span class="line"># You may obtain a copy of the License at</span><br><span class="line">#</span><br><span class="line">#    http://www.apache.org/licenses/LICENSE-2.0</span><br><span class="line">#</span><br><span class="line"># Unless required by applicable law or agreed to in writing, software</span><br><span class="line"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span><br><span class="line"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span><br><span class="line"># See the License for the specific language governing permissions and</span><br><span class="line"># limitations under the License.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#</span><br><span class="line"># This file will be fetched as: curl -L https://git.io/getLatestIstio | sh -</span><br><span class="line"># so it should be pure bourne shell, not bash (and not reference other scripts)</span><br><span class="line">#</span><br><span class="line"># The script fetches the latest Istio release candidate and untars it.</span><br><span class="line"># You can pass variables on the command line to download a specific version</span><br><span class="line"># or to override the processor architecture. For example, to download</span><br><span class="line"># Istio 1.6.8 for the x86_64 architecture,</span><br><span class="line"># run curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.6.8 TARGET_ARCH=x86_64 sh -.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set -e</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Determines the operating system.</span><br><span class="line">OS=&quot;$(uname)&quot;</span><br><span class="line">if [ &quot;x$&#123;OS&#125;&quot; = &quot;xDarwin&quot; ] ; then</span><br><span class="line">  OSEXT=&quot;osx&quot;</span><br><span class="line">else</span><br><span class="line">  OSEXT=&quot;linux&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Determine the latest Istio version by version number ignoring alpha, beta, and rc versions.</span><br><span class="line">if [ &quot;x$&#123;ISTIO_VERSION&#125;&quot; = &quot;x&quot; ] ; then</span><br><span class="line">  ISTIO_VERSION=&quot;$(curl -sL https://github.com/istio/istio/releases | \</span><br><span class="line">                  grep -o &#x27;releases/[0-9]*.[0-9]*.[0-9]*/&#x27; | sort -V | \</span><br><span class="line">                  tail -1 | awk -F&#x27;/&#x27; &#x27;&#123; print $2&#125;&#x27;)&quot;</span><br><span class="line">  ISTIO_VERSION=&quot;$&#123;ISTIO_VERSION##*/&#125;&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">LOCAL_ARCH=$(uname -m)</span><br><span class="line">if [ &quot;$&#123;TARGET_ARCH&#125;&quot; ]; then</span><br><span class="line">    LOCAL_ARCH=$&#123;TARGET_ARCH&#125;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">case &quot;$&#123;LOCAL_ARCH&#125;&quot; in</span><br><span class="line">  x86_64)</span><br><span class="line">    ISTIO_ARCH=amd64</span><br><span class="line">    ;;</span><br><span class="line">  armv8*)</span><br><span class="line">    ISTIO_ARCH=arm64</span><br><span class="line">    ;;</span><br><span class="line">  aarch64*)</span><br><span class="line">    ISTIO_ARCH=arm64</span><br><span class="line">    ;;</span><br><span class="line">  armv*)</span><br><span class="line">    ISTIO_ARCH=armv7</span><br><span class="line">    ;;</span><br><span class="line">  amd64|arm64)</span><br><span class="line">    ISTIO_ARCH=$&#123;LOCAL_ARCH&#125;</span><br><span class="line">    ;;</span><br><span class="line">  *)</span><br><span class="line">    echo &quot;This system&#x27;s architecture, $&#123;LOCAL_ARCH&#125;, isn&#x27;t supported&quot;</span><br><span class="line">    exit 1</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if [ &quot;x$&#123;ISTIO_VERSION&#125;&quot; = &quot;x&quot; ] ; then</span><br><span class="line">  printf &quot;Unable to get latest Istio version. Set ISTIO_VERSION env var and re-run. For example: export ISTIO_VERSION=1.0.4&quot;</span><br><span class="line">  exit 1;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NAME=&quot;istio-$ISTIO_VERSION&quot;</span><br><span class="line">URL=&quot;https://github.com/istio/istio/releases/download/$&#123;ISTIO_VERSION&#125;/istio-$&#123;ISTIO_VERSION&#125;-$&#123;OSEXT&#125;.tar.gz&quot;</span><br><span class="line">ARCH_URL=&quot;https://github.com/istio/istio/releases/download/$&#123;ISTIO_VERSION&#125;/istio-$&#123;ISTIO_VERSION&#125;-$&#123;OSEXT&#125;-$&#123;ISTIO_ARCH&#125;.tar.gz&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">with_arch() &#123;</span><br><span class="line">  printf &quot;\nDownloading %s from %s ...\n&quot; &quot;$NAME&quot; &quot;$ARCH_URL&quot;</span><br><span class="line">  if ! curl -o /dev/null -sIf &quot;$ARCH_URL&quot;; then</span><br><span class="line">    printf &quot;\n%s is not found, please specify a valid ISTIO_VERSION and TARGET_ARCH\n&quot; &quot;$ARCH_URL&quot;</span><br><span class="line">    exit 1</span><br><span class="line">  fi</span><br><span class="line">  curl -fsLO &quot;$ARCH_URL&quot;</span><br><span class="line">  filename=&quot;istio-$&#123;ISTIO_VERSION&#125;-$&#123;OSEXT&#125;-$&#123;ISTIO_ARCH&#125;.tar.gz&quot;</span><br><span class="line">  tar -xzf &quot;$&#123;filename&#125;&quot;</span><br><span class="line">  rm &quot;$&#123;filename&#125;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">without_arch() &#123;</span><br><span class="line">  printf &quot;\nDownloading %s from %s ...&quot; &quot;$NAME&quot; &quot;$URL&quot;</span><br><span class="line">  if ! curl -o /dev/null -sIf &quot;$URL&quot;; then</span><br><span class="line">    printf &quot;\n%s is not found, please specify a valid ISTIO_VERSION\n&quot; &quot;$URL&quot;</span><br><span class="line">    exit 1</span><br><span class="line">  fi</span><br><span class="line">  curl -fsLO &quot;$URL&quot;</span><br><span class="line">  filename=&quot;istio-$&#123;ISTIO_VERSION&#125;-$&#123;OSEXT&#125;.tar.gz&quot;</span><br><span class="line">  tar -xzf &quot;$&#123;filename&#125;&quot;</span><br><span class="line">  rm &quot;$&#123;filename&#125;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Istio 1.6 and above support arch</span><br><span class="line"># Istio 1.5 and below do not have arch support</span><br><span class="line">ARCH_SUPPORTED=&quot;1.6&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if [ &quot;$&#123;OS&#125;&quot; = &quot;Linux&quot; ] ; then</span><br><span class="line">  # This checks if ISTIO_VERSION is less than ARCH_SUPPORTED (version-sort&#x27;s before it)</span><br><span class="line">  if [ &quot;$(printf &#x27;%s\n%s&#x27; &quot;$&#123;ARCH_SUPPORTED&#125;&quot; &quot;$&#123;ISTIO_VERSION&#125;&quot; | sort -V | head -n 1)&quot; = &quot;$&#123;ISTIO_VERSION&#125;&quot; ]; then</span><br><span class="line">    without_arch</span><br><span class="line">  else</span><br><span class="line">    with_arch</span><br><span class="line">  fi</span><br><span class="line">elif [ &quot;x$&#123;OS&#125;&quot; = &quot;xDarwin&quot; ] ; then</span><br><span class="line">  without_arch</span><br><span class="line">else</span><br><span class="line">  printf &quot;\n\n&quot;</span><br><span class="line">  printf &quot;Unable to download Istio %s at this moment!\n&quot; &quot;$ISTIO_VERSION&quot;</span><br><span class="line">  printf &quot;Please verify the version you are trying to download.\n\n&quot;</span><br><span class="line">  exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">printf &quot;&quot;</span><br><span class="line">printf &quot;\nIstio %s Download Complete!\n&quot; &quot;$ISTIO_VERSION&quot;</span><br><span class="line">printf &quot;\n&quot;</span><br><span class="line">printf &quot;Istio has been successfully downloaded into the %s folder on your system.\n&quot; &quot;$NAME&quot;</span><br><span class="line">printf &quot;\n&quot;</span><br><span class="line">BINDIR=&quot;$(cd &quot;$NAME/bin&quot; &amp;&amp; pwd)&quot;</span><br><span class="line">printf &quot;Next Steps:\n&quot;</span><br><span class="line">printf &quot;See https://istio.io/latest/docs/setup/install/ to add Istio to your Kubernetes cluster.\n&quot;</span><br><span class="line">printf &quot;\n&quot;</span><br><span class="line">printf &quot;To configure the istioctl client tool for your workstation,\n&quot;</span><br><span class="line">printf &quot;add the %s directory to your environment path variable with:\n&quot; &quot;$BINDIR&quot;</span><br><span class="line">printf &quot;\t export PATH=\&quot;\$PATH:%s\&quot;\n&quot; &quot;$BINDIR&quot;</span><br><span class="line">printf &quot;\n&quot;</span><br><span class="line">printf &quot;Begin the Istio pre-installation check by running:\n&quot;</span><br><span class="line">printf &quot;\t istioctl x precheck \n&quot;</span><br><span class="line">printf &quot;\n&quot;</span><br><span class="line">printf &quot;Need more information? Visit https://istio.io/latest/docs/setup/install/ \n&quot;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~]# bash istio.sh</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>转到 Istio 包目录。例如，如果包是 istio-1.11.4：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~]# cd istio-1.11.4/</span><br><span class="line">[root@k8s-master-node1 ~/istio-1.11.4]# ll</span><br><span class="line">total 28</span><br><span class="line">drwxr-x---.  2 root root    22 Oct 13 22:50 bin</span><br><span class="line">-rw-r--r--.  1 root root 11348 Oct 13 22:50 LICENSE</span><br><span class="line">drwxr-xr-x.  5 root root    52 Oct 13 22:50 manifests</span><br><span class="line">-rw-r-----.  1 root root   854 Oct 13 22:50 manifest.yaml</span><br><span class="line">-rw-r--r--.  1 root root  5866 Oct 13 22:50 README.md</span><br><span class="line">drwxr-xr-x. 21 root root  4096 Oct 13 22:50 samples</span><br><span class="line">drwxr-xr-x.  3 root root    57 Oct 13 22:50 tools</span><br><span class="line">[root@k8s-master-node1 ~/istio-1.11.4]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装目录包含：</strong></p>
+<p>samples&#x2F; 目录下的示例应用程序</p>
+<p>bin&#x2F; 目录下的 istioctl 客户端二进制文件 .</p>
+<p>将 istioctl 客户端加入搜索路径（Linux or macOS）:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ export PATH=$PWD/bin:$PATH</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">export PATH=/root/istio-1.11.4/bin:$PATH</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~/istio-1.11.4]# export PATH=$PWD/bin:$PATH</span><br><span class="line">[root@k8s-master-node1 ~/istio-1.11.4]#</span><br><span class="line">[root@k8s-master-node1 ~/istio-1.11.4]# vim /etc/profile</span><br><span class="line">[root@k8s-master-node1 ~/istio-1.11.4]# tail -n 2 /etc/profile</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">export PATH=/root/istio-1.11.4/bin:$PATH</span><br><span class="line">[root@k8s-master-node1 ~/istio-1.11.4]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用默认配置档安装 Istio</strong></p>
+<p>最简单的选择是用下面命令安装 Istio 默认 配置档：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~]# istioctl version</span><br><span class="line">no running Istio pods in &quot;istio-system&quot;</span><br><span class="line">1.11.4</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br><span class="line">[root@k8s-master-node1 ~]# istioctl install --set profile=demo -y</span><br><span class="line">✔ Istio core installed                                                                                                                                                                                                                                                        </span><br><span class="line">✔ Istiod installed                                                                                                                                                                                                                                                            </span><br><span class="line">✔ Egress gateways installed                                                                                                                                                                                                                                                  </span><br><span class="line">✔ Ingress gateways installed                                                                                                                                                                                                                                                  </span><br><span class="line">✔ Installation complete                                                                                                                                                                                                                                                      </span><br><span class="line">Thank you for installing Istio 1.11.  Please take a few minutes to tell us about your install/upgrade experience!  https://forms.gle/kWULBRjUv7hHci7T6</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>查看istio相应的 namespace 和 pod 是否已经正常创建</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~]#</span><br><span class="line">[root@k8s-master-node1 ~]# kubectl get pods -n istio-system</span><br><span class="line">NAME                                    READY   STATUS    RESTARTS   AGE</span><br><span class="line">istio-egressgateway-756d4db566-wh949    1/1     Running   0          2m</span><br><span class="line">istio-ingressgateway-8577c57fb6-2vrtg   1/1     Running   0          2m</span><br><span class="line">istiod-5847c59c69-l2dt2                 1/1     Running   0          2m39s</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>检查 istio 的 CRD 和 API 资源</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~]#</span><br><span class="line">[root@k8s-master-node1 ~]# kubectl get crd |grep istio</span><br><span class="line">authorizationpolicies.security.istio.io    2021-11-01T09:43:55Z</span><br><span class="line">destinationrules.networking.istio.io       2021-11-01T09:43:55Z</span><br><span class="line">envoyfilters.networking.istio.io           2021-11-01T09:43:55Z</span><br><span class="line">gateways.networking.istio.io               2021-11-01T09:43:55Z</span><br><span class="line">istiooperators.install.istio.io            2021-11-01T09:43:55Z</span><br><span class="line">peerauthentications.security.istio.io      2021-11-01T09:43:55Z</span><br><span class="line">requestauthentications.security.istio.io   2021-11-01T09:43:55Z</span><br><span class="line">serviceentries.networking.istio.io         2021-11-01T09:43:55Z</span><br><span class="line">sidecars.networking.istio.io               2021-11-01T09:43:55Z</span><br><span class="line">telemetries.telemetry.istio.io             2021-11-01T09:43:55Z</span><br><span class="line">virtualservices.networking.istio.io        2021-11-01T09:43:55Z</span><br><span class="line">workloadentries.networking.istio.io        2021-11-01T09:43:55Z</span><br><span class="line">workloadgroups.networking.istio.io         2021-11-01T09:43:55Z</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~]# kubectl api-resources |grep istio</span><br><span class="line">istiooperators                    iop,io       install.istio.io/v1alpha1              true         IstioOperator</span><br><span class="line">destinationrules                  dr           networking.istio.io/v1beta1            true         DestinationRule</span><br><span class="line">envoyfilters                                   networking.istio.io/v1alpha3           true         EnvoyFilter</span><br><span class="line">gateways                          gw           networking.istio.io/v1beta1            true         Gateway</span><br><span class="line">serviceentries                    se           networking.istio.io/v1beta1            true         ServiceEntry</span><br><span class="line">sidecars                                       networking.istio.io/v1beta1            true         Sidecar</span><br><span class="line">virtualservices                   vs           networking.istio.io/v1beta1            true         VirtualService</span><br><span class="line">workloadentries                   we           networking.istio.io/v1beta1            true         WorkloadEntry</span><br><span class="line">workloadgroups                    wg           networking.istio.io/v1alpha3           true         WorkloadGroup</span><br><span class="line">authorizationpolicies                          security.istio.io/v1beta1              true         AuthorizationPolicy</span><br><span class="line">peerauthentications               pa           security.istio.io/v1beta1              true         PeerAuthentication</span><br><span class="line">requestauthentications            ra           security.istio.io/v1beta1              true         RequestAuthentication</span><br><span class="line">telemetries                       telemetry    telemetry.istio.io/v1alpha1            true         Telemetry</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装 dashboard 组件。命令如下</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~]# kubectl apply -f /root/istio-1.11.4/samples/addons/ -n istio-system</span><br><span class="line">serviceaccount/grafana created</span><br><span class="line">configmap/grafana created</span><br><span class="line">service/grafana created</span><br><span class="line">deployment.apps/grafana created</span><br><span class="line">configmap/istio-grafana-dashboards created</span><br><span class="line">configmap/istio-services-grafana-dashboards created</span><br><span class="line">deployment.apps/jaeger created</span><br><span class="line">service/tracing created</span><br><span class="line">service/zipkin created</span><br><span class="line">service/jaeger-collector created</span><br><span class="line">serviceaccount/kiali created</span><br><span class="line">configmap/kiali created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/kiali-viewer created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/kiali created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/kiali created</span><br><span class="line">role.rbac.authorization.k8s.io/kiali-controlplane created</span><br><span class="line">rolebinding.rbac.authorization.k8s.io/kiali-controlplane created</span><br><span class="line">service/kiali created</span><br><span class="line">deployment.apps/kiali created</span><br><span class="line">serviceaccount/prometheus created</span><br><span class="line">configmap/prometheus created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/prometheus created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/prometheus created</span><br><span class="line">service/prometheus created</span><br><span class="line">deployment.apps/prometheus created</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@k8s-master-node1 ~]# kubectl get pods -n istio-system</span><br><span class="line">NAME                                    READY   STATUS    RESTARTS   AGE</span><br><span class="line">grafana-68cc7d6d78-792cw                1/1     Running   0          88s</span><br><span class="line">istio-egressgateway-756d4db566-wh949    1/1     Running   0          6m9s</span><br><span class="line">istio-ingressgateway-8577c57fb6-2vrtg   1/1     Running   0          6m9s</span><br><span class="line">istiod-5847c59c69-l2dt2                 1/1     Running   0          6m48s</span><br><span class="line">jaeger-5d44bc5c5d-n6zjq                 1/1     Running   0          88s</span><br><span class="line">kiali-fd9f88575-svz7g                   1/1     Running   0          87s</span><br><span class="line">prometheus-77b49cb997-7d4s9             2/2     Running   0          86s</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br></pre></td></tr></table></figure>
+
+<p><strong>将istio-ingressgateway改为NodePort方式，方便访问</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~]# kubectl patch service istio-ingressgateway -n istio-system -p &#x27;&#123;&quot;spec&quot;:&#123;&quot;type&quot;:&quot;NodePort&quot;&#125;&#125;&#x27;</span><br><span class="line">service/istio-ingressgateway patched</span><br><span class="line">[root@k8s-master-node1 ~]#</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/532ce5ca82fe4b8e974f283e8c246b3b~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>Linux运维交流社区</strong></p>
+<p>Linux运维交流社区，互联网新闻以及技术交流。</p>
+<p>46篇原创内容</p>
+<p>公众号</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4294884c6484402aa64f90a153005ce0~tplv-k3u1fbpfcp-zoom-1.image" alt="图片">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
