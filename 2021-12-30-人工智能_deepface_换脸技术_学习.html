@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">人工智能 deepface 换脸技术 学习</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">人工智能 deepface 换脸技术 学习</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5551722f4b254661b22663128f7e538a~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>介绍  </p>
+<p>Deepface是一个轻量级的python人脸识别和人脸属性分析（年龄、性别、情感和种族）框架。它是一种混合人脸识别框架缠绕状态的最先进的模型：VGG-Face，Google FaceNet，OpenFace，Facebook DeepFace，DeepID，ArcFace和Dlib。那些模型已经达到并通过了人类水平的准确性。该库主要基于 TensorFlow 和 Keras。</p>
+<p>环境准备与安装</p>
+<p>项目地址：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/serengil/deepface">https://github.com/serengil/deepface</a></p>
+<p>pycharm环境下载：</p>
+<p><a target="_blank" rel="noopener" href="https://www.jetbrains.com/pycharm/download/#section=windows">https://www.jetbrains.com/pycharm/download/#section=windows</a></p>
+<p>conda虚拟环境：</p>
+<p><a target="_blank" rel="noopener" href="https://www.anaconda.com/products/individual">https://www.anaconda.com/products/individual</a></p>
+<p>数据集：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/serengil/deepface/_models/releases/download/v1.0/vgg/_face/_weights.h5">https://github.com/serengil/deepface\_models/releases/download/v1.0/vgg\_face\_weights.h5</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/serengil/deepface/_models/releases/download/v1.0/facial/_expression/_model/_weights.h5">https://github.com/serengil/deepface\_models/releases/download/v1.0/facial\_expression\_model\_weights.h5</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/serengil/deepface/_models/releases/download/v1.0/age/_model/_weights.h5">https://github.com/serengil/deepface\_models/releases/download/v1.0/age\_model\_weights.h5</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/serengil/deepface/_models/releases/download/v1.0/gender/_model/_weights.h5">https://github.com/serengil/deepface\_models/releases/download/v1.0/gender\_model\_weights.h5</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/serengil/deepface/_models/releases/download/v1.0/race/_model/_single/_batch.h5">https://github.com/serengil/deepface\_models/releases/download/v1.0/race\_model\_single\_batch.h5</a></p>
+<p>创建项目</p>
+<p>使用打开项目目录后，创建时使用conda的Python 3.9虚拟环境</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c75238b7236542c3b67dc3f0999438a1~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>安装pip依赖</p>
+<p>创建完成后，在cmd中查看现有的虚拟环境，并进入刚刚创建的虚拟环境</p>
+<p>conda env list</p>
+<p>activate pythonProject</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6acad22ae9b64ed99174838b5daefced~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>进入环境后在进行安装pip所需依赖，并使用国内源进行安装实现下载加速</p>
+<p>pip install deepface -i <a target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/58f5096a70834443a804991aaf14f527~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>使用</p>
+<p>面部验证</p>
+<p>此功能验证同一人或不同人员的面部对。它期望精确的图像路径作为输入。也欢迎通过笨重或基于 64 编码的图像。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd C:\Users\Administrator\PycharmProjects\pythonProject\tests\dataset</span><br><span class="line"></span><br><span class="line">from deepface import DeepFace</span><br><span class="line">result = DeepFace.verify(img1_path = &quot;img1.jpg&quot;, img2_path = &quot;img2.jpg&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>会自动下载数据集，若无法下载数据集</p>
+<p>可以提前下载好数据集，放入到 C:\Users\Administrator.deepface\weights\ 目录下</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8a60acdc50a9463081d7aad9159d6955~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>面部属性分析</p>
+<p>Deepface还配备了一个强大的面部属性分析模块，包括年龄，性别，面部表情（包括愤怒，恐惧，中性，悲伤，厌恶，快乐和惊喜）和种族（包括亚洲，白人，中东，印度，拉丁和黑色）预测。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from deepface import DeepFace</span><br><span class="line">obj = DeepFace.analyze(img_path = &quot;img4.jpg&quot;, actions = [&#x27;age&#x27;, &#x27;gender&#x27;, &#x27;race&#x27;, &#x27;emotion&#x27;])</span><br></pre></td></tr></table></figure>
+
+<p>会自动下载数据集，若无法下载数据集</p>
+<p>可以提前下载好数据集，放入到 C:\Users\Administrator.deepface\weights\ 目录下</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/de61bf44979c40f58c8d53fb760fd63e~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/579503a2be664b64bb26935ace853f46~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>Linux运维交流社区</strong></p>
+<p>Linux运维交流社区，互联网新闻以及技术交流。</p>
+<p>49篇原创内容</p>
+<p>公众号</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/59bf3a92e5f04d658066d5cc13b094e3~tplv-k3u1fbpfcp-zoom-1.image" alt="图片">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

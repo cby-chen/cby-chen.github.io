@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">在 k8s（kubernetes）中使用 Loki 进行日志监控</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">在 k8s（kubernetes）中使用 Loki 进行日志监控</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3279789d71c64e61a0df1c24cb94b1dd~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<h1 id="安装helm环境"><a href="#安装helm环境" class="headerlink" title="安装helm环境"></a>安装helm环境</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@hello ~/yaml]#</span><br><span class="line">[root@hello ~/yaml]# curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -</span><br><span class="line">[root@hello ~/yaml]# sudo apt-get install apt-transport-https --yes</span><br><span class="line">[root@hello ~/yaml]# echo &quot;deb https://baltocdn.com/helm/stable/debian/ all main&quot; | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list</span><br><span class="line">deb https://baltocdn.com/helm/stable/debian/ all main</span><br><span class="line">[root@hello ~/yaml]# sudo apt-get update</span><br><span class="line">[root@hello ~/yaml]# sudo apt-get install helm</span><br><span class="line">[root@hello ~/yaml]#</span><br></pre></td></tr></table></figure>
+
+<h1 id="添加安装下载源"><a href="#添加安装下载源" class="headerlink" title="添加安装下载源"></a>添加安装下载源</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@hello ~/yaml]# helm repo add loki https://grafana.github.io/loki/charts &amp;&amp; helm repo update</span><br><span class="line">WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /root/.kube/config</span><br><span class="line">WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /root/.kube/config</span><br><span class="line">&quot;loki&quot; has been added to your repositories</span><br><span class="line">WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /root/.kube/config</span><br><span class="line">WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /root/.kube/config</span><br><span class="line">Hang tight while we grab the latest from your chart repositories...</span><br><span class="line">...Successfully got an update from the &quot;loki&quot; chart repository</span><br><span class="line">Update Complete. ⎈Happy Helming!⎈</span><br><span class="line">[root@hello ~/yaml]#</span><br><span class="line">[root@hello ~/yaml]#</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@hello ~/yaml]# helm pull loki/loki-stack</span><br><span class="line">WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /root/.kube/config</span><br><span class="line">WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /root/.kube/config</span><br><span class="line">[root@hello ~/yaml]# ls</span><br><span class="line">loki-stack-2.1.2.tgz  nfs-storage.yaml  nginx-ingress.yaml</span><br><span class="line">[root@hello ~/yaml]# tar xf loki-stack-2.1.2.tgz</span><br><span class="line">[root@hello ~/yaml]# ls</span><br><span class="line">loki-stack  loki-stack-2.1.2.tgz  nfs-storage.yaml  nginx-ingress.yaml</span><br></pre></td></tr></table></figure>
+
+<h1 id="安装loki日志系统"><a href="#安装loki日志系统" class="headerlink" title="安装loki日志系统"></a>安装loki日志系统</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@hello ~/yaml]# helm install loki loki-stack/</span><br><span class="line">WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /root/.kube/config</span><br><span class="line">WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /root/.kube/config</span><br><span class="line">WARNING: This chart is deprecated</span><br><span class="line">W1203 07:31:04.751065  212245 warnings.go:70] policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+</span><br><span class="line">W1203 07:31:04.754254  212245 warnings.go:70] policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+</span><br><span class="line">W1203 07:31:04.833003  212245 warnings.go:70] policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+</span><br><span class="line">W1203 07:31:04.833003  212245 warnings.go:70] policy/v1beta1 PodSecurityPolicy is deprecated in v1.21+, unavailable in v1.25+</span><br><span class="line">NAME: loki</span><br><span class="line">LAST DEPLOYED: Fri Dec  3 07:31:04 2021</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: deployed</span><br><span class="line">REVISION: 1</span><br><span class="line">NOTES:</span><br><span class="line">The Loki stack has been deployed to your cluster. Loki can now be added as a datasource in Grafana.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">See http://docs.grafana.org/features/datasources/loki/ for more detail.</span><br><span class="line">[root@hello ~/yaml]#</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看安装后是否完成"><a href="#查看安装后是否完成" class="headerlink" title="查看安装后是否完成"></a>查看安装后是否完成</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@hello ~/yaml]# helm list -A</span><br><span class="line">WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /root/.kube/config</span><br><span class="line">WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /root/.kube/config</span><br><span class="line">NAME    NAMESPACE   REVISION    UPDATED                                 STATUS      CHART               APP VERSION</span><br><span class="line">loki    default     1           2021-12-03 07:31:04.3324429 +0000 UTC   deployed    loki-stack-2.1.2    v2.0.0    </span><br><span class="line">[root@hello ~/yaml]#</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@hello ~/yaml]# kubectl  get pod</span><br><span class="line">NAME                                     READY   STATUS    RESTARTS   AGE</span><br><span class="line">loki-0                                   0/1     Running   0          68s</span><br><span class="line">loki-promtail-79tn8                      1/1     Running   0          68s</span><br><span class="line">loki-promtail-qzjjs                      1/1     Running   0          68s</span><br><span class="line">loki-promtail-zlt7p                      1/1     Running   0          68s</span><br><span class="line">nfs-client-provisioner-dc5789f74-jsrh7   1/1     Running   0          44m</span><br><span class="line">[root@hello ~/yaml]#</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看svc并修改类型"><a href="#查看svc并修改类型" class="headerlink" title="查看svc并修改类型"></a>查看svc并修改类型</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@hello ~/yaml]# kubectl  get svc</span><br><span class="line">NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE</span><br><span class="line">kubernetes      ClusterIP   10.68.0.1       &lt;none&gt;        443/TCP    4h44m</span><br><span class="line">loki            ClusterIP   10.68.140.107   &lt;none&gt;        3100/TCP   2m58s</span><br><span class="line">loki-headless   ClusterIP   None            &lt;none&gt;        3100/TCP   2m58s</span><br><span class="line">[root@hello ~/yaml]#</span><br></pre></td></tr></table></figure>
+
+<h1 id="将svc设置为-type-NodePort"><a href="#将svc设置为-type-NodePort" class="headerlink" title="将svc设置为 type: NodePort"></a>将svc设置为 type: NodePort</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@hello ~/yaml]# kubectl  edit  svc loki</span><br><span class="line">service/loki edited</span><br><span class="line">[root@hello ~/yaml]#</span><br><span class="line">[root@hello ~/yaml]# kubectl  get svc</span><br><span class="line">NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE</span><br><span class="line">kubernetes      ClusterIP   10.68.0.1       &lt;none&gt;        443/TCP          4h46m</span><br><span class="line">loki            NodePort    10.68.140.107   &lt;none&gt;        3100:31089/TCP   4m34s</span><br><span class="line">loki-headless   ClusterIP   None            &lt;none&gt;        3100/TCP         4m34s</span><br><span class="line">[root@hello ~/yaml]#</span><br></pre></td></tr></table></figure>
+
+<h1 id="添加nginx应用"><a href="#添加nginx应用" class="headerlink" title="添加nginx应用"></a>添加nginx应用</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">[root@hello ~/yaml]# vim nginx-app.yaml</span><br><span class="line">[root@hello ~/yaml]# cat nginx-app.yaml</span><br><span class="line">apiVersion: apps/v1 </span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: nginx</span><br><span class="line">  replicas: 1 </span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: nginx</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: nginx</span><br><span class="line">        image: nginx:1.7.9</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 80</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx</span><br><span class="line">  labels:</span><br><span class="line">    app: nginx</span><br><span class="line">    jobLabel: nginx</span><br><span class="line">spec:</span><br><span class="line">  ports:</span><br><span class="line">  - name: nginx</span><br><span class="line">    port: 80</span><br><span class="line">    protocol: TCP</span><br><span class="line">  selector:</span><br><span class="line">    app: nginx</span><br><span class="line">  type: NodePort</span><br><span class="line">[root@hello ~/yaml]#</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="查看nginx的pod"><a href="#查看nginx的pod" class="headerlink" title="查看nginx的pod"></a>查看nginx的pod</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@hello ~/yaml]# kubectl apply -f nginx-app.yaml </span><br><span class="line">deployment.apps/nginx created</span><br><span class="line">service/nginx created</span><br><span class="line"></span><br><span class="line">[root@hello ~/yaml]# kubectl get pod  | grep nginx</span><br><span class="line">nginx-5d59d67564-7fj4b                   1/1     Running   0          29s</span><br><span class="line">[root@hello ~/yaml]#</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="测试访问"><a href="#测试访问" class="headerlink" title="测试访问"></a>测试访问</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@hello ~/yaml]# kubectl  get svc</span><br><span class="line">NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE</span><br><span class="line">kubernetes      ClusterIP   10.68.0.1       &lt;none&gt;        443/TCP          4h57m</span><br><span class="line">loki            NodePort    10.68.140.107   &lt;none&gt;        3100:31089/TCP   15m</span><br><span class="line">loki-headless   ClusterIP   None            &lt;none&gt;        3100/TCP         15m</span><br><span class="line">nginx           NodePort    10.68.150.95    &lt;none&gt;        80:31317/TCP     105s</span><br><span class="line">[root@hello ~/yaml]# </span><br><span class="line">[root@hello ~/yaml]# while true; do curl --silent --output /dev/null --write-out &#x27;%&#123;http_code&#125;&#x27; http://192.168.1.12:31317; sleep 1; echo; done</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="在grafana中添加源"><a href="#在grafana中添加源" class="headerlink" title="在grafana中添加源"></a>在grafana中添加源</h1><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bb42d16252a748ce90bb5fa77945c038~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<h1 id="查看日志"><a href="#查看日志" class="headerlink" title="查看日志"></a>查看日志</h1><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ed027a6ed9674ae98cedbc8f6a8249c5~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<h1 id="添加面板"><a href="#添加面板" class="headerlink" title="添加面板"></a>添加面板</h1><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c23a4d8a5afd459b93280f2e02506a2d~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/eb98af4b99594a2cbf0448e8685715b5~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/83d39f756f944709bc3cb9e205da3533~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>Linux运维交流社区</strong></p>
+<p>Linux运维交流社区，互联网新闻以及技术交流。</p>
+<p>68篇原创内容</p>
+<p>公众号</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6031aba6c4b847cd8a0ffbd534e049ed~tplv-k3u1fbpfcp-zoom-1.image" alt="图片">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

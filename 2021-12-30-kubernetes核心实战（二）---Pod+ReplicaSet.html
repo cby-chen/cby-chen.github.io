@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">kubernetes核心实战（二）---Pod+ReplicaSet</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">kubernetes核心实战（二）---Pod+ReplicaSet</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h4 id="3、pod"><a href="#3、pod" class="headerlink" title="3、pod"></a>3、pod</h4><p>Pod 是可以在 Kubernetes 中创建和管理的、最小的可部署的计算单元。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8e8a8942405543b1b5db2621d244407a~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>Pod （就像在鲸鱼荚或者豌豆荚中）是一组（一个或多个） 容器；这些容器共享存储、网络、以及怎样运行这些容器的声明。Pod 中的内容总是并置（colocated）的并且一同调度，在共享的上下文中运行。Pod 所建模的是特定于应用的“逻辑主机”，其中包含一个或多个应用容器， 这些容器是相对紧密的耦合在一起的。在非云环境中，在相同的物理机或虚拟机上运行的应用类似于 在同一逻辑主机上运行的云应用。</p>
+<p>除了应用容器，Pod 还可以包含在 Pod 启动期间运行的 Init 容器。你也可以在集群中支持临时性容器 的情况外，为调试的目的注入临时性容器。</p>
+<h5 id="使用-Pod"><a href="#使用-Pod" class="headerlink" title="使用 Pod"></a>使用 Pod</h5><p>通常你不需要直接创建 Pod，甚至单实例 Pod。相反，你会使用诸如 Deployment 或 Job 这类工作负载资源 来创建 Pod。如果 Pod 需要跟踪状态， 可以考虑 StatefulSet 资源。</p>
+<p>Kubernetes 集群中的 Pod 主要有<strong>两种</strong>用法：</p>
+<p>运行单个容器的 Pod。”每个 Pod 一个容器”模型是最常见的 Kubernetes 用例；在这种情况下，可以将 Pod 看作单个容器的包装器，并且 Kubernetes 直接管理 Pod，而不是容器。</p>
+<p>运行多个协同工作的容器的 Pod。Pod 可能封装由多个紧密耦合且需要共享资源的共处容器组成的应用程序。这些位于同一位置的容器可能形成单个内聚的服务单元 —— 一个容器将文件从共享卷提供给公众， 而另一个单独的“挂斗”（sidecar）容器则刷新或更新这些文件。Pod 将这些容器和存储资源打包为一个可管理的实体。</p>
+<p>说明：将多个并置、同管的容器组织到一个 Pod 中是一种相对高级的使用场景。只有在一些场景中，容器之间紧密关联时你才应该使用这种模式。</p>
+<p>每个 Pod 都旨在运行给定应用程序的单个实例。如果希望横向扩展应用程序（例如，运行多个实例 以提供更多的资源），则应该使用多个 Pod，每个实例使用一个 Pod。在 Kubernetes 中，这通常被称为 副本（Replication）。通常使用一种工作负载资源及其控制器 来创建和管理一组 Pod 副本。</p>
+<p>Pod 怎样管理多个容器</p>
+<p>Pod 被设计成支持形成内聚服务单元的多个协作过程（形式为容器）。Pod 中的容器被自动安排到集群中的同一物理机或虚拟机上，并可以一起进行调度。容器之间可以共享资源和依赖、彼此通信、协调何时以及何种方式终止自身。</p>
+<p>例如，你可能有一个容器，为共享卷中的文件提供 Web 服务器支持，以及一个单独的 “sidecar（挂斗）”容器负责从远端更新这些文件，如下图所示：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b95fa02d2c3140cc982206fb9988e4f6~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h4 id="4、ReplicaSet"><a href="#4、ReplicaSet" class="headerlink" title="4、ReplicaSet"></a>4、ReplicaSet</h4><p>ReplicaSet 的目的是维护一组在任何时候都处于运行状态的 Pod 副本的稳定集合。因此，它通常用来保证给定数量的、完全相同的 Pod 的可用性。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0048a17c108e438283d95a482ac437a4~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>ReplicaSet 的工作原理</p>
+<p>RepicaSet 是通过一组字段来定义的，包括一个用来识别可获得的 Pod 的集合的选择算符，一个用来标明应该维护的副本个数的数值，一个用来指定应该创建新 Pod 以满足副本个数条件时要使用的 Pod 模板等等。每个 ReplicaSet 都通过根据需要创建和 删除 Pod 以使得副本个数达到期望值，进而实现其存在价值。当 ReplicaSet 需要创建 新的 Pod 时，会使用所提供的 Pod 模板。</p>
+<p>ReplicaSet 通过 Pod 上的 metadata.ownerReferences 字段连接到附属 Pod，该字段给出当前对象的属主资源。ReplicaSet 所获得的 Pod 都在其 ownerReferences 字段中包含了属主 ReplicaSet 的标识信息。正是通过这一连接，ReplicaSet 知道它所维护的 Pod 集合的状态， 并据此计划其操作行为。</p>
+<p>ReplicaSet 使用其选择算符来辨识要获得的 Pod 集合。如果某个 Pod 没有 OwnerReference 或者其 OwnerReference 不是一个 控制器，且其匹配到 某 ReplicaSet 的选择算符，则该 Pod 立即被此 ReplicaSet 获得。</p>
+<p>示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# vim pod.yaml [root@k8s-master-node1 ~/yaml/test]# cat pod.yaml apiVersion: apps/v1kind: ReplicaSetmetadata:  name: frontend  labels:    app: guestbook    tier: frontendspec:  # modify replicas according to your case  replicas: 3  selector:    matchLabels:      tier: frontend  template:    metadata:      labels:        tier: frontend    spec:      containers:      - name: nginx        image: nginx[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<h5 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl apply -f pod.yaml replicaset.apps/frontend created</span><br></pre></td></tr></table></figure>
+
+<h5 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl get podNAME                                     READY   STATUS    RESTARTS     AGEfrontend-8zxxw                           1/1     Running   0            2m26sfrontend-l22df                           1/1     Running   0            2m26sfrontend-qnhkr                           1/1     Running   0            2m26s[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<h5 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl delete -f pod.yaml replicaset.apps &quot;frontend&quot; deleted[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bcb34e25e7bc44959c9255c2b5dc0555~tplv-k3u1fbpfcp-zoom-1.image">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

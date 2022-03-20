@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">在 Linux 上以 All-in-One 模式安装 KubeSphere</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">在 Linux 上以 All-in-One 模式安装 KubeSphere</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p><strong>在 Linux 上以 All-in-One 模式安装 KubeSphere</strong></p>
+<p>Install KubeSphere in All-in-One mode on Linux</p>
+<p><strong>背景</strong></p>
+<p>KubeSphere 是在Kubernetes 之上构建的面向云原生应用的分布式操作系统，完全开源，支持多云与多集群管理，提供全栈的IT 自动化运维能力，简化公司的DevOps 工作流。… 作为全栈的多租户容器平台，KubeSphere 提供了运维友好的向导式操作界面，帮助公司快速构建一个强大和功能丰富的容器云平台。</p>
+<p>KubeSphere is a distributed operating system for cloud-native applications built on Kubernetes. It is fully open source, supports multi-cloud and multi-cluster management, provides full-stack IT automated operation and maintenance capabilities, and simplifies the company’s DevOps workflow. … As a full-stack multi-tenant container platform, KubeSphere provides an operation and maintenance-friendly guided operation interface to help the company quickly build a powerful and feature-rich container cloud platform.</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2726cdd76c2945b2be33b877b2ced175~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><strong>一、安装 docker</strong></p>
+<p>One, install docker</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun</span><br><span class="line">----略----</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@hello:~# docker -v</span><br><span class="line">Docker version 20.10.9, build c2ea9bc</span><br><span class="line">root@hello:~#</span><br></pre></td></tr></table></figure>
+
+<p><strong>二，下载安装 KubeKey</strong></p>
+<p>Second, download and install KubeKey</p>
+<p>从源代码生成二进制文件</p>
+<p>Generate binary files from source code</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# git clone https://github.com/kubesphere/kubekey.git</span><br><span class="line">Cloning into &#x27;kubekey&#x27;...</span><br><span class="line">remote: Enumerating objects: 13438, done.</span><br><span class="line">remote: Counting objects: 100% (899/899), done.</span><br><span class="line">remote: Compressing objects: 100% (238/238), done.</span><br><span class="line">remote: Total 13438 (delta 745), reused 662 (delta 661), pack-reused 12539</span><br><span class="line">Receiving objects: 100% (13438/13438), 34.95 MiB | 10.14 MiB/s, done.</span><br><span class="line">Resolving deltas: 100% (5424/5424), done.</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# cd kubekey</span><br><span class="line">root@hello:~/kubekey# </span><br><span class="line">root@hello:~/kubekey# </span><br><span class="line">root@hello:~/kubekey# ./build.sh -p</span><br><span class="line">----略----</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<p>Notice:</p>
+<p>在构建之前，需要先安装 Docker。</p>
+<p>如果无法访问 <a target="_blank" rel="noopener" href="https://proxy.golang.org/%EF%BC%8C%E6%AF%94%E5%A6%82%E5%9C%A8%E5%A2%99%E5%86%85%EF%BC%8C%E8%AF%B7%E6%89%A7%E8%A1%8C">https://proxy.golang.org/，比如在墙内，请执行</a> build.sh -p。</p>
+<p>Before building, you need to install Docker.</p>
+<p>If you cannot access <a target="_blank" rel="noopener" href="https://proxy.golang.org/">https://proxy.golang.org/</a>, such as inside a firewall, please execute build.sh -p.</p>
+<p><strong>三、 安装所需工具</strong></p>
+<p>Three， Tools required for installation</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# apt install sudo -y</span><br><span class="line">root@hello:~# apt install curl -y</span><br><span class="line">root@hello:~# apt install openssl -y</span><br><span class="line">root@hello:~# apt install ebtables -y</span><br><span class="line">root@hello:~# apt install socat -y</span><br><span class="line">root@hello:~# apt install ipset -y</span><br><span class="line">root@hello:~# apt install conntrack -y</span><br><span class="line">root@hello:~# apt install nfs-common -y</span><br></pre></td></tr></table></figure>
+
+<p>四、创建集群</p>
+<p>Fourth, create a cluster</p>
+<p>同时安装 Kubernetes 和 KubeSphere</p>
+<p>Install Kubernetes and KubeSphere at the same time</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# export KKZONE=cn</span><br><span class="line">root@hello:~# /root/kubekey/output/kk create cluster --with-kubernetes v1.20.4 --with-kubesphere v3.1.1</span><br><span class="line">+-------+------+------+---------+----------+-------+-------+-----------+---------+------------+-------------+------------------+--------------+</span><br><span class="line">| name  | sudo | curl | openssl | ebtables | socat | ipset | conntrack | docker  | nfs client | ceph client | glusterfs client | time         |</span><br><span class="line">+-------+------+------+---------+----------+-------+-------+-----------+---------+------------+-------------+------------------+--------------+</span><br><span class="line">| hello | y    | y    | y       | y        | y     | y     | y         | 20.10.9 | y          |             |                  | UTC 02:50:57 |</span><br><span class="line">+-------+------+------+---------+----------+-------+-------+-----------+---------+------------+-------------+------------------+--------------+</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">This is a simple check of your environment.</span><br><span class="line">Before installation, you should ensure that your machines meet all requirements specified at</span><br><span class="line">https://github.com/kubesphere/kubekey#requirements-and-recommendations</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Continue this installation? [yes/no]: yes</span><br><span class="line">INFO[02:51:00 UTC] Downloading Installation Files               </span><br><span class="line">INFO[02:51:00 UTC] Downloading kubeadm ...    </span><br><span class="line">----略----</span><br></pre></td></tr></table></figure>
+
+<p><strong>五、验证安装结果</strong></p>
+<p>Five, verify the installation results</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath=&#x27;&#123;.items[0].metadata.name&#125;&#x27;) -f</span><br><span class="line">----略----</span><br><span class="line">#####################################################</span><br><span class="line">###              Welcome to KubeSphere!           ###</span><br><span class="line">#####################################################</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Console: http://192.168.1.20:30880</span><br><span class="line">Account: admin</span><br><span class="line">Password: P@88w0rd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NOTES：</span><br><span class="line">  1. After you log into the console, please check the</span><br><span class="line">     monitoring status of service components in</span><br><span class="line">     &quot;Cluster Management&quot;. If any service is not</span><br><span class="line">     ready, please wait patiently until all components </span><br><span class="line">     are up and running.</span><br><span class="line">  2. Please change the default password after login.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#####################################################</span><br><span class="line">https://kubesphere.io             2021-10-11 03:04:53</span><br><span class="line">#####################################################</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/01946623a981490880a25cba41758d86~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>注意：</p>
+<p>Notice:</p>
+<p>输出信息会显示 Web 控制台的 IP 地址和端口号，默认的 NodePort 是 30880。现在，您可以使用默认的帐户和密码 (admin&#x2F;P@88w0rd) 通过 <NodeIP>:30880 访问控制台</p>
+<p>The output information will display the IP address and port number of the Web console. The default NodePort is 30880. Now you can use the default account and password (admin&#x2F;P@88w0rd) to access the console via <NodeIP>:30880</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a3d34a9731814326865c5e325943451f~tplv-k3u1fbpfcp-zoom-1.image" alt="Linux运维交流社区"></p>
+<p><strong>Linux运维交流社区</strong></p>
+<p>Linux运维交流社区，互联网新闻以及技术交流。</p>
+<p>39篇原创内容</p>
+<p>公众号</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e8493e3afea74dfa8e4498ce7802dec9~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

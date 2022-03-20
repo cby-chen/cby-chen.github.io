@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Ansible 安装并简单使用</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Ansible 安装并简单使用</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p>Ansible 简介</p>
+<p>Ansible 是一款 IT 自动化工具。主要应用场景有配置系统、软件部署、持续发布及不停服平滑滚动更新的高级任务编排。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc088adca8ce488482700e675f8717c3~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>Ansible 本身非常简单易用，同时注重安全和可靠性，以最小化变动为特色，使用 OpenSSH 实现数据传输 ( 如果有需要的话也可以使用其它传输模式或者 pull 模式 )，其语言设计非常利于人类阅读，即使是针对不刚接触 Ansible 的新手来讲亦是如此。</p>
+<p>我们坚信无论什么范围的环境，简单都是必须的，所以我们的设计尽可能满足各类型的繁忙人群：开发人员、系统管理员、发布工程师、IT 管理员等所有类型的人。同时， Ansible 适用于各种环境，小到几台多到成千上万台的企业实际环境都完全满足。</p>
+<p>Ansible 不使用C&#x2F;S架构管理节点，即没有 Agent 。这样的架构使得 Ansible 不会存在如何升级远程 Agent 管理进程或者因为没有安装 Agent 而无法管理系统。因为 OpenSSH 是非常流行的开源组件，安全问题也非常少 。Ansible 的 去中心化 管理方式深受业内认可， 即它只依赖 OS 的 KEY 认证访问远程主机。如需， Ansible 可以便捷接入 Kerberos, LDAP 或者其它认证系统。</p>
+<p>安装ansible工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@Ansible:~# apt update &amp;&amp; apt install ansible</span><br><span class="line">root@Ansible:~# apt install sshpass</span><br></pre></td></tr></table></figure>
+
+<p>创建秘钥</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">root@Ansible:~# ssh-keygen</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/root/.ssh/id_rsa):</span><br><span class="line">Enter passphrase (empty for no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br><span class="line">Your identification has been saved in /root/.ssh/id_rsa</span><br><span class="line">Your public key has been saved in /root/.ssh/id_rsa.pub</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:ZlnekfYdDkp4AA2zZLysbtr8Epcp6tMgFB2TGEY/zFU root@Ansible</span><br><span class="line">The key&#x27;s randomart image is:</span><br><span class="line">+---[RSA 3072]----+</span><br><span class="line">|.++oo.oE+.       |</span><br><span class="line">|.o+oo o.o.o  .   |</span><br><span class="line">|  .=  .....o+. . |</span><br><span class="line">| .  .  o +oo.oo..|</span><br><span class="line">|.     . S ... ...|</span><br><span class="line">| . . + *         |</span><br><span class="line">|  . = +          |</span><br><span class="line">|   oo=           |</span><br><span class="line">|  .o+oo.         |</span><br><span class="line">+----[SHA256]-----+</span><br><span class="line">root@Ansible:~#</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">批量拷贝脚本</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# vim copy_ssh_id.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# cat copy_ssh_id.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">rm -f ./authorized_keys; touch ./authorized_keys</span><br><span class="line">sed -i &#x27;/StrictHostKeyChecking/s/^#//; /StrictHostKeyChecking/s/ask/no/&#x27; /etc/ssh/ssh_config</span><br><span class="line">sed -i &quot;/#UseDNS/ s/^#//; /UseDNS/ s/yes/no/&quot; /etc/ssh/sshd_config</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cat hostsname.txt | while read host ip pwd; do</span><br><span class="line">  sshpass -p $pwd ssh-copy-id -f $ip 2&gt;/dev/null</span><br><span class="line">  ssh -nq $ip &quot;hostnamectl set-hostname $host&quot;</span><br><span class="line">  ssh -nq $ip &quot;echo -e &#x27;y\n&#x27; | ssh-keygen -q -f ~/.ssh/id_rsa -t rsa -N &#x27;&#x27;&quot;</span><br><span class="line">  echo &quot;===== Copy id_rsa.pub of $ip =====&quot;</span><br><span class="line">  scp $ip:/root/.ssh/id_rsa.pub ./$host-id_rsa.pub</span><br><span class="line">  #cat ./$host-id_rsa.pub &gt;&gt; ./authorized_keys</span><br><span class="line">  echo $ip $host &gt;&gt; /etc/hosts</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~#</span><br></pre></td></tr></table></figure>
+
+<p>添加主机信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@Ansible:~# vim hostsname.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# cat hostsname.txt</span><br><span class="line">node  192.168.1.2    123123</span><br><span class="line">node  192.168.1.3    123123</span><br><span class="line">node  192.168.1.4    123123</span><br><span class="line">node  192.168.1.5    123123</span><br><span class="line">node  192.168.1.6    123123</span><br><span class="line">node  192.168.1.7    123123</span><br><span class="line">node  192.168.1.8    123123</span><br><span class="line">node  192.168.1.9    123123</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">------</span><br></pre></td></tr></table></figure>
+
+<p>fetch模块：</p>
+<p>copy模块：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1、从远程主机获取文件：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# ansible k8s -m fetch -a &quot;src=/root/node.sh dest=/root/test&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2、从本地主机传到远程：</span><br><span class="line">root@Ansible:~# ansible k8s -m copy -a &quot;src=/root/node.sh dest=/root&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">3、远程复制或者本地上传，加上force=yes，则会覆盖掉原来的文件，加上backup=yes，在覆盖的时候会把原来的文件做一个备份：</span><br><span class="line">root@Ansible:~# ansible k8s -m copy -a &quot;src=/root/node.sh dest=/root force=yes backup=yes&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">4、复制的时候可以带参数：owner,group,mode</span><br></pre></td></tr></table></figure>
+
+<p>-——–</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">将本地的源拷贝到服务器上</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# ansible k8s -m copy -a &quot;src=/etc/apt/sources.list dest=/etc/apt/&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">更新源</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# ansible k8s  -m  command -a &#x27;apt update&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">安装ntpdate</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# ansible k8s  -m  command -a &#x27;apt install ntpdate&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">同步时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# ansible k8s  -m  command -a &#x27;ntpdate -u ntp.aliyun.com&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">修改时区</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~#</span><br><span class="line">root@Ansible:~#</span><br><span class="line">root@Ansible:~# ansible k8s  -m  command -a &#x27;cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">查看是否修改</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~#</span><br><span class="line">root@Ansible:~# ansible k8s  -m  command -a &#x27;date -R &#x27;</span><br><span class="line">192.168.1.13 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.10 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.14 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.12 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.11 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.15 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.51 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.52 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.16 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.53 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.55 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:58 +0800</span><br><span class="line">192.168.1.54 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:58 +0800</span><br><span class="line">192.168.1.57 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:58 +0800</span><br><span class="line">192.168.1.56 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:58 +0800</span><br><span class="line">root@Ansible:~#</span><br><span class="line">root@Ansible:~#</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/40ba7623bb9d4ae6bc4941bf4c672b7e~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>Linux运维交流社区</strong></p>
+<p>Linux运维交流社区，互联网新闻以及技术交流。</p>
+<p>50篇原创内容</p>
+<p>公众号</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5ba57b90f02b4710a4187c30b960fcc2~tplv-k3u1fbpfcp-zoom-1.image" alt="图片">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

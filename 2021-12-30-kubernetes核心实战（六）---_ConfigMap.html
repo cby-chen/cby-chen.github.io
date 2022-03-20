@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>chenby - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="chenby - chenby"/>
+    <meta name="twitter:description" content="chenby,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="chenby - chenby"/>
+    <meta property="og:description" content="chenby,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">kubernetes核心实战（六）--- ConfigMap</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">kubernetes核心实战（六）--- ConfigMap</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h4 id="8、ConfigMap"><a href="#8、ConfigMap" class="headerlink" title="8、ConfigMap"></a>8、ConfigMap</h4><p>抽取应用配置，并且可以自动更新</p>
+<h6 id="创建配置文件"><a href="#创建配置文件" class="headerlink" title="创建配置文件"></a>创建配置文件</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# vim configmap.yaml</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# cat configmap.yaml </span><br><span class="line">apiVersion: v1</span><br><span class="line">data:   </span><br><span class="line">  redis.conf: |</span><br><span class="line">    appendonly yes</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: redis-conf</span><br><span class="line">  namespace: default</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl apply -f configmap.yaml </span><br><span class="line">configmap/redis-conf created</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h6 id="查看配置"><a href="#查看配置" class="headerlink" title="查看配置"></a>查看配置</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  get configmaps </span><br><span class="line">NAME               DATA   AGE</span><br><span class="line">kube-root-ca.crt   1      110m</span><br><span class="line">redis-conf         1      18s</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="9、DaemonSet"><a href="#9、DaemonSet" class="headerlink" title="9、DaemonSet"></a>9、DaemonSet</h4><p>DaemonSet 确保全部（或者某些）节点上运行一个 Pod 的副本。当有节点加入集群时， 也会为他们新增一个 Pod 。当有节点从集群移除时，这些 Pod 也会被回收。删除 DaemonSet 将会删除它创建的所有 Pod。</p>
+<p>DaemonSet 的一些典型用法：</p>
+<p>在每个节点上运行集群存守护进程在每个节点上运行日志收集守护进程在每个节点上运行监控守护进程一种简单的用法是为每种类型的守护进程在所有的节点上都启动一个 DaemonSet。一个稍微复杂的用法是为同一种守护进程部署多个 DaemonSet；每个具有不同的标志， 并且对不同硬件类型具有不同的内存、CPU 要求。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6f346eb21df342eb90fae6fc2f45f178~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<h6 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# vim daemonset.yaml</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# cat daemonset.yaml </span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: DaemonSet</span><br><span class="line">metadata:</span><br><span class="line">  name: redis-app</span><br><span class="line">  labels:</span><br><span class="line">    k8s-app: redis-app</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      name: fluentd-redis</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        name: fluentd-redis</span><br><span class="line">    spec:</span><br><span class="line">      tolerations:</span><br><span class="line">      # this toleration is to have the daemonset runnable on master nodes</span><br><span class="line">      # remove it if your masters can&#x27;t run pods</span><br><span class="line">      - key: node-role.kubernetes.io/master</span><br><span class="line">        effect: NoSchedule</span><br><span class="line">      containers:</span><br><span class="line">      - name: fluentd-redis</span><br><span class="line">        image: redis</span><br><span class="line">        command:</span><br><span class="line">          - redis-server</span><br><span class="line">          - &quot;/redis-master/redis.conf&quot;  #指的是redis容器内部的位置</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 6379</span><br><span class="line">        resources:</span><br><span class="line">          limits:</span><br><span class="line">            memory: 200Mi</span><br><span class="line">          requests:</span><br><span class="line">            cpu: 100m</span><br><span class="line">            memory: 200Mi</span><br><span class="line">        volumeMounts:</span><br><span class="line">        - name: data</span><br><span class="line">          mountPath: /data</span><br><span class="line">        - name: config</span><br><span class="line">          mountPath: /redis-master</span><br><span class="line">          readOnly: true</span><br><span class="line">      terminationGracePeriodSeconds: 30</span><br><span class="line">      volumes:</span><br><span class="line">      - name: data</span><br><span class="line">        emptyDir: &#123;&#125;</span><br><span class="line">      - name: config</span><br><span class="line">        configMap: </span><br><span class="line">          name: redis-conf</span><br><span class="line">          items:</span><br><span class="line">          - key: redis.conf</span><br><span class="line">            path: redis.conf</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  apply -f daemonset.yaml </span><br><span class="line">daemonset.apps/redis-app created</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h6 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master-node1 ~/yaml/test]# </span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  get pod</span><br><span class="line">NAME                                     READY   STATUS    RESTARTS   AGE</span><br><span class="line">ingress-demo-app-694bf5d965-8rh7f        1/1     Running   0          130m</span><br><span class="line">ingress-demo-app-694bf5d965-swkpb        1/1     Running   0          130m</span><br><span class="line">nfs-client-provisioner-dc5789f74-5bznq   1/1     Running   0          114m</span><br><span class="line">redis-app-86g4q                          1/1     Running   0          28s</span><br><span class="line">redis-app-rt92n                          1/1     Running   0          28s</span><br><span class="line">redis-app-vkzft                          1/1     Running   0          28s</span><br><span class="line">web-0                                    1/1     Running   0          64m</span><br><span class="line">web-1                                    1/1     Running   0          63m</span><br><span class="line">web-2                                    1/1     Running   0          63m</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]# kubectl  get daemonsets.apps </span><br><span class="line">NAME        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE</span><br><span class="line">redis-app   3         3         3       3            3           &lt;none&gt;          38s</span><br><span class="line">[root@k8s-master-node1 ~/yaml/test]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0dd563f5511748219158213f3c0c46a1~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>Linux运维交流社区</strong></p>
+<p>Linux运维交流社区，互联网新闻以及技术交流。</p>
+<p>62篇原创内容</p>
+<p>公众号</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/53fa028ea8904565afb8761f1dec368e~tplv-k3u1fbpfcp-zoom-1.image" alt="图片">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
