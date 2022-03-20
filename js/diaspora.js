@@ -155,11 +155,11 @@ var Diaspora = {
             'timeupdate': function() {
                 var progress = p[0].currentTime / p[0].duration * 100;
                 $('.bar').css('width', progress + '%');
-                if (progress / 5 <= 1) {
-                    p[0].volume = progress / 5;
-                }else {
-                    p[0].volume = 1;
-                }
+                // if (progress / 5 <= 1) {
+                //     p[0].volume = progress / 5;
+                // }else {
+                //     p[0].volume = 1;
+                // }
             },
             'ended': function() {
                 $('.icon-pause').removeClass('icon-pause').addClass('icon-play')
