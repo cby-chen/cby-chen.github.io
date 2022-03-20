@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kubernetes（K8S）内核优化常用参数详解 - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,
+1234567891011121314151617181920212223242526272829303132333435363738net.ipv4.tcp_keepalive_time=600,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="Kubernetes（K8S）内核优化常用参数详解 - chenby"/>
+    <meta name="twitter:description" content="chenby,
+1234567891011121314151617181920212223242526272829303132333435363738net.ipv4.tcp_keepalive_time=600,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="Kubernetes（K8S）内核优化常用参数详解 - chenby"/>
+    <meta property="og:description" content="chenby,
+1234567891011121314151617181920212223242526272829303132333435363738net.ipv4.tcp_keepalive_time=600,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Kubernetes（K8S）内核优化常用参数详解</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Kubernetes（K8S）内核优化常用参数详解</h1>
+        <div class="stuff">
+            <span>二月 10, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1f2345b8f7124d4a9569c7429d0403fb~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">net.ipv4.tcp_keepalive_time=600</span><br><span class="line">net.ipv4.tcp_keepalive_intvl=30</span><br><span class="line">net.ipv4.tcp_keepalive_probes=10</span><br><span class="line">net.ipv6.conf.all.disable_ipv6=1</span><br><span class="line">net.ipv6.conf.default.disable_ipv6=1</span><br><span class="line">net.ipv6.conf.lo.disable_ipv6=1</span><br><span class="line">net.ipv4.neigh.default.gc_stale_time=120</span><br><span class="line">net.ipv4.conf.all.rp_filter=0 </span><br><span class="line">net.ipv4.conf.default.rp_filter=0</span><br><span class="line">net.ipv4.conf.default.arp_announce=2</span><br><span class="line">net.ipv4.conf.lo.arp_announce=2</span><br><span class="line">net.ipv4.conf.all.arp_announce=2</span><br><span class="line">net.ipv4.ip_local_port_range= 45001 65000</span><br><span class="line">net.ipv4.ip_forward=1</span><br><span class="line">net.ipv4.tcp_max_tw_buckets=6000</span><br><span class="line">net.ipv4.tcp_syncookies=1</span><br><span class="line">net.ipv4.tcp_synack_retries=2</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables=1</span><br><span class="line">net.bridge.bridge-nf-call-iptables=1</span><br><span class="line">net.netfilter.nf_conntrack_max=2310720</span><br><span class="line">net.ipv6.neigh.default.gc_thresh1=8192</span><br><span class="line">net.ipv6.neigh.default.gc_thresh2=32768</span><br><span class="line">net.ipv6.neigh.default.gc_thresh3=65536</span><br><span class="line">net.core.netdev_max_backlog=16384</span><br><span class="line">net.core.rmem_max = 16777216 </span><br><span class="line">net.core.wmem_max = 16777216</span><br><span class="line">net.ipv4.tcp_max_syn_backlog = 8096 </span><br><span class="line">net.core.somaxconn = 32768 </span><br><span class="line">fs.inotify.max_user_instances=8192 </span><br><span class="line">fs.inotify.max_user_watches=524288 </span><br><span class="line">fs.file-max=52706963</span><br><span class="line">fs.nr_open=52706963</span><br><span class="line">kernel.pid_max = 4194303</span><br><span class="line">net.bridge.bridge-nf-call-arptables=1</span><br><span class="line">vm.swappiness=0 </span><br><span class="line">vm.overcommit_memory=1 </span><br><span class="line">vm.panic_on_oom=0 </span><br><span class="line">vm.max_map_count = 262144</span><br></pre></td></tr></table></figure>
+
+<p>内核参数解释</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">net.ipv4.tcp_keepalive_time=600 #此参数表示TCP发送keepalive探测消息的间隔时间(秒)</span><br><span class="line">net.ipv4.tcp_keepalive_intvl=30 #tcp检查间隔时间（keepalive探测包的发送间隔）</span><br><span class="line">net.ipv4.tcp_keepalive_probes=10  #tcp检查次数（如果对方不予应答，探测包的发送次数）</span><br><span class="line">net.ipv6.conf.all.disable_ipv6=1 #禁用IPv6，修为0为启用IPv6</span><br><span class="line">net.ipv6.conf.default.disable_ipv6=1 #禁用IPv6，修为0为启用IPv6</span><br><span class="line">net.ipv6.conf.lo.disable_ipv6=1 #禁用IPv6，修为0为启用IPv6</span><br><span class="line">net.ipv4.neigh.default.gc_stale_time=120 #ARP缓存条目超时</span><br><span class="line">net.ipv4.conf.all.rp_filter=0  #默认为1，系统会严格校验数据包的反向路径，可能导致丢包</span><br><span class="line">net.ipv4.conf.default.rp_filter=0 #不开启源地址校验</span><br><span class="line">net.ipv4.conf.default.arp_announce=2 #始终使用与目的IP地址对应的最佳本地IP地址作为ARP请求的源IP地址</span><br><span class="line">net.ipv4.conf.lo.arp_announce=2 #始终使用与目的IP地址对应的最佳本地IP地址作为ARP请求的源IP地址</span><br><span class="line">net.ipv4.conf.all.arp_announce=2 #始终使用与目的IP地址对应的最佳本地IP地址作为ARP请求的源IP地址</span><br><span class="line">net.ipv4.ip_local_port_range= 45001 65000 # 定义网络连接可用作其源（本地）端口的最小和最大端口的限制，同时适用于TCP和UDP连接。</span><br><span class="line">net.ipv4.ip_forward=1 # 其值为0,说明禁止进行IP转发；如果是1,则说明IP转发功能已经打开。</span><br><span class="line">net.ipv4.tcp_max_tw_buckets=6000 #配置服务器 TIME_WAIT 数量</span><br><span class="line">net.ipv4.tcp_syncookies=1 #此参数应该设置为1，防止SYN Flood</span><br><span class="line">net.ipv4.tcp_synack_retries=2 #表示回应第二个握手包（SYN+ACK包）给客户端IP后，如果收不到第三次握手包（ACK包），进行重试的次数（默认为5）</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables=1 # 是否在ip6tables链中过滤IPv6包</span><br><span class="line">net.bridge.bridge-nf-call-iptables=1 # 二层的网桥在转发包时也会被iptables的FORWARD规则所过滤，这样有时会出现L3层的iptables rules去过滤L2的帧的问题</span><br><span class="line">net.netfilter.nf_conntrack_max=2310720 #连接跟踪表的大小，建议根据内存计算该值CONNTRACK_MAX = RAMSIZE (in bytes) / 16384 / (x / 32)，并满足nf_conntrack_max=4*nf_conntrack_buckets，默认262144</span><br><span class="line"></span><br><span class="line">net.ipv6.neigh.default.gc_thresh1=8192</span><br><span class="line">net.ipv6.neigh.default.gc_thresh2=32768</span><br><span class="line">net.ipv6.neigh.default.gc_thresh3=65536</span><br><span class="line"></span><br><span class="line">#gc_thresh3 是表大小的绝对限制</span><br><span class="line">#gc_thresh2 设置为等于系统的最大预期邻居条目数的值</span><br><span class="line">#在这种情况下，gc_thresh3 应该设置为一个比 gc_thresh2 值高的值，例如，比 gc_thresh2 高 25%-50%，将其视为浪涌容量。</span><br><span class="line">#gc_thresh1 提高到较大的值；此设置的作用是，如果表包含的条目少于 gc_thresh1，内核将永远不会删除（超时）过时的条目。</span><br><span class="line"></span><br><span class="line">net.core.netdev_max_backlog=16384 # 每CPU网络设备积压队列长度</span><br><span class="line">net.core.rmem_max = 16777216 # 所有协议类型读写的缓存区大小</span><br><span class="line">net.core.wmem_max = 16777216 # 最大的TCP数据发送窗口大小</span><br><span class="line">net.ipv4.tcp_max_syn_backlog = 8096 # 第一个积压队列长度</span><br><span class="line">net.core.somaxconn = 32768 # 第二个积压队列长度</span><br><span class="line">fs.inotify.max_user_instances=8192 # 表示每一个real user ID可创建的inotify instatnces的数量上限，默认128.</span><br><span class="line">fs.inotify.max_user_watches=524288 # 同一用户同时可以添加的watch数目，默认8192。</span><br><span class="line">fs.file-max=52706963 # 文件描述符的最大值</span><br><span class="line">fs.nr_open=52706963 #设置最大微博号打开数</span><br><span class="line">kernel.pid_max = 4194303 #最大进程数</span><br><span class="line">net.bridge.bridge-nf-call-arptables=1 #是否在arptables的FORWARD中过滤网桥的ARP包</span><br><span class="line">vm.swappiness=0 # 禁止使用 swap 空间，只有当系统 OOM 时才允许使用它</span><br><span class="line">vm.overcommit_memory=1 # 不检查物理内存是否够用</span><br><span class="line">vm.panic_on_oom=0 # 开启 OOM</span><br><span class="line">vm.max_map_count = 262144</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3ddf552cf5334cce914774cb862f6037~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>Linux运维交流社区</strong></p>
+<p>Linux运维交流社区，互联网新闻以及技术交流。</p>
+<p>82篇原创内容</p>
+<p>公众号</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2a8ad52b4bd04c6ea2e40a1fb2fdaf57~tplv-k3u1fbpfcp-zoom-1.image" alt="图片">  </p>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a></p>
+<p><a target="_blank" rel="noopener" href="https://weibo.com/u/5982474121">https://weibo.com/u/5982474121</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a></p>
+<p>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、哔哩哔哩、今日头条、新浪微博、个人博客、全网可搜《小陈运维》</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

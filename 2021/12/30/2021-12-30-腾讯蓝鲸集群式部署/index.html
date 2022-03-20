@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>腾讯蓝鲸集群式部署 - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby, 腾讯蓝鲸智云，简称蓝鲸，是腾讯互动娱乐事业群（Interactive Entertainment Group，简称 IEG）自研自用的一套用于构建企业研发运营一体化体系的 PaaS 开发框架，提供,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="腾讯蓝鲸集群式部署 - chenby"/>
+    <meta name="twitter:description" content="chenby, 腾讯蓝鲸智云，简称蓝鲸，是腾讯互动娱乐事业群（Interactive Entertainment Group，简称 IEG）自研自用的一套用于构建企业研发运营一体化体系的 PaaS 开发框架，提供,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="腾讯蓝鲸集群式部署 - chenby"/>
+    <meta property="og:description" content="chenby, 腾讯蓝鲸智云，简称蓝鲸，是腾讯互动娱乐事业群（Interactive Entertainment Group，简称 IEG）自研自用的一套用于构建企业研发运营一体化体系的 PaaS 开发框架，提供,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">腾讯蓝鲸集群式部署</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">腾讯蓝鲸集群式部署</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p> 腾讯蓝鲸智云，简称蓝鲸，是腾讯互动娱乐事业群（Interactive Entertainment Group，简称 IEG）自研自用的一套用于构建企业研发运营一体化体系的 PaaS 开发框架，提供了 aPaaS（DevOps 流水线、运行环境托管、前后台框架）和 iPaaS（持续集成、CMDB、作业平台、容器管理、计算平台、AI 等原子平台）等模块，帮助企业技术人员快速构建基础运营 PaaS。</p>
+<p>关闭防火墙</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# sed -i &#x27;s/^SELINUX=enforcing/SELINUX=disabled/g&#x27; /etc/selinux/config</span><br><span class="line">[root@localhost ~]# setenforce 0</span><br><span class="line">[root@localhost ~]# systemctl stop firewalld</span><br><span class="line">[root@localhost ~]# systemctl disable firewalld</span><br><span class="line">Removed symlink /etc/systemd/system/multi-user.target.wants/firewalld.service.</span><br><span class="line">Removed symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.</span><br></pre></td></tr></table></figure>
+
+<p>关闭网络管理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# systemctl status NetworkManager</span><br><span class="line">● NetworkManager.service - Network Manager</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/NetworkManager.service; enabled; vendor preset: enabled)</span><br><span class="line">   Active: active (running) since Thu 2021-07-29 15:49:45 CST; 1h 10min ago</span><br><span class="line">     Docs: man:NetworkManager(8)</span><br><span class="line"> Main PID: 1086 (NetworkManager)</span><br><span class="line">   CGroup: /system.slice/NetworkManager.service</span><br><span class="line">           ├─1086 /usr/sbin/NetworkManager --no-daemon</span><br><span class="line">           └─1197 /sbin/dhclient -d -q -sf /usr/libexec/nm-dhcp-helper -pf /var/run/dhclient-ens33.pid -lf /var/lib/NetworkManager/dhclient-54043ffa-9f33-49a0-b4d5-4b191...</span><br><span class="line"></span><br><span class="line">Jul 29 15:49:58 localhost.localdomain NetworkManager[1086]: &lt;info&gt;  [1627544998.6410] device (ens33): state change: secondaries -&gt; activated (reason &#x27;none&#x27;, sys...managed&#x27;)</span><br><span class="line">Jul 29 15:49:58 localhost.localdomain NetworkManager[1086]: &lt;info&gt;  [1627544998.6420] manager: NetworkManager state is now CONNECTED_LOCAL</span><br><span class="line">Jul 29 15:49:58 localhost.localdomain NetworkManager[1086]: &lt;info&gt;  [1627544998.6445] manager: NetworkManager state is now CONNECTED_SITE</span><br><span class="line">Jul 29 15:49:58 localhost.localdomain NetworkManager[1086]: &lt;info&gt;  [1627544998.6447] policy: set &#x27;ens33&#x27; (ens33) as default for IPv4 routing and DNS</span><br><span class="line">Jul 29 15:49:58 localhost.localdomain dhclient[1197]: bound to 192.168.1.74 -- renewal in 39901 seconds.</span><br><span class="line">Jul 29 15:49:58 localhost.localdomain NetworkManager[1086]: &lt;info&gt;  [1627544998.6550] device (ens33): Activation: successful, device activated.</span><br><span class="line">Jul 29 15:49:58 localhost.localdomain NetworkManager[1086]: &lt;info&gt;  [1627544998.6559] manager: NetworkManager state is now CONNECTED_GLOBAL</span><br><span class="line">Jul 29 15:49:58 localhost.localdomain NetworkManager[1086]: &lt;info&gt;  [1627544998.6567] manager: startup complete</span><br><span class="line">Jul 29 16:53:57 tencen-3 NetworkManager[1086]: &lt;info&gt;  [1627548837.1248] hostname: hostname changed from &quot;localhost.localdomain&quot; to &quot;tencen-3&quot;</span><br><span class="line">Jul 29 16:53:57 tencen-3 NetworkManager[1086]: &lt;info&gt;  [1627548837.1252] policy: set-hostname: set hostname to &#x27;tencen-3&#x27; (from system configuration)</span><br><span class="line">Hint: Some lines were ellipsized, use -l to show in full.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# systemctl stop NetworkManager</span><br><span class="line">[root@localhost ~]# systemctl disable NetworkManager</span><br><span class="line">Removed symlink /etc/systemd/system/multi-user.target.wants/NetworkManager.service.</span><br><span class="line">Removed symlink /etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service.</span><br><span class="line">Removed symlink /etc/systemd/system/network-online.target.wants/NetworkManager-wait-online.service.</span><br></pre></td></tr></table></figure>
+
+<p>设置最大连接数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# ulimit -n</span><br><span class="line">1024</span><br><span class="line">[root@localhost ~]# cp /etc/security/limits.conf /etc/security/limits.conf.bak</span><br><span class="line">[root@localhost ~]# cat &lt;&lt; EOF &gt;&gt; /etc/security/limits.conf</span><br><span class="line">&gt; root soft nofile 102400</span><br><span class="line">&gt; root hard nofile 102400</span><br><span class="line">&gt; EOF</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
+
+<p>准备所需软件包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkdir  /data</span><br><span class="line">[root@localhost ~]# mv bkce_basic_suite-6.0.3.tgz /data</span><br><span class="line">[root@localhost ~]# cd /data</span><br><span class="line">[root@localhost data]# ls</span><br><span class="line">bkce_basic_suite-6.0.3.tgz</span><br><span class="line">[root@localhost data]# </span><br><span class="line">[root@localhost data]# </span><br><span class="line">[root@localhost data]#</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc57f354d6094d55942f21373bcd7a11~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>解压套餐包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost data]# tar xf bkce_basic_suite-6.0.3.tgz</span><br><span class="line">[root@localhost data]#</span><br></pre></td></tr></table></figure>
+
+<p>解压各个产品软件包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost data]# cd /data/src/; for f in *gz;do tar xf $f; done</span><br></pre></td></tr></table></figure>
+
+<p>解压证书包</p>
+<p>    在网站 <a target="_blank" rel="noopener" href="https://bk.tencent.com/download/_ssl/">https://bk.tencent.com/download\_ssl/</a> 中使用Mac地址进行注册</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost src]# install -d -m 755 /data/src/cert</span><br><span class="line">[root@localhost src]# tar xf /data/ssl_certificates.tar.gz -C /data/src/cert/</span><br><span class="line">[root@localhost src]# chmod 644 /data/src/cert/*</span><br></pre></td></tr></table></figure>
+
+<p>拷贝 rpm 包文件夹到&#x2F;opt&#x2F;目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost src]# cp -a /data/src/yum /opt</span><br><span class="line">[root@localhost src]#</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>生成并配置 install.config</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost src]# cat &lt;&lt; EOF &gt;/data/install/install.config</span><br><span class="line">&gt; 192.168.1.75 iam,ssm,usermgr,gse,license,redis,consul,mysql</span><br><span class="line">&gt; 192.168.1.50 nginx,consul,mongodb,rabbitmq,appo</span><br><span class="line">&gt; 192.168.1.74 paas,cmdb,job,zk(config),appt,consul,nodeman(nodeman)</span><br><span class="line">&gt; </span><br><span class="line">&gt; EOF</span><br></pre></td></tr></table></figure>
+
+<p>执行免密</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost src]# cd /data/install</span><br><span class="line">[root@localhost install]# yum install rsync -y</span><br><span class="line">[root@localhost install]# bash /data/install/configure_ssh_without_pass</span><br></pre></td></tr></table></figure>
+
+<p>初始化并检查环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# ./bk_install common</span><br><span class="line"></span><br><span class="line">[root@localhost install]# ./health_check/check_bk_controller.sh</span><br></pre></td></tr></table></figure>
+
+<p>部署 PaaS 平台</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# ./bk_install paas</span><br><span class="line"></span><br><span class="line">如果以上步骤没有报错, 你现在可以通过 http://paas.bktencent.com:80 访问 paas 平台,</span><br><span class="line">登陆用户名(login user): admin</span><br><span class="line">登陆密码(login password): fKJbtZ54KDA_</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c10e4f44c1c84419be9c13cd9aab6c5d~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>部署 app_mgr</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# ./bk_install app_mgr</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/86e2b68f6ff544a0929c4905a7dec5cb~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>部署权限中心与用户管理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# ./bk_install saas-o bk_iam</span><br><span class="line">[root@localhost install]# ./bk_install saas-o bk_user_manage</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a0487790bf664ca68e7f153f5da3ee29~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/acf1458099c14e05bbbdb39395d4da44~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>部署 CMDB</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# ./bk_install cmdb</span><br></pre></td></tr></table></figure>
+
+<p>部署 JOB</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# ./bk_install job</span><br></pre></td></tr></table></figure>
+
+<p>部署 bknodeman</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# ./bk_install bknodeman</span><br></pre></td></tr></table></figure>
+
+<p># 标准运维</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# ./bk_install saas-o bk_sops</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5b093f8b47e74210937e609a77ceac66~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p># 流程管理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# ./bk_install saas-o bk_itsm</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b508727c928a4bf6ac4e3369dbebb28a~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>加载蓝鲸相关维护命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# source ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2bfd5fb61a184ff0b3f973ba3d0be906~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>初始化蓝鲸业务拓扑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# ./bkcli initdata topo</span><br></pre></td></tr></table></figure>
+
+<p>检测相关服务状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost install]# cd /data/install/</span><br><span class="line">[root@localhost install]# echo bkssm bkiam usermgr paas cmdb gse job consul | xargs -n 1 ./bkcli check</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9e944b2f2b424c7cbf2d9eb6568afe13~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>Windows 配置</p>
+<p>用文本编辑器（如 Notepad++）打开文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Windows\System32\drivers\etc\hosts</span><br></pre></td></tr></table></figure>
+
+<p>将以下内容复制到上述文件内，并将以下 IP 需更换为本机浏览器可以访问的 IP，然后保存。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">10.0.0.2 paas.bktencent.com cmdb.bktencent.com job.bktencent.com jobapi.bktencent.com</span><br><span class="line">10.0.0.3 nodeman.bktencent.com</span><br></pre></td></tr></table></figure>
+
+<p>注意：10.0.0.2 为 nginx 模块所在的机器，10.0.0.3 为 nodeman 模块所在的机器。IP 需更换为本机浏览器可以访问的 IP。</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

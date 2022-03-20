@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>kubernetes（k8s）安装命令行自动补全功能 - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,
+Ubuntu下安装命令
+123456root@master1:~# apt install -y bash-completionReading package lists... DoneBuild,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="kubernetes（k8s）安装命令行自动补全功能 - chenby"/>
+    <meta name="twitter:description" content="chenby,
+Ubuntu下安装命令
+123456root@master1:~# apt install -y bash-completionReading package lists... DoneBuild,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="kubernetes（k8s）安装命令行自动补全功能 - chenby"/>
+    <meta property="og:description" content="chenby,
+Ubuntu下安装命令
+123456root@master1:~# apt install -y bash-completionReading package lists... DoneBuild,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">kubernetes（k8s）安装命令行自动补全功能</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">kubernetes（k8s）安装命令行自动补全功能</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1f6c9c76f1d04d2e9939b271bfcfa0ba~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>Ubuntu下安装命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@master1:~# apt install -y bash-completion</span><br><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree      </span><br><span class="line">Reading state information... Done</span><br><span class="line">bash-completion is already the newest version (1:2.10-1ubuntu1).</span><br><span class="line">0 upgraded, 0 newly installed, 0 to remove and 29 not upgraded.</span><br></pre></td></tr></table></figure>
+
+<p>centos下安装命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@dss ~]# yum install bash-completion -y</span><br><span class="line">Loaded plugins: fastestmirror, langpacks</span><br><span class="line">Loading mirror speeds from cached hostfile</span><br><span class="line"> * epel: mirrors.tuna.tsinghua.edu.cn</span><br><span class="line">Package 1:bash-completion-2.1-8.el7.noarch already installed and latest version</span><br><span class="line">Nothing to do</span><br><span class="line">[root@dss ~]#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">root@master1:~# locate bash_completion</span><br><span class="line">/etc/bash_completion</span><br><span class="line">/etc/bash_completion.d</span><br><span class="line">/etc/bash_completion.d/apport_completion</span><br><span class="line">/etc/bash_completion.d/git-prompt</span><br><span class="line">/etc/profile.d/bash_completion.sh</span><br><span class="line">/snap/core18/2128/etc/bash_completion</span><br><span class="line">/snap/core18/2128/usr/share/bash-completion/bash_completion</span><br><span class="line">/snap/core18/2128/usr/share/doc/bash/README.md.bash_completion.gz</span><br><span class="line">/snap/core18/2128/usr/share/perl5/Debian/Debhelper/Sequence/bash_completion.pm</span><br><span class="line">/snap/lxd/21029/etc/bash_completion.d</span><br><span class="line">/snap/lxd/21029/etc/bash_completion.d/snap.lxd.lxc</span><br><span class="line">/usr/share/bash-completion/bash_completion</span><br><span class="line">/usr/share/doc/bash/README.md.bash_completion.gz</span><br><span class="line">/usr/share/perl5/Debian/Debhelper/Sequence/bash_completion.pm</span><br><span class="line">/var/lib/docker/overlay2/0f27e9d2ca7fbe8a3b764a525f1c58990345512fa6dfe4162aba3e05ccff5b56/diff/etc/bash_completion.d</span><br><span class="line">/var/lib/docker/overlay2/5eb1b0cb946881e1081bfa7a608b6fa85dbf2cb7e67f84b038f3b8a85bd13196/diff/usr/local/lib/node_modules/npm/node_modules/dashdash/etc/dashdash.bash_completion.in</span><br><span class="line">/var/lib/docker/overlay2/76c41c1d1eb6eaa7b9259bd822a4bffebf180717a24319d2ffec3b4dcae0e66a/merged/etc/bash_completion.d</span><br><span class="line">/var/lib/docker/overlay2/78b8ab76c0e0ad7ee873daab9ab3987a366ec32fda68a4bb56a218c7f8806a58/merged/etc/profile.d/bash_completion.sh</span><br><span class="line">/var/lib/docker/overlay2/78b8ab76c0e0ad7ee873daab9ab3987a366ec32fda68a4bb56a218c7f8806a58/merged/usr/share/bash-completion/bash_completion</span><br><span class="line">/var/lib/docker/overlay2/802133f75f62596a2c173f1b57231efbe210eddd7a43770a62ca94c86ce2ca56/merged/usr/local/lib/node_modules/npm/node_modules/dashdash/etc/dashdash.bash_completion.in</span><br><span class="line">/var/lib/docker/overlay2/ee672bdd0bf0fdf590f9234a8a784ca12c262c47a0ac8ab91acc0942dfafc339/diff/etc/profile.d/bash_completion.sh</span><br><span class="line">/var/lib/docker/overlay2/ee672bdd0bf0fdf590f9234a8a784ca12c262c47a0ac8ab91acc0942dfafc339/diff/usr/share/bash-completion/bash_completion</span><br></pre></td></tr></table></figure>
+
+<p>临时环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@master1:~# source /usr/share/bash-completion/bash_completion</span><br><span class="line">root@master1:~# source &lt;(kubectl completion bash)</span><br><span class="line">root@master1:~#</span><br><span class="line">root@master1:~#</span><br><span class="line">root@master1:~# kubectl</span><br><span class="line">annotate       auth           config         delete         exec           kustomize      plugin         run            uncordon</span><br><span class="line">api-resources  autoscale      cordon         describe       explain        label          port-forward   scale          version</span><br><span class="line">api-versions   certificate    cp             diff           expose         logs           proxy          set            wait</span><br><span class="line">apply          cluster-info   create         drain          get            options        replace        taint          </span><br><span class="line">attach         completion     debug          edit           help           patch          rollout        top            </span><br><span class="line">root@master1:~# kubectl</span><br></pre></td></tr></table></figure>
+
+<p>永久写入环境变量配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">root@master1:~#</span><br><span class="line">root@master1:~#</span><br><span class="line">root@master1:~# echo &quot;source &lt;(kubectl completion bash)&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">root@master1:~#</span><br><span class="line">root@master1:~# cat ~/.bashrc</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">----略----</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># some more ls aliases</span><br><span class="line">alias ll=&#x27;ls -alF&#x27;</span><br><span class="line">alias la=&#x27;ls -A&#x27;</span><br><span class="line">alias l=&#x27;ls -CF&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Alias definitions.</span><br><span class="line"># You may want to put all your additions into a separate file like</span><br><span class="line"># ~/.bash_aliases, instead of adding them here directly.</span><br><span class="line"># See /usr/share/doc/bash-doc/examples in the bash-doc package.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if [ -f ~/.bash_aliases ]; then</span><br><span class="line">    . ~/.bash_aliases</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># enable programmable completion features (you don&#x27;t need to enable</span><br><span class="line"># this, if it&#x27;s already enabled in /etc/bash.bashrc and /etc/profile</span><br><span class="line"># sources /etc/bash.bashrc).</span><br><span class="line">#if [ -f /etc/bash_completion ] &amp;&amp; ! shopt -oq posix; then</span><br><span class="line">#    . /etc/bash_completion</span><br><span class="line">#fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">source &lt;(kubectl completion bash)</span><br><span class="line">root@master1:~#</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f15584c5a770436f943162d88635f215~tplv-k3u1fbpfcp-zoom-1.image">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

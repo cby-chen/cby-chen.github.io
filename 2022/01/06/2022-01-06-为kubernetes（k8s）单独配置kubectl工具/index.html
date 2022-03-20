@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>为kubernetes（k8s）单独配置kubectl工具 - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,介绍Kubernetes API 是一个 HTTP REST API。这个 API 是真正的 Kubernetes 用户界面，通过它可以完全控制它。这意味着每个 Kubernetes 操作都作为 A,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="为kubernetes（k8s）单独配置kubectl工具 - chenby"/>
+    <meta name="twitter:description" content="chenby,介绍Kubernetes API 是一个 HTTP REST API。这个 API 是真正的 Kubernetes 用户界面，通过它可以完全控制它。这意味着每个 Kubernetes 操作都作为 A,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="为kubernetes（k8s）单独配置kubectl工具 - chenby"/>
+    <meta property="og:description" content="chenby,介绍Kubernetes API 是一个 HTTP REST API。这个 API 是真正的 Kubernetes 用户界面，通过它可以完全控制它。这意味着每个 Kubernetes 操作都作为 A,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">为kubernetes（k8s）单独配置kubectl工具</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">为kubernetes（k8s）单独配置kubectl工具</h1>
+        <div class="stuff">
+            <span>一月 06, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>Kubernetes API 是一个 HTTP REST API。这个 API 是真正的 Kubernetes 用户界面，通过它可以完全控制它。这意味着每个 Kubernetes 操作都作为 API 端点公开，并且可以通过对该端点的 HTTP 请求进行。因此，kubectl 的主要目的是向 Kubernetes API 发出 HTTP 请求：<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3dd62e455489487985d282b6867f10c6~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<h1 id="配置apt软件源"><a href="#配置apt软件源" class="headerlink" title="配置apt软件源"></a>配置apt软件源</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# apt-get update &amp;&amp; apt-get install -y apt-transport-https</span><br><span class="line">Hit:1 http://192.168.1.104:81/ubuntu focal InRelease</span><br><span class="line">Hit:2 http://192.168.1.104:81/ubuntu focal-security InRelease</span><br><span class="line">Hit:3 http://192.168.1.104:81/ubuntu focal-updates InRelease</span><br><span class="line">Hit:4 http://192.168.1.104:81/ubuntu focal-proposed InRelease</span><br><span class="line">Hit:5 https://mirrors.aliyun.com/docker-ce/linux/ubuntu focal InRelease</span><br><span class="line">Reading package lists... Done        </span><br><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree       </span><br><span class="line">Reading state information... Done</span><br><span class="line">apt-transport-https is already the newest version (2.0.6).</span><br><span class="line">0 upgraded, 0 newly installed, 0 to remove and 54 not upgraded.</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - </span><br><span class="line"><span class="meta prompt_">  % </span><span class="language-bash">Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span></span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100  2537  100  2537    0     0  26989      0 --:--:-- --:--:-- --:--:-- 26989</span><br><span class="line">OK</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list</span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main</span></span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">EOF</span></span><br><span class="line">root@hello:~# apt-get update</span><br><span class="line">Hit:1 http://192.168.1.104:81/ubuntu focal InRelease</span><br><span class="line">Hit:2 http://192.168.1.104:81/ubuntu focal-security InRelease</span><br><span class="line">Hit:3 http://192.168.1.104:81/ubuntu focal-updates InRelease</span><br><span class="line">Hit:4 http://192.168.1.104:81/ubuntu focal-proposed InRelease</span><br><span class="line">Hit:5 https://mirrors.aliyun.com/docker-ce/linux/ubuntu focal InRelease</span><br><span class="line">Get:6 https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial InRelease [9,383 B]</span><br><span class="line">Ign:7 https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial/main amd64 Packages</span><br><span class="line">Get:7 https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial/main amd64 Packages [52.6 kB]</span><br><span class="line">Fetched 62.0 kB in 1s (59.9 kB/s)   </span><br><span class="line">Reading package lists... Done</span><br><span class="line">root@hello:~#</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用apt安装kubectl工具"><a href="#使用apt安装kubectl工具" class="headerlink" title="使用apt安装kubectl工具"></a>使用apt安装kubectl工具</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# apt-get install -y kubectl</span><br><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree       </span><br><span class="line">Reading state information... Done</span><br><span class="line">The following NEW packages will be installed:</span><br><span class="line">  kubectl</span><br><span class="line">0 upgraded, 1 newly installed, 0 to remove and 54 not upgraded.</span><br><span class="line">Need to get 8,928 kB of archives.</span><br><span class="line">After this operation, 46.6 MB of additional disk space will be used.</span><br><span class="line">Get:1 https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial/main amd64 kubectl amd64 1.23.1-00 [8,928 kB]</span><br><span class="line">Fetched 8,928 kB in 2s (5,599 kB/s)   </span><br><span class="line">Selecting previously unselected package kubectl.</span><br><span class="line">(Reading database ... 129153 files and directories currently installed.)</span><br><span class="line">Preparing to unpack .../kubectl_1.23.1-00_amd64.deb ...</span><br><span class="line">Unpacking kubectl (1.23.1-00) ...</span><br><span class="line">Setting up kubectl (1.23.1-00) ...</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# mkdir /root/.kube/</span><br></pre></td></tr></table></figure>
+
+<h1 id="配置kubectl配置文件"><a href="#配置kubectl配置文件" class="headerlink" title="配置kubectl配置文件"></a>配置kubectl配置文件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# vim /root/.kube/config </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# cat /root/.kube/config</span><br><span class="line">apiVersion: v1</span><br><span class="line">clusters:</span><br><span class="line">- cluster:</span><br><span class="line">    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUR1RENDQXFDZ0F3SUJBZ0lVSlF3R05rQS9BaGxLYVpEcS9oaVpQNStteVJ3d0RRWUpLb1pJaHZjTkFRRUwKQlFBd1lURUxNQWtHQTFVRUJoTUNRMDR4RVRBUEJnTlZCQWdUQ0VoaGJtZGFhRzkxTVFzd0NRWURWUVFIRXdKWQpVekVNTUFvR0ExVUVDaE1EYXpoek1ROHdEUVlEVlFRTEV3WlRlWE4wWlcweEV6QVJCZ05WQkFNVENtdDFZbVZ5CmJtVjBaWE13SUJjTk1qRXhNakF6TURJME1EQXdXaGdQTWpFeU1URXhNRGt3TWpRd01EQmFNR0V4Q3pBSkJnTlYKQkFZVEFrTk9NUkV3RHdZRFZRUUlFd2hJWVc1bldtaHZkVEVMTUFrR0ExVUVCeE1DV0ZNeEREQUtCZ05WQkFvVApBMnM0Y3pFUE1BMEdBMVVFQ3hNR1UzbHpkR1Z0TVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1JSUJJakFOCkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXRvcisyNkVLY2VRZGE5eDZodXRoL0h1S21ZRWIKVWhadWJSWVR0VW85WTBpaFc2ME1GK1RBTndNSURFdHo0MGhkSXhrTmtJaDhITEdUcjlwek9hWGNzSVg2NzJsZwpheTdQVGlVZ3I2cVRYcmEzcnpxMjJrdVJtU05yY29ZVmpRbDVXa2ZITWR6cS9GZFpRVDVsRytZZWlLS1Q0c2tzCmJUcmFwSGFUc0VYY0lMb2VBREdCUVJrSXhvTmswWGo3RzNXbEt4enFRRXJ3cVIvbkE3b0U2MStYbHJZaTJTYUkKVFFoaUpMV0lYRTluUkRRNG9hOVNDSXhKUFp5Ukl5UTJFSVc2TG1DRDVtazNtZ2lPNFlVK3ZiMXg3amppS3ZKcQo0MExaaklFQllxY1R4RVN3K2J6cnYrQ1JaMm9UUlRaVGxveGVtYzliOWdhM2pwSjZBbWdvYjRmQkVRSURBUUFCCm8yWXdaREFPQmdOVkhROEJBZjhFQkFNQ0FRWXdFZ1lEVlIwVEFRSC9CQWd3QmdFQi93SUJBakFkQmdOVkhRNEUKRmdRVThBWGxiWis4cnRySmxxYzhpUUxIVjVHUis3TXdId1lEVlIwakJCZ3dGb0FVOEFYbGJaKzhydHJKbHFjOAppUUxIVjVHUis3TXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBRkxFMGFGclQzTnptcWRRdCtPN1c1OW04WnJVCnNtbFFzNGt2cFhET0FwdUxaNzROVUY0K3F1aVVRaFB4VEZFVnA2azBqVjlwWVVzbURMKzZmR1BaQldwdVpscisKSjRYZlcwaENITjlnZ05JelcxWUNZNEVxWGp5ZmY1dTZZQ1MyNmU2ZVB3dFA2RGhObE0xNzRNOXpKbnhGbllZdApZYmFjdDhjOTlwRDZvYlI3VGhnd3BFdE9YbW11ajM5OU5ycjR5cXBaQk95dGxQR291N2JzcFl2dkFhMnJ3QnNJCkh4NTNUT1paMXFNRjBYemNWbVk2eHQ1MklkVUtSdDV1QWsxRGRsQ2RkMHplL2RsZmN4MVBxbnV6dDNndldpL3MKRERCYXg0SnB0cXloMjgwZkVlU1pEd0hpYnY4V3AwRi8ranI1N2Q1K0p0cXgrOTlBSXZiUlM5U1JLMmc9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K</span><br><span class="line">    server: https://192.168.1.11:6443</span><br><span class="line">  name: cluster1</span><br><span class="line">contexts:</span><br><span class="line">- context:</span><br><span class="line">    cluster: cluster1</span><br><span class="line">    user: admin</span><br><span class="line">  name: context-cluster1</span><br><span class="line">current-context: context-cluster1</span><br><span class="line">kind: Config</span><br><span class="line">preferences: &#123;&#125;</span><br><span class="line">users:</span><br><span class="line">- name: admin</span><br><span class="line">  user:</span><br><span class="line">    client-certificate-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUQxekNDQXIrZ0F3SUJBZ0lVVFprVnpuSFYxMStjdVRWSnNqWHpUVDVOZHQ4d0RRWUpLb1pJaHZjTkFRRUwKQlFBd1lURUxNQWtHQTFVRUJoTUNRMDR4RVRBUEJnTlZCQWdUQ0VoaGJtZGFhRzkxTVFzd0NRWURWUVFIRXdKWQpVekVNTUFvR0ExVUVDaE1EYXpoek1ROHdEUVlEVlFRTEV3WlRlWE4wWlcweEV6QVJCZ05WQkFNVENtdDFZbVZ5CmJtVjBaWE13SUJjTk1qRXhNakF6TURJME1EQXdXaGdQTWpBM01URXhNakV3TWpRd01EQmFNR2N4Q3pBSkJnTlYKQkFZVEFrTk9NUkV3RHdZRFZRUUlFd2hJWVc1bldtaHZkVEVMTUFrR0ExVUVCeE1DV0ZNeEZ6QVZCZ05WQkFvVApEbk41YzNSbGJUcHRZWE4wWlhKek1ROHdEUVlEVlFRTEV3WlRlWE4wWlcweERqQU1CZ05WQkFNVEJXRmtiV2x1Ck1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBbXNKUHBvdEcyNVE4bExyNC9NK3MKdVYzdWduQU14ZWRKYldFQmcxem81UGtyVW8wTUpDUEkyMTgrby9yTHh2eWJ1SlJKRm5qZlJMWlBZNmYrTGZTKwpJQmppbHJQN3J2OHdLMTh1V0EvNVdoWWNQeUZZYTZKeTVRM1RFdkZBYkdLVU5FUjBiWUhNOXdmTGJhVWNmdGkyCnI5dEd5TFVPYzBpemJ5QkFPZFU3Wkx0Z2d2OVdZb213aThLZG84bXVTTjdqSGlpd1BXTmIvQlBDUzE1WElvTXcKZDRzUW15MFFLVENTOHRuR2FzeFlPQ1pqMkhZMTV6dTdmbFJBeWZZcDNCM1pLZVZzQXdvUkhLQmVCa0NlMklwMQpYVnI3aEtkaEtkRWlaNGROcFVjd1V1U2xBRml3K1lPeUREbDZLdmVsSGVHVCs0N3E5SStjbXc0Rm1Ra1hhNGZFCkhRSURBUUFCbzM4d2ZUQU9CZ05WSFE4QkFmOEVCQU1DQmFBd0hRWURWUjBsQkJZd0ZBWUlLd1lCQlFVSEF3RUcKQ0NzR0FRVUZCd01DTUF3R0ExVWRFd0VCL3dRQ01BQXdIUVlEVlIwT0JCWUVGQTRwcGFzNUZzTGJuNVJIVGxwTQo5T1FlQTlZaE1COEdBMVVkSXdRWU1CYUFGUEFGNVcyZnZLN2F5WmFuUElrQ3gxZVJrZnV6TUEwR0NTcUdTSWIzCkRRRUJDd1VBQTRJQkFRQnRsQ21xN1pZQ2lRVVFHSGdSc2lDY2Q0UmVEZy8rcWVmbkJRT3h4SWN4TzU3UE1uNkwKWjVJNnJwUE9TSi9XaFlwUkNGUGVPTzZTUE5GS1RrUzNIQzlocytmY3dCaFBtV0gzNmJXQytDOXkrU1dXcXpkWQpWRzhpbDF1YW8wK04wWTZVdDdnZ0h5V1RscnByem43MmsrT1dKUlA4VWM5SVpBaWx5TUlHTmdZZENoMDVnbVBlCkd3Z0VyMHBLU3A5UE9SUDFZTGF5VVFsdUdCZkhtWERHM21kd3RYVmFFRmJNbEJsRU1CdCsvMW8xMWNVSFdNVWgKYXVBVWNPYy9RTGUvZUVZcFZTT25NRWpmalJZd1BwY1RybnNsYjNjblFnU2VrdE51QXJWZ1Y5UXg3WkhvZ1o3NApJZTJzSU9tRDRBUGEzNWJWb0c1SkMwYkc2NHVVM2hKOEIzNGgKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=</span><br><span class="line">    client-key-data: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb2dJQkFBS0NBUUVBbXNKUHBvdEcyNVE4bExyNC9NK3N1VjN1Z25BTXhlZEpiV0VCZzF6bzVQa3JVbzBNCkpDUEkyMTgrby9yTHh2eWJ1SlJKRm5qZlJMWlBZNmYrTGZTK0lCamlsclA3cnY4d0sxOHVXQS81V2hZY1B5RlkKYTZKeTVRM1RFdkZBYkdLVU5FUjBiWUhNOXdmTGJhVWNmdGkycjl0R3lMVU9jMGl6YnlCQU9kVTdaTHRnZ3Y5VwpZb213aThLZG84bXVTTjdqSGlpd1BXTmIvQlBDUzE1WElvTXdkNHNRbXkwUUtUQ1M4dG5HYXN4WU9DWmoySFkxCjV6dTdmbFJBeWZZcDNCM1pLZVZzQXdvUkhLQmVCa0NlMklwMVhWcjdoS2RoS2RFaVo0ZE5wVWN3VXVTbEFGaXcKK1lPeUREbDZLdmVsSGVHVCs0N3E5SStjbXc0Rm1Ra1hhNGZFSFFJREFRQUJBb0lCQUVEa0tUSFVSS25keG1rMgozU0JrbERCRnlyUzI5eVFrancxbUY1UlZhUEpaNkdoODdCSmJUdVZ0VW42L3NxS0ZXV1pVQnpGOURXRnFjRytCCkNYdUxuQTBwWWhsKzdwRzZQeUJ3a0tZc1RJb1JxMVp0VFA0VTU4aFR1Nlc5c3gyL1dCVnlmcjlNSmYyUEx5V1MKamhoQ0ZwZzJnYisyNjVBN2M4R3M3RUZUdjh2RWZ3S3RYVm50SDVKOVA1R3RWTnBEcTNncnM0UWNSajVzNWI0MwppVFZBTGNabkRHTktrS2JwYzdmYWVxdUc0R0VOWUZQcUJ1RnNvM3BUTzEwWlIrbmQxaFFiWm9xdW5JYlRxUDNGClV3NzJ5MTNLSkdjNkRRbnhpUWROeTFIUWlYbFVtTzk1dER4UHhzdFBmM3BpSVhkU1RpRTUzMDNkVEZpMWtFaG4KN2dWcDhxRUNnWUVBeSsvMEdrZVgzTU4ySG1qNU9iWGlnUzM0Sk90elBpUGdmMENMdzQ4K20wV2VNdkVhZmhwbApNRnl2T2V0bWpQWlpIaWNOaTErMkladDBUWnQ4Qmo4QXc1LzVnd3hXRS9pVm5uYVkyd1NaVlcwYlh4QlJqTkNLCnhYTXJJWlRCK2dwcG9tUGpKRlBFMGNnOWgzWUJFMkdBRUc3RjdnNi9yeGNkOVUrV2VMbE9OczhDZ1lFQXdrUmcKa1Y3ajRIU2llMTFHUzgvTGc1YXd4VTNFTXNMdVNSL2RVRTZ3c1hRMWxBS0x0dTlURXZyTFdydHpzYkhwU0JEYgpIUXVOQWhXandQS0RvY0lzcVNpVFdPdkdMa2NrZGphY2dPL3lYcmpTMng1cmpUWjc2NWRjaFRQUGFRVEE1VFdwCmRjbEI4S0g2Z1k2M1FwTWg1RURFZ3VaS2dRWFNCU0IwdUtnRDBWTUNnWUFkc3V3Umg2dU44c2tZMUtDMnpzNFYKa2VRNVBEQ2tOQVZWZ3NqWHlkeU1NQzlCcStyM3dsQktJclZCOGc0VktTc0JRUjZ2MVZob3ZJTExhb0U5UjUrTQozWmN3aG5OaXBTamswdENmMUtPZjFTdlBSRWtjQUtLMDduaXhnMEJjY1hmQXRsczF4eDA2ajdhbUs0RXNtVjVWCkJreTh4bGtUM29IMlg0akNPL292OFFLQmdIZlhVSzg5RjF5Rzl4a2RVRmxDUmV6V1VCUlhSZnAra0JyaUlsZ0IKUXpVbFdFd0hTZ00vSGtOdUhYYktmck9XNmk4LzNydkxQV0NVMHVFYmVpS1dzNUJpN0lzRlg4dDZyYjZUTC9iRwpqd0RxQ1lHTkFaSXFrMFdocVR5dTJudVJxQ0Y5K2gwa1c1NURmbExnSktOWU9xY2hZVmpURWhFSDh5aWdmZ0RQCi9STHJBb0dBUStWMnlJa2VRYm95b2VKSzJGZnhvUXVaNmY3NERraGFhQkV3UU4rM1NIdmIvWlE0YnpDbktvaUYKODA0bWZuN1VZN0ptN0hOTVYzRHpGRzNxYkhiWDZnSEYyWlFiWm4rb0Ywck8vbWxITnE5QzlJWXpXWS9sZERYVApwS3hMaWsxeEt1VURGUFp2Y01XTmY5Vk82NW5HZXo3R2I5UE9UMTdTQ3FmWGZBRHN2V1U9Ci0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==</span><br><span class="line">root@hello:~#</span><br></pre></td></tr></table></figure>
+
+<p>*注意：配置文件中的server需要修改，并且该配置文件在原有的集权管理节点上。</p>
+<h1 id="配置自动补全，并测试kubectl"><a href="#配置自动补全，并测试kubectl" class="headerlink" title="配置自动补全，并测试kubectl"></a>配置自动补全，并测试kubectl</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# apt install -y bash-completion</span><br><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree       </span><br><span class="line">Reading state information... Done</span><br><span class="line">bash-completion is already the newest version (1:2.10-1ubuntu1).</span><br><span class="line">bash-completion set to manually installed.</span><br><span class="line">0 upgraded, 0 newly installed, 0 to remove and 54 not upgraded.</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# echo &quot;source &lt;(kubectl completion bash)&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# source &lt;(kubectl completion bash)</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# kubectl get deployments.apps </span><br><span class="line">NAME                     READY   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">cby                      1/1     1            1           3h53m</span><br><span class="line">hello-server             2/2     2            2           30d</span><br><span class="line">ingress-demo-app         2/2     2            2           30d</span><br><span class="line">nfs-client-provisioner   1/1     1            1           34d</span><br><span class="line">nginx-demo               2/2     2            2           30d</span><br><span class="line">root@hello:~#</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e5de0e0573dd401cb592f93d697971ed~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>Linux运维交流社区</strong></p>
+<p>Linux运维交流社区，互联网新闻以及技术交流。</p>
+<p>76篇原创内容</p>
+<p>公众号</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5ed5f95687254a299297f3e2bb64a65f~tplv-k3u1fbpfcp-zoom-1.image" alt="图片">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云、简书、今日头条</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

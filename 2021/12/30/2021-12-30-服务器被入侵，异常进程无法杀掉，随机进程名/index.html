@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>服务器被入侵，异常进程无法杀掉，随机进程名 - chenby</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="chenby,故事情节：
+    有一天在聚餐中，我有一个朋友和我说他的服务器上有有个异常的进程他一直在占满CPU在运行，我在一顿谦虚之后答应了他，有空登录上他的服务器看一下具体情况。  
+      
+    ,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="服务器被入侵，异常进程无法杀掉，随机进程名 - chenby"/>
+    <meta name="twitter:description" content="chenby,故事情节：
+    有一天在聚餐中，我有一个朋友和我说他的服务器上有有个异常的进程他一直在占满CPU在运行，我在一顿谦虚之后答应了他，有空登录上他的服务器看一下具体情况。  
+      
+    ,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="chenby"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="服务器被入侵，异常进程无法杀掉，随机进程名 - chenby"/>
+    <meta property="og:description" content="chenby,故事情节：
+    有一天在聚餐中，我有一个朋友和我说他的服务器上有有个异常的进程他一直在占满CPU在运行，我在一顿谦虚之后答应了他，有空登录上他的服务器看一下具体情况。  
+      
+    ,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">chenby</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">服务器被入侵，异常进程无法杀掉，随机进程名</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">服务器被入侵，异常进程无法杀掉，随机进程名</h1>
+        <div class="stuff">
+            <span>十二月 30, 2021</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p>故事情节：</p>
+<p>    有一天在聚餐中，我有一个朋友和我说他的服务器上有有个异常的进程他一直在占满CPU在运行，我在一顿谦虚之后答应了他，有空登录上他的服务器看一下具体情况。  </p>
+<p>      </p>
+<p>    这一天正是五月一日，一年一度的劳动节来了，我在家里闲着没事干在看某综艺，这时手机响了，来了一条微信消息，看到他给我发来了俩张图，突然勾起了我内心的好奇。  </p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/aff292bb3ed545a5a71c52449f10bf55~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f9c20a96a67744f08ee41e26cbc60e4f~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f12ed157c81342df8fb2ac295150eeca~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>    就是以上三张图，在proc目录中的exe指向的文件已被删除，我看到这里，我好奇这个进程肯定是被隐藏掉了。这时，我急中生智跟这位朋友要了root账号密码。登录服务器用top命令一看，发现一个奇怪的进程在运行，我使用kill命令将其杀后，等了十来分钟后，发现没有被启动，这时我和这位朋友说干掉了，他问我是不是kill掉了，我说嗯，他又补充到，这个进程杀掉过段时间会起来的，我问他大概多久就会启动，他说不清楚大概一天内肯定会启动。这时我慌了，如果是一天内才启动，我还得明天才能看见，那实在没办法了。我又开始看我的综艺了。</p>
+<p>    没过多久，我又看了一下，发现这个进程换了个名字又启动了。还干满了CPU，就在这时，我在研究这个进程运行文件的时候发现：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2700693c2b3c42e29513095f1cd528e5~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ea178cf674ac4db681eae00e0e9e0758~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/af2b391ca2b840908272967f98548a6b~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>    这个进程会连到一个韩国的服务器上，我访问这个IP发现是一个正常的网站，没有异常情况。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3589c932e46e414f98bb194a67917cda~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>    同时在查看运行目录的时候，发现如下问题</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/be1b20c6036d4fab9d729c900a8d74f0~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/740298419f3542199bc5182f4990135d~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>   发现运行文件的命令也没有，同时运行目录也被删掉了。就在这时卡住了脖子，不知如何是好，这时突然想起来一个定时运行的脚本。打开脚本是这样的：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a6822603916648d4a8eb2dfa69d75f34~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>      </p>
+<p>    发现这个脚本是base64编码加密的，在网上找了一个解密的工具，进解密后发现这个是脚本</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6c5fca27de9043a0b343049d8f2d90ac~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>完整脚本如图：  </p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3ce9e9469c964a1ba4a4ca8e5615e05a~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>    在下大概看了一下脚本内容，如下是执行一个临时文件并赋予一个执行权限在执行完成后将其删除，所以刚刚在看得时候发现执行的目录下得文件报红出现丢失的情况  </p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1879ea2e824d405d9765cdb3d6ba65f5~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>    最骚的是这里，关键东西在这里了。使用拼接组成一个URL进行下载病毒文件。通过一系列操作，先查看本地IP，又看了是我是谁，又看了机器的架构，还看了机器的主机名，同时还看了本地的网卡所有的IP。最关键的是把网络这一块搞成一个md5sum。在最后查看了定时任务并搞成了一个base64的字符串</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d8d44f7e54a94cbb8e70163d0df8deab~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>    再往下就是下载脚本执行并添加定时任务了，有意思的是这个脚本的2017年的，至今还再用。到最后我取消了他所有权限，并改了名字，同时把定时任务将其删除。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cd3cd4244ce74bb79e3ceade78022ffd~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>到此该病毒已被清理。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bb22ea56078b4509813142ecb7f5d026~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
