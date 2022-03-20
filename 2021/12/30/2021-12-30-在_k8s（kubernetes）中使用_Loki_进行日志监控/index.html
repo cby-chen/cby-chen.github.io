@@ -14,7 +14,7 @@
 安装helm环境12345678[root@hello ~/yaml]#[root@hello ~/yaml]# curl https://baltocdn.com/helm/signing.as,"> 
     <meta name="author" content="chenby"> 
     <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
-    <link rel="icon" href="/img/favicon.png"> 
+    <link rel="icon" href="/img/1.ico"> 
     
     
     
@@ -108,7 +108,7 @@
 </blockquote>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
-            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
                 <source type="audio/mpeg" src="">
             </audio>
             
@@ -139,6 +139,10 @@
 
 
     </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85helm%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">安装helm环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%AE%89%E8%A3%85%E4%B8%8B%E8%BD%BD%E6%BA%90"><span class="toc-number">2.</span> <span class="toc-text">添加安装下载源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85loki%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.</span> <span class="toc-text">安装loki日志系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%AE%89%E8%A3%85%E5%90%8E%E6%98%AF%E5%90%A6%E5%AE%8C%E6%88%90"><span class="toc-number">4.</span> <span class="toc-text">查看安装后是否完成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bsvc%E5%B9%B6%E4%BF%AE%E6%94%B9%E7%B1%BB%E5%9E%8B"><span class="toc-number">5.</span> <span class="toc-text">查看svc并修改类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%86svc%E8%AE%BE%E7%BD%AE%E4%B8%BA-type-NodePort"><span class="toc-number">6.</span> <span class="toc-text">将svc设置为 type: NodePort</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0nginx%E5%BA%94%E7%94%A8"><span class="toc-number">7.</span> <span class="toc-text">添加nginx应用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bnginx%E7%9A%84pod"><span class="toc-number">8.</span> <span class="toc-text">查看nginx的pod</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E8%AE%BF%E9%97%AE"><span class="toc-number">9.</span> <span class="toc-text">测试访问</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8grafana%E4%B8%AD%E6%B7%BB%E5%8A%A0%E6%BA%90"><span class="toc-number">10.</span> <span class="toc-text">在grafana中添加源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97"><span class="toc-number">11.</span> <span class="toc-text">查看日志</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%9D%A2%E6%9D%BF"><span class="toc-number">12.</span> <span class="toc-text">添加面板</span></a></li></ol>	
+        </div>
     
 </div>
 
@@ -211,6 +215,25 @@
 </div>
 
 
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
 

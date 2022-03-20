@@ -13,7 +13,7 @@
     <meta name="description" content="chenby,什么是 DockerDocker 最初是 dotCloud 公司创始人  在法国期间发起的一个公司内部项目，它是基于 dotCloud 公司多年云服务技术的一次革新，并于 ，主要项目代码在  上进行,"> 
     <meta name="author" content="chenby"> 
     <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
-    <link rel="icon" href="/img/favicon.png"> 
+    <link rel="icon" href="/img/1.ico"> 
     
     
     
@@ -169,7 +169,7 @@
 </blockquote>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
-            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
                 <source type="audio/mpeg" src="">
             </audio>
             
@@ -200,6 +200,10 @@
 
 
     </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Docker"><span class="toc-number">1.</span> <span class="toc-text">什么是 Docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8-Docker"><span class="toc-number">2.</span> <span class="toc-text">为什么要用 Docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker%E4%B8%80%E9%94%AE%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">docker一键安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker%E5%91%BD%E4%BB%A4%E5%AE%9E%E6%88%98"><span class="toc-number">4.</span> <span class="toc-text">Docker命令实战</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">4.1.</span> <span class="toc-text">常用命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%AE%9E%E6%88%98"><span class="toc-number">5.</span> <span class="toc-text">基础实战</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E9%95%9C%E5%83%8F"><span class="toc-number">5.1.</span> <span class="toc-text">1、镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E6%9C%80%E6%96%B0%E7%89%88%E9%95%9C%E5%83%8F"><span class="toc-number">5.1.1.</span> <span class="toc-text">下载最新版镜像</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%9C%AC%E5%9C%B0%E9%95%9C%E5%83%8F"><span class="toc-number">5.1.2.</span> <span class="toc-text">查看本地镜像</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E9%95%9C%E5%83%8F"><span class="toc-number">5.1.3.</span> <span class="toc-text">删除镜像</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E6%8C%87%E5%AE%9A%E7%89%88%E6%9C%AC%E9%95%9C%E5%83%8F"><span class="toc-number">5.1.4.</span> <span class="toc-text">下载指定版本镜像</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%AE%B9%E5%99%A8"><span class="toc-number">5.2.</span> <span class="toc-text">2、容器</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E8%BF%90%E8%A1%8C%E7%9A%84%E5%AE%B9%E5%99%A8"><span class="toc-number">5.2.1.</span> <span class="toc-text">查看当前运行的容器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%81%9C%E6%AD%A2%E5%AE%B9%E5%99%A8"><span class="toc-number">5.2.2.</span> <span class="toc-text">停止容器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E5%AE%B9%E5%99%A8"><span class="toc-number">5.2.3.</span> <span class="toc-text">查看所有容器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%AE%B9%E5%99%A8"><span class="toc-number">5.2.4.</span> <span class="toc-text">启动容器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%AE%B9%E5%99%A8%EF%BC%8C%E5%9C%A8%E8%BF%90%E8%A1%8C%E4%B8%AD%E6%97%A0%E6%B3%95%E5%88%A0%E9%99%A4"><span class="toc-number">5.2.5.</span> <span class="toc-text">删除容器，在运行中无法删除</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BC%BA%E5%88%B6%E5%88%A0%E9%99%A4%E5%AE%B9%E5%99%A8"><span class="toc-number">5.2.6.</span> <span class="toc-text">强制删除容器</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E8%BF%9B%E5%85%A5%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C%E5%AE%B9%E5%99%A8"><span class="toc-number">5.3.</span> <span class="toc-text">3、进入容器操作容器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E4%BF%AE%E6%94%B9%E5%AE%B9%E5%99%A8%E5%86%85%E5%AE%B9"><span class="toc-number">5.4.</span> <span class="toc-text">4、修改容器内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5%E3%80%81%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE"><span class="toc-number">5.5.</span> <span class="toc-text">5、挂载外部数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6%E3%80%81%E5%B0%86%E8%BF%90%E8%A1%8C%E4%B8%AD%E7%9A%84%E5%AE%B9%E5%99%A8%E6%9E%84%E5%BB%BA%E4%B8%BA%E9%95%9C%E5%83%8F"><span class="toc-number">5.6.</span> <span class="toc-text">6、将运行中的容器构建为镜像</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7%E3%80%81%E9%95%9C%E5%83%8F%E4%BF%9D%E5%AD%98%E4%B8%8E%E5%AF%BC%E5%85%A5"><span class="toc-number">5.7.</span> <span class="toc-text">7、镜像保存与导入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8%E3%80%81%E6%8E%A8%E9%80%81%E5%88%B0DockerHub%EF%BC%8C%E5%B9%B6%E5%9C%A8%E5%85%B6%E4%BB%96%E4%B8%BB%E6%9C%BA%E4%B8%8A%E5%8F%AF%E6%8B%89%E5%8E%BB%E8%AF%A5%E9%95%9C%E5%83%8F"><span class="toc-number">5.8.</span> <span class="toc-text">8、推送到DockerHub，并在其他主机上可拉去该镜像</span></a></li></ol></li></ol>	
+        </div>
     
 </div>
 
@@ -272,6 +276,25 @@
 </div>
 
 
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
 

@@ -17,7 +17,7 @@
 组织域：.com, .org, .net,"> 
     <meta name="author" content="chenby"> 
     <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
-    <link rel="icon" href="/img/favicon.png"> 
+    <link rel="icon" href="/img/1.ico"> 
     
     
     
@@ -123,7 +123,7 @@
 <p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
-            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
                 <source type="audio/mpeg" src="">
             </audio>
             
@@ -154,6 +154,10 @@
 
 
     </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-Domain-Name-Service%EF%BC%8C%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.</span> <span class="toc-text">DNS:Domain Name Service，域名解析服务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85dns%E6%9C%8D%E5%8A%A1%E5%B9%B6%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">安装dns服务并配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">检查配置文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%EF%BC%8C%E5%B9%B6%E8%AE%BE%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF"><span class="toc-number">4.</span> <span class="toc-text">启动服务，并设置开机自启</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="toc-number">5.</span> <span class="toc-text">附录：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-name-conf%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3"><span class="toc-number">6.</span> <span class="toc-text">1.name.conf文件详解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%8C%BA%E5%9F%9F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-x2F-etc-x2F-named-rfc1912-zones"><span class="toc-number">7.</span> <span class="toc-text">2.区域配置文件&#x2F;etc&#x2F;named.rfc1912.zones</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E6%A0%B9%E5%9F%9F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6named-ca"><span class="toc-number">8.</span> <span class="toc-text">3.根域配置文件named.ca</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E6%AD%A3%E5%90%91%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6"><span class="toc-number">9.</span> <span class="toc-text">4.正向域名解析数据库文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E5%8F%8D%E5%90%91%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6"><span class="toc-number">10.</span> <span class="toc-text">5.反向域名解析数据库文件</span></a></li></ol>	
+        </div>
     
 </div>
 
@@ -226,6 +230,25 @@
 </div>
 
 
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
 

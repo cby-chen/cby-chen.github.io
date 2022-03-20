@@ -14,7 +14,7 @@
 JupyterHub 为用户组带来了笔记本的强大功能。它使用户能够访问计算环境和资源，而不会给用户带来安装和维护任务的负担。用户——包括学生、研究人员和数据科学家——可以在他们自己的工作空间中,"> 
     <meta name="author" content="chenby"> 
     <link rel="alternative" href="atom.xml" title="chenby" type="application/atom+xml"> 
-    <link rel="icon" href="/img/favicon.png"> 
+    <link rel="icon" href="/img/1.ico"> 
     
     
     
@@ -101,7 +101,7 @@ JupyterHub 为用户组带来了笔记本的强大功能。它使用户能够访
 </blockquote>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
-            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
                 <source type="audio/mpeg" src="">
             </audio>
             
@@ -132,6 +132,10 @@ JupyterHub 为用户组带来了笔记本的强大功能。它使用户能够访
 
 
     </div>
+    
+        <div class="side">
+				
+        </div>
     
 </div>
 
@@ -204,6 +208,25 @@ JupyterHub 为用户组带来了笔记本的强大功能。它使用户能够访
 </div>
 
 
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
 
