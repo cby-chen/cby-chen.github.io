@@ -81,8 +81,8 @@ docker,"/>
 <hr>
 <p><strong>docker配置启动运行MySQL</strong>  </p>
 <p>首先创建目录并进入</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -p 3306:3306 \\</span><br><span class="line">--name mymysql \\</span><br><span class="line">--restart=always \\</span><br><span class="line">-v $PWD/conf:/etc/mysql/conf.d \\</span><br><span class="line">-v $PWD/logs:/logs \\</span><br><span class="line">-v $PWD/data:/var/lib/mysql \\</span><br><span class="line">-e MYSQL\_ROOT\_PASSWORD=123456 \\</span><br><span class="line">-d mysql:8</span><br></pre></td></tr></table></figure>
-
+<p>&#96;&#96;&#96;shell<br>sudo docker run -p 3306:3306 \<br>–name mymysql \<br>–restart&#x3D;always \<br>-v $PWD&#x2F;conf:&#x2F;etc&#x2F;mysql&#x2F;conf.d \<br>-v $PWD&#x2F;logs:&#x2F;logs \<br>-v $PWD&#x2F;data:&#x2F;var&#x2F;lib&#x2F;mysql \<br>-e MYSQL_ROOT_PASSWORD&#x3D;123456 \<br>-d mysql:8</p>
+<p>&#96;&#96;&#96;shell</p>
 <p>--restart&#x3D;always：在容器退出时总是重启容器</p>
 <p>MYSQL_ROOT_PASSWORD&#x3D;123456：root密码123456</p>
 <p>mysql:8  使用MySQL8</p>
@@ -91,33 +91,33 @@ docker,"/>
 <p>-v $PWD&#x2F;data:&#x2F;var&#x2F;lib&#x2F;mysql    数据</p>
 <hr>
 <p><strong>docker配置启动运行phpMyAdmin</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">  -p 8001:80 \\</span><br><span class="line">  -e UPLOAD\_LIMIT=128M \\</span><br><span class="line">  -e MAX\_EXECUTION\_TIME=10000 \\</span><br><span class="line">  --name phpmyadmin \\</span><br><span class="line">  phpmyadmin/phpmyadmin</span><br></pre></td></tr></table></figure>
-
+<p>&#96;&#96;&#96;shell<br>docker run -d \<br>  -p 8001:80 \<br>  -e UPLOAD_LIMIT&#x3D;128M \<br>  -e MAX_EXECUTION_TIME&#x3D;10000 \<br>  –name phpmyadmin \<br>  phpmyadmin&#x2F;phpmyadmin</p>
+<p>&#96;&#96;&#96;shell</p>
 <p>UPLOAD_LIMIT 和 MAX_EXECUTION_TIME 需要设置一下</p>
 <hr>
 <p>*<em><strong>docker配置启动运行</strong>MongoDB</em>*</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">  -p 27017:27017 \\</span><br><span class="line">  -v mongo-data:/data/db \\</span><br><span class="line">  -v mongo-config:/data/configdb \\</span><br><span class="line">  --name mongo \\</span><br><span class="line">  -e MONGO\_INITDB\_ROOT\_USERNAME=mongoadmin \\</span><br><span class="line">  -e MONGO\_INITDB\_ROOT\_PASSWORD=123123 \\</span><br><span class="line">  -v /data:/mnt/data \\</span><br><span class="line">  mongo</span><br></pre></td></tr></table></figure>
-
+<p>&#96;&#96;&#96;shell<br>docker run -d \<br>  -p 27017:27017 \<br>  -v mongo-data:&#x2F;data&#x2F;db \<br>  -v mongo-config:&#x2F;data&#x2F;configdb \<br>  –name mongo \<br>  -e MONGO_INITDB_ROOT_USERNAME&#x3D;mongoadmin \<br>  -e MONGO_INITDB_ROOT_PASSWORD&#x3D;123123 \<br>  -v &#x2F;data:&#x2F;mnt&#x2F;data \<br>  mongo</p>
+<p>&#96;&#96;&#96;shell</p>
 <p>MONGO_INITDB_ROOT_USERNAME 用户名</p>
 <p>MONGO_INITDB_ROOT_PASSWORD 密码</p>
 <p>mongo-data 数据目录</p>
 <p>mongo-config 配置文件目录</p>
 <hr>
 <p>*<em><strong>docker配置启动运行</strong>Mongo Express</em>*</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">-p 8002:8081 \\</span><br><span class="line">--name mongo-express \\</span><br><span class="line">mongo-express</span><br></pre></td></tr></table></figure>
-
+<p>&#96;&#96;&#96;shell<br>  docker run -d \<br>  -p 8002:8081 \<br>  –name mongo-express \<br>  mongo-express</p>
+<p>&#96;&#96;&#96;shell</p>
 <hr>
 <p>*<em><strong>docker配置启动运行</strong>Redis</em>*</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">  -p 6379:6379 \\</span><br><span class="line">  -v redis-data:/data \\</span><br><span class="line">  --name redis \\</span><br><span class="line">  redis</span><br></pre></td></tr></table></figure>
-
+<p>&#96;&#96;&#96;shell<br>docker run -d \<br>  -p 6379:6379 \<br>  -v redis-data:&#x2F;data \<br>  –name redis \<br>  redis</p>
+<p>&#96;&#96;&#96;shell</p>
 <hr>
 <p>*<em><strong>docker配置启动运行</strong>Elasticsearch</em>*</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">  -p 9100:9100 -p 9200:9200 \\</span><br><span class="line">  -e discovery.type=single-node \\</span><br><span class="line">  -v es-data:/usr/share/elasticsearch/data \\</span><br><span class="line">  -v es-log:/usr/share/elasticsearch/logs \\</span><br><span class="line">  --name elasticsearch \\</span><br><span class="line">  elasticsearch</span><br></pre></td></tr></table></figure>
-
+<p>&#96;&#96;&#96;shell<br>docker run -d \<br>  -p 9100:9100 -p 9200:9200 \<br>  -e discovery.type&#x3D;single-node \<br>  -v es-data:&#x2F;usr&#x2F;share&#x2F;elasticsearch&#x2F;data \<br>  -v es-log:&#x2F;usr&#x2F;share&#x2F;elasticsearch&#x2F;logs \<br>  –name elasticsearch \<br>  elasticsearch</p>
+<p>&#96;&#96;&#96;shell</p>
 <hr>
 <p>*<em><strong>docker配置启动运行</strong>Grafana</em>*</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \\</span><br><span class="line">  -p 8003:3000 \\</span><br><span class="line">  --link mysql:mysql \\</span><br><span class="line">  --link mongo:mongo \\</span><br><span class="line">  --name grafana \\</span><br><span class="line">  grafana/grafana</span><br></pre></td></tr></table></figure>
-
+<p>&#96;&#96;&#96;shell<br>docker run -d \<br>  -p 8003:3000 \<br>  –link mysql:mysql \<br>  –link mongo:mongo \<br>  –name grafana \<br>  grafana&#x2F;grafana</p>
+<p>&#96;&#96;&#96;shell</p>
 <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4f8044e051f1458b8a62e9da38458826~tplv-k3u1fbpfcp-zoom-1.image"></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->

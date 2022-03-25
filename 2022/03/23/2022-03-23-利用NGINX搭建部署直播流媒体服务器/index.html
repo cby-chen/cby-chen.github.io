@@ -5,14 +5,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CentOS安装时钟同步服务 - 小陈运维</title>
+    <title>利用NGINX搭建部署直播流媒体服务器 - 小陈运维</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="Fechin,"> 
     <meta name="description" content="小陈运维,
-使用chrony用于时间同步
-123456789101112131415161718yum install chrony -yvim /etc/chrony.confcat /etc/chrony,"> 
+直播如今是一个老生常谈的问题，怎么用于直播，大多数人只晓得，大佬某平台直播软件，点击开始即可直播。那么如何来搭建一个简易的直播平台呢？仅仅是有直播功能，没有涉及转码以及播放软件。
+12345678,"> 
     <meta name="author" content="chenby"> 
     <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
     <link rel="icon" href="/img/1.ico"> 
@@ -20,20 +20,20 @@
     
     
     <meta name="twitter:card" content="summary"/>
-    <meta name="twitter:title" content="CentOS安装时钟同步服务 - 小陈运维"/>
+    <meta name="twitter:title" content="利用NGINX搭建部署直播流媒体服务器 - 小陈运维"/>
     <meta name="twitter:description" content="小陈运维,
-使用chrony用于时间同步
-123456789101112131415161718yum install chrony -yvim /etc/chrony.confcat /etc/chrony,"/>
+直播如今是一个老生常谈的问题，怎么用于直播，大多数人只晓得，大佬某平台直播软件，点击开始即可直播。那么如何来搭建一个简易的直播平台呢？仅仅是有直播功能，没有涉及转码以及播放软件。
+12345678,"/>
     
     
     
     
     <meta property="og:site_name" content="小陈运维"/>
     <meta property="og:type" content="object"/>
-    <meta property="og:title" content="CentOS安装时钟同步服务 - 小陈运维"/>
+    <meta property="og:title" content="利用NGINX搭建部署直播流媒体服务器 - 小陈运维"/>
     <meta property="og:description" content="小陈运维,
-使用chrony用于时间同步
-123456789101112131415161718yum install chrony -yvim /etc/chrony.confcat /etc/chrony,"/>
+直播如今是一个老生常谈的问题，怎么用于直播，大多数人只晓得，大佬某平台直播软件，点击开始即可直播。那么如何来搭建一个简易的直播平台呢？仅仅是有直播功能，没有涉及转码以及播放软件。
+12345678,"/>
     
 <link rel="stylesheet" href="/css/diaspora.css">
 
@@ -47,7 +47,7 @@
     <div class="bar" style="width: 0;"></div>
     <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
     <div title="播放/暂停" class="iconfont icon-play"></div>
-    <h3 class="subtitle">CentOS安装时钟同步服务</h3>
+    <h3 class="subtitle">利用NGINX搭建部署直播流媒体服务器</h3>
     <div class="social">
         <div>
             <div class="share">
@@ -62,25 +62,24 @@
     <div class="section">
         <div class="article">
     <div class='main'>
-        <h1 class="title">CentOS安装时钟同步服务</h1>
+        <h1 class="title">利用NGINX搭建部署直播流媒体服务器</h1>
         <div class="stuff">
-            <span>二月 15, 2022</span>
+            <span>三月 23, 2022</span>
             
 
         </div>
         <div class="content markdown">
-            <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc6cf2866ac64e0698e289c141aa34a7~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
-<p>使用chrony用于时间同步</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">yum install chrony -y</span><br><span class="line"></span><br><span class="line">vim /etc/chrony.conf</span><br><span class="line"></span><br><span class="line">cat /etc/chrony.conf | grep -v  &quot;^#&quot; | grep -v &quot;^$&quot;</span><br><span class="line">pool ntp.aliyun.com iburst</span><br><span class="line">driftfile /var/lib/chrony/drift</span><br><span class="line">makestep 1.0 3</span><br><span class="line">rtcsync</span><br><span class="line">allow 10.0.0.0/8</span><br><span class="line">local stratum 10</span><br><span class="line">keyfile /etc/chrony.keys</span><br><span class="line">leapsectz right/UTC</span><br><span class="line">logdir /var/log/chrony</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">systemctl restart chronyd</span><br><span class="line">systemctl enable chronyd</span><br></pre></td></tr></table></figure>
+            <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5dfb3a7d70874dc5acedba95eb63499d~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>直播如今是一个老生常谈的问题，怎么用于直播，大多数人只晓得，大佬某平台直播软件，点击开始即可直播。那么如何来搭建一个简易的直播平台呢？仅仅是有直播功能，没有涉及转码以及播放软件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">安装nginx以及rtmp模块</span><br><span class="line"></span><br><span class="line">root@cby:~# apt install nginx</span><br><span class="line">root@cby:~# apt install libnginx-mod-rtmp</span><br><span class="line"></span><br><span class="line">修改配置以支持rtmp</span><br><span class="line">root@cby:~# vim /etc/nginx/nginx.conf</span><br><span class="line">rtmp &#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 1935;</span><br><span class="line">        chunk_size 4096;</span><br><span class="line">        application live &#123;</span><br><span class="line">            live on;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">检查是否有报错</span><br><span class="line">root@cby:~# nginx -t</span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf test is successful</span><br><span class="line">root@cby:~# </span><br><span class="line"></span><br><span class="line">重启nginx</span><br><span class="line">root@cby:~# systemctl restart nginx</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>客户端安装并配置</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">yum install chrony -y</span><br><span class="line"></span><br><span class="line">vim /etc/chrony.conf</span><br><span class="line"></span><br><span class="line">cat /etc/chrony.conf | grep -v  &quot;^#&quot; | grep -v &quot;^$&quot;</span><br><span class="line">pool 10.0.0.20 iburst</span><br><span class="line">driftfile /var/lib/chrony/drift</span><br><span class="line">makestep 1.0 3</span><br><span class="line">rtcsync</span><br><span class="line">keyfile /etc/chrony.keys</span><br><span class="line">leapsectz right/UTC</span><br><span class="line">logdir /var/log/chrony</span><br><span class="line"></span><br><span class="line">systemctl restart chronyd ; systemctl enable chronyd</span><br></pre></td></tr></table></figure>
-
-<p>使用客户端进行验证</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">chronyc sources -v</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  .-- Source mode  &#x27;^&#x27; = server, &#x27;=&#x27; = peer, &#x27;#&#x27; = local clock.</span><br><span class="line"> / .- Source state &#x27;*&#x27; = current best, &#x27;+&#x27; = combined, &#x27;-&#x27; = not combined,</span><br><span class="line">| /             &#x27;x&#x27; = may be in error, &#x27;~&#x27; = too variable, &#x27;?&#x27; = unusable.</span><br><span class="line">||                                                 .- xxxx [ yyyy ] +/- zzzz</span><br><span class="line">||      Reachability register (octal) -.           |  xxxx = adjusted offset,</span><br><span class="line">||      Log2(Polling interval) --.      |          |  yyyy = measured offset,</span><br><span class="line">||                                \     |          |  zzzz = estimated error.</span><br><span class="line">||                                 |    |           \</span><br><span class="line">MS Name/IP address         Stratum Poll Reach LastRx Last sample               </span><br><span class="line">===============================================================================</span><br><span class="line">^* master01                      3   6    17     7  -2539ns[  -29us] +/-   16ms</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
+<p>使用obs直播工具进行推流操作  </p>
+<p>rtmp:&#x2F;&#x2F;&lt;你的域名或者IP&gt;:1935&#x2F;live</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b45d78b6803a4461a72ac6f84b4a0430~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>使用vlc拉流播放</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/213ab9de78394063be0d21d55a4e4aa2~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>查看效果</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d2cf4ac8ff1f4eacb0139284bfdc6208~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
 <p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a></p>
 <p><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a></p>
