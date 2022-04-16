@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Let&#39;s Encrypt 泛域名证书申请 - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="小陈运维,泛域名泛域名证书又名通配符证书是SSL证书中的其中一种形式，一般会以通配符的形式(如：*.domain.com)来指定证书所要保护的域名。
+OV证书和DV证书都会有通配符的域名形式提供，而EV证书一,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="Let&#39;s Encrypt 泛域名证书申请 - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,泛域名泛域名证书又名通配符证书是SSL证书中的其中一种形式，一般会以通配符的形式(如：*.domain.com)来指定证书所要保护的域名。
+OV证书和DV证书都会有通配符的域名形式提供，而EV证书一,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="Let&#39;s Encrypt 泛域名证书申请 - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,泛域名泛域名证书又名通配符证书是SSL证书中的其中一种形式，一般会以通配符的形式(如：*.domain.com)来指定证书所要保护的域名。
+OV证书和DV证书都会有通配符的域名形式提供，而EV证书一,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Let's Encrypt 泛域名证书申请</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Let's Encrypt 泛域名证书申请</h1>
+        <div class="stuff">
+            <span>四月 15, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="泛域名"><a href="#泛域名" class="headerlink" title="泛域名"></a>泛域名</h1><p>泛域名证书又名通配符证书是SSL证书中的其中一种形式，一般会以通配符的形式(如：*.domain.com)来指定证书所要保护的域名。</p>
+<p>OV证书和DV证书都会有通配符的域名形式提供，而EV证书一般没有通配符的证书形式。</p>
+<p>1.配置灵活方便</p>
+<p>由于采用了通配符的形式对域名进行配置，那么对于拥有多个二级域名的网站是一件非常便利的事情。只要申请一张通配符证书，就能用于所有的二级域名网站中。而且如果以后需要继续增加二级域名，也不需要再去申请购买证书，只需继续使用原有的证书就可以，对于网站管理者来说确实是非常的方便。</p>
+<p>2.性价比高</p>
+<p>一般而言，通配符证书是会比单域名证书会贵上不少，但是假如按每个二级域名的证书价格摊分下来，那其实证书单价是及其的低。当然这要看你的二级域名数量总数有多少而定。但如今互联网时代，很多公司企业他们都会用户多个二级域名。对于这些企业而言，通配符证书无疑是一种高性价比的SSL证书。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/54bf914a089f4666ad17c100745bc89c~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h1 id="安装所需环境"><a href="#安装所需环境" class="headerlink" title="安装所需环境"></a>安装所需环境</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">root@cby:~# apt-get install socat -y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@cby:~# curl  https://get.acme.sh | sh</span><br><span class="line"><span class="meta prompt_">  %</span><span class="language-bash"> Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span></span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0</span><br><span class="line">100   937    0   937    0     0    788      0 --:--:--  0:00:01 --:--:--   789</span><br><span class="line"><span class="meta prompt_">  %</span><span class="language-bash"> Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span></span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100  210k  100  210k    0     0   131k      0  0:00:01  0:00:01 --:--:--  131k</span><br><span class="line">[Fri 15 Apr 2022 11:54:09 AM CST] Installing from online archive.</span><br><span class="line">[Fri 15 Apr 2022 11:54:09 AM CST] Downloading https://github.com/acmesh-official/acme.sh/archive/master.tar.gz</span><br><span class="line">[Fri 15 Apr 2022 11:54:11 AM CST] Extracting master.tar.gz</span><br><span class="line">[Fri 15 Apr 2022 11:54:11 AM CST] Installing to /root/.acme.sh</span><br><span class="line">[Fri 15 Apr 2022 11:54:11 AM CST] Installed to /root/.acme.sh/acme.sh</span><br><span class="line">[Fri 15 Apr 2022 11:54:11 AM CST] Installing alias to &#x27;/root/.bashrc&#x27;</span><br><span class="line">[Fri 15 Apr 2022 11:54:11 AM CST] OK, Close and reopen your terminal to start using acme.sh</span><br><span class="line">[Fri 15 Apr 2022 11:54:11 AM CST] Installing cron job</span><br><span class="line">49 0 * * * &quot;/root/.acme.sh&quot;/acme.sh --cron --home &quot;/root/.acme.sh&quot; &gt; /dev/null</span><br><span class="line">[Fri 15 Apr 2022 11:54:11 AM CST] Good, bash is found, so change the shebang to use bash as preferred.</span><br><span class="line">[Fri 15 Apr 2022 11:54:12 AM CST] OK</span><br><span class="line">[Fri 15 Apr 2022 11:54:12 AM CST] Install success!</span><br><span class="line">root@cby:~# </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="进入导入环境变量并提出申请"><a href="#进入导入环境变量并提出申请" class="headerlink" title="进入导入环境变量并提出申请"></a>进入导入环境变量并提出申请</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">root@cby:~# cd .acme.sh/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@cby:~/.acme.sh# export DP_Id=&quot;abcd&quot;</span><br><span class="line">root@cby:~/.acme.sh# export DP_Key=&quot;xxxxxxxxxx&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@cby:~/.acme.sh# ./acme.sh --issue --dns dns_dp -d *.oiox.cn -d oiox.cn</span><br><span class="line">[Fri 15 Apr 2022 12:05:13 PM CST] Using CA: https://acme.zerossl.com/v2/DV90</span><br><span class="line">[Fri 15 Apr 2022 12:05:13 PM CST] Multi domain=&#x27;DNS:*.oiox.cn,DNS:oiox.cn&#x27;</span><br><span class="line">[Fri 15 Apr 2022 12:05:13 PM CST] Getting domain auth token for each domain</span><br><span class="line">[Fri 15 Apr 2022 12:05:38 PM CST] Getting webroot for domain=&#x27;*.oiox.cn&#x27;</span><br><span class="line">[Fri 15 Apr 2022 12:05:38 PM CST] Getting webroot for domain=&#x27;oiox.cn&#x27;</span><br><span class="line">[Fri 15 Apr 2022 12:05:39 PM CST] Adding txt value: DDuc5hd3b1RIoa5BefBkA53EpEtbAY0Fk8jOVVJcL6E for domain:  _acme-challenge.oiox.cn</span><br><span class="line">[Fri 15 Apr 2022 12:05:39 PM CST] Adding record</span><br><span class="line">[Fri 15 Apr 2022 12:05:39 PM CST] The txt record is added: Success.</span><br><span class="line">[Fri 15 Apr 2022 12:05:40 PM CST] Adding txt value: 43GHnhiHjyxCxsdHSDRDP_A4YqP8dDjc_9YgnkFNk5I for domain:  _acme-challenge.oiox.cn</span><br><span class="line">[Fri 15 Apr 2022 12:05:40 PM CST] Adding record</span><br><span class="line">[Fri 15 Apr 2022 12:05:40 PM CST] The txt record is added: Success.</span><br><span class="line">[Fri 15 Apr 2022 12:05:40 PM CST] Let&#x27;s check each DNS record now. Sleep 20 seconds first.</span><br><span class="line">[Fri 15 Apr 2022 12:06:01 PM CST] You can use &#x27;--dnssleep&#x27; to disable public dns checks.</span><br><span class="line">[Fri 15 Apr 2022 12:06:01 PM CST] See: https://github.com/acmesh-official/acme.sh/wiki/dnscheck</span><br><span class="line">[Fri 15 Apr 2022 12:06:02 PM CST] Checking oiox.cn for _acme-challenge.oiox.cn</span><br><span class="line">[Fri 15 Apr 2022 12:06:04 PM CST] Domain oiox.cn &#x27;_acme-challenge.oiox.cn&#x27; success.</span><br><span class="line">[Fri 15 Apr 2022 12:06:04 PM CST] Checking oiox.cn for _acme-challenge.oiox.cn</span><br><span class="line">[Fri 15 Apr 2022 12:06:05 PM CST] Domain oiox.cn &#x27;_acme-challenge.oiox.cn&#x27; success.</span><br><span class="line">[Fri 15 Apr 2022 12:06:05 PM CST] All success, let&#x27;s return</span><br><span class="line">[Fri 15 Apr 2022 12:06:05 PM CST] Verifying: *.oiox.cn</span><br><span class="line">[Fri 15 Apr 2022 12:06:17 PM CST] Processing, The CA is processing your order, please just wait. (1/30)</span><br><span class="line">[Fri 15 Apr 2022 12:06:24 PM CST] Success</span><br><span class="line">[Fri 15 Apr 2022 12:06:24 PM CST] Verifying: oiox.cn</span><br><span class="line">[Fri 15 Apr 2022 12:06:31 PM CST] Processing, The CA is processing your order, please just wait. (1/30)</span><br><span class="line">[Fri 15 Apr 2022 12:06:34 PM CST] Success</span><br><span class="line">[Fri 15 Apr 2022 12:06:34 PM CST] Removing DNS records.</span><br><span class="line">[Fri 15 Apr 2022 12:06:34 PM CST] Removing txt: DDuc5hd3b1RIoa5BefBkA53EpEtbAY0Fk8jOVVJcL6E for domain: _acme-challenge.oiox.cn</span><br><span class="line">[Fri 15 Apr 2022 12:06:35 PM CST] Removed: Success</span><br><span class="line">[Fri 15 Apr 2022 12:06:35 PM CST] Removing txt: 43GHnhiHjyxCxsdHSDRDP_A4YqP8dDjc_9YgnkFNk5I for domain: _acme-challenge.oiox.cn</span><br><span class="line">[Fri 15 Apr 2022 12:06:36 PM CST] Removed: Success</span><br><span class="line">[Fri 15 Apr 2022 12:06:36 PM CST] Verify finished, start to sign.</span><br><span class="line">[Fri 15 Apr 2022 12:06:36 PM CST] Lets finalize the order.</span><br><span class="line">[Fri 15 Apr 2022 12:06:36 PM CST] Le_OrderFinalize=&#x27;https://acme.zerossl.com/v2/DV90/order/G4Sy37Y-eHjHX1wLMAh5nA/finalize&#x27;</span><br><span class="line">[Fri 15 Apr 2022 12:06:44 PM CST] Order status is processing, lets sleep and retry.</span><br><span class="line">[Fri 15 Apr 2022 12:06:44 PM CST] Retry after: 15</span><br><span class="line">[Fri 15 Apr 2022 12:07:00 PM CST] Polling order status: https://acme.zerossl.com/v2/DV90/order/G4Sy37Y-eHjHX1wLMAh5nA</span><br><span class="line">[Fri 15 Apr 2022 12:07:03 PM CST] Downloading cert.</span><br><span class="line">[Fri 15 Apr 2022 12:07:03 PM CST] Le_LinkCert=&#x27;https://acme.zerossl.com/v2/DV90/cert/r4l-4WevkiEwiZA3U340ig&#x27;</span><br><span class="line">[Fri 15 Apr 2022 12:07:10 PM CST] Cert success.</span><br><span class="line">-----BEGIN CERTIFICATE-----</span><br><span class="line">MIIGaDCCBFCgAwIBAgIRAPw9soTBNxRGIVE6ANgMifAwDQYJKoZIhvcNAQEMBQAw</span><br><span class="line">SzELMAkGA1UEBhMCQVQxEDAOBgNVBAoTB1plcm9TU0wxKjAoBgNVBAMTIVplcm9T</span><br><span class="line">U0wgUlNBIERvbWFpbiBTZWN1cmUgU2l0ZSBDQTAeFw0yMjA0MTUwMDAwMDBaFw0y</span><br><span class="line">MjA3MTQyMzU5NTlaMBQxEjAQBgNVBAMMCSoub2lveC5jbjCCASIwDQYJKoZIhvcN</span><br><span class="line">AQEBBQADggEPADCCAQoCggEBALj8qi39uAgrhdwzQ6zP+ADRZgO2qGAVN4Qmu/ul</span><br><span class="line">tANIVXuM/B3lbD6RM+Msb1Df5FKXJoga+hBjBQI9iX+k4M3uf2isIeZBJix1dj2N</span><br><span class="line">6o2NpcbCXEyPclOFSWHuOuMgCXKofThz9Vlgb1sZsuBv7+6mF/qGEmX2nsjIYlPh</span><br><span class="line">/x7NqB1+WF+ouKPWOvWTg/O+NaJd/8EkIhtqwYRH19JtIMxZAnVcnk/vlUirHFdl</span><br><span class="line">K0C21mCn4SZpG/k0tfLkUAJ/dokWAYKiAV5kCr1cpS/mEKGWKbgR0+e436ZlAXR8</span><br><span class="line">pPJLHvV19U+D4+YrjvEGrxh0p3sQmVLAQiKvX8H/2e6/lJUCAwEAAaOCAnwwggJ4</span><br><span class="line">MB8GA1UdIwQYMBaAFMjZeGii2Rlo1T1y3l8KPty1hoamMB0GA1UdDgQWBBQNQ6Tg</span><br><span class="line">Wc9VXEb7JBebpnqg07n6lDAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAd</span><br><span class="line">BgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwSQYDVR0gBEIwQDA0BgsrBgEE</span><br><span class="line">AbIxAQICTjAlMCMGCCsGAQUFBwIBFhdodHRwczovL3NlY3RpZ28uY29tL0NQUzAI</span><br><span class="line">BgZngQwBAgEwgYgGCCsGAQUFBwEBBHwwejBLBggrBgEFBQcwAoY/aHR0cDovL3pl</span><br><span class="line">cm9zc2wuY3J0LnNlY3RpZ28uY29tL1plcm9TU0xSU0FEb21haW5TZWN1cmVTaXRl</span><br><span class="line">Q0EuY3J0MCsGCCsGAQUFBzABhh9odHRwOi8vemVyb3NzbC5vY3NwLnNlY3RpZ28u</span><br><span class="line">Y29tMIIBAgYKKwYBBAHWeQIEAgSB8wSB8ADuAHUARqVV63X6kSAwtaKJafTzfREs</span><br><span class="line">QXS+/Um4havy/HD+bUcAAAGAK2cJxgAABAMARjBEAiBqAyCsE36I+qUvZaEuWqNf</span><br><span class="line">XuLAgdaNl6Xi/XrtpEIQhAIgRxOZNoDnqjgxGxfuG4kaGvLzlJezgbzss49CK/pH</span><br><span class="line">g+MAdQBByMqx3yJGShDGoToJQodeTjGLGwPr60vHaPCQYpYG9gAAAYArZwmVAAAE</span><br><span class="line">AwBGMEQCIE4CJqmMWMJBpSMumrxsK4hBV2aVoG6zke9vqjvUD6mQAiBaCjPj2NJC</span><br><span class="line">ULsSB39TVW9maHtX9oQ8Wl9vLAD4dKirkDAdBgNVHREEFjAUggkqLm9pb3guY26C</span><br><span class="line">B29pb3guY24wDQYJKoZIhvcNAQEMBQADggIBAGdRf30QaQQ764Qe7e/+qFX6gcQ2</span><br><span class="line">nee8w4jKTLgcXL0un5Fb9lJi/cJtdsMDxvYyrFEhYIl3XosP2Kzl0DAwxYV2QcN0</span><br><span class="line">g0EulOfU46v/rueWuLo/AwzSVdSwxPTLa+QI69cPgQk/skqRigv17zjdbRRVY7jm</span><br><span class="line">/+a9wGc8st0CNUtCgH4N03HcexIqbo7wquNUE19rvhFOTPMewID7P8NviitM76vS</span><br><span class="line">K3C7SNqnyeIAZ3ydOFamZ4ye68mEQCJ0LGaSlDme8tY3eA3vliziKeouv6itGbRS</span><br><span class="line">X2Ze8Twk/8PADC0sxIjPjrh47ngE+DNpEEDr6PH89hnvjEl3V0ZFV9dW1McAoq2Q</span><br><span class="line">RW4LyXeSXasYPKQU1ncTjDsymquX5r7OJ1SCnXUCuEFohoGWkZTWUFQBy3C8Xwuz</span><br><span class="line">AHzYxzsSPyKV19sJEUkSaFIEQH5dbMqGSnk60gE+bqDfRTZ2PL9WGp+by60HSbzo</span><br><span class="line">3ehnUoyRkggmoD+SX8AAJLPuxkHFB/L68CL7knwWXzYcBYfj0yv+0T5HPhOofHud</span><br><span class="line">Fwv/h5loRN/1jeVwIblo9B+3KnNNDAxd5NTf1l80oZJgKqS6zoFJwKbE0X11Ved7</span><br><span class="line">m35ZEcj4UwrgSFLE7Y9+to66In2N/QpvFPFclE9Xfwdd03YAmxS/biIul2xrkzBf</span><br><span class="line">E9Q19NWLnTA2YU52</span><br><span class="line">-----END CERTIFICATE-----</span><br><span class="line">[Fri 15 Apr 2022 12:07:10 PM CST] Your cert is in: /root/.acme.sh/*.oiox.cn/*.oiox.cn.cer</span><br><span class="line">[Fri 15 Apr 2022 12:07:10 PM CST] Your cert key is in: /root/.acme.sh/*.oiox.cn/*.oiox.cn.key</span><br><span class="line">[Fri 15 Apr 2022 12:07:10 PM CST] The intermediate CA cert is in: /root/.acme.sh/*.oiox.cn/ca.cer</span><br><span class="line">[Fri 15 Apr 2022 12:07:10 PM CST] And the full chain certs is there: /root/.acme.sh/*.oiox.cn/fullchain.cer</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="查看已申请出来证书"><a href="#查看已申请出来证书" class="headerlink" title="查看已申请出来证书"></a>查看已申请出来证书</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@cby:~/.acme.sh# cd \*.oiox.cn</span><br><span class="line">root@cby:~/.acme.sh/*.oiox.cn# ll</span><br><span class="line">total 44</span><br><span class="line">drwxr-xr-x 2 root root 4096 Apr 15 12:07  ./</span><br><span class="line">drwx------ 8 root root 4096 Apr 15 11:55  ../</span><br><span class="line">-rw-r--r-- 1 root root 4399 Apr 15 12:07  ca.cer</span><br><span class="line">-rw-r--r-- 1 root root 6680 Apr 15 12:07  fullchain.cer</span><br><span class="line">-rw-r--r-- 1 root root 2281 Apr 15 12:07 &#x27;*.oiox.cn.cer&#x27;</span><br><span class="line">-rw-r--r-- 1 root root  563 Apr 15 12:07 &#x27;*.oiox.cn.conf&#x27;</span><br><span class="line">-rw-r--r-- 1 root root  956 Apr 15 12:05 &#x27;*.oiox.cn.csr&#x27;</span><br><span class="line">-rw-r--r-- 1 root root  156 Apr 15 12:05 &#x27;*.oiox.cn.csr.conf&#x27;</span><br><span class="line">-rw------- 1 root root 1675 Apr 15 11:55 &#x27;*.oiox.cn.key&#x27;</span><br><span class="line">root@cby:~/.acme.sh/*.oiox.cn#</span><br></pre></td></tr></table></figure>
+
+<h1 id="Nginx部署证书"><a href="#Nginx部署证书" class="headerlink" title="Nginx部署证书"></a>Nginx部署证书</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">示例：</span><br><span class="line">server &#123;</span><br><span class="line">        listen 80;</span><br><span class="line">        listen [::]:80;</span><br><span class="line"></span><br><span class="line">        listen 443 ssl;</span><br><span class="line">        listen [::]:443;</span><br><span class="line">        ssl_certificate /ssl/fullchain.cer;</span><br><span class="line">        ssl_certificate_key /ssl/*.oiox.cn.key;</span><br><span class="line">        ssl_session_timeout  5m;</span><br><span class="line">        ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line">        ssl_prefer_server_ciphers on;</span><br><span class="line"></span><br><span class="line">        server_name dns.oiox.cn;</span><br><span class="line"></span><br><span class="line">        root /var/www/dns;</span><br><span class="line">        index index.html;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">                try_files $uri $uri/ =404;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>附录  </p>
+<p>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">上面使用DNSPOD进行动态解析申请证书</span><br><span class="line"></span><br><span class="line">阿里云DNS申请</span><br><span class="line">export Ali_Key=&quot;abcd&quot;</span><br><span class="line">export Ali_Secret=&quot;xxxxxxxxxx&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"> RSA 证书</span></span><br><span class="line">acme.sh --issue --dns dns_ali -d blog.exsvc.cn -d *.exsvc.cn</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"> ECC 证书</span></span><br><span class="line">acme.sh --issue --dns dns_ali -d blog.exsvc.cn -d *.exsvc.cn --keylength ec-256</span><br><span class="line"></span><br><span class="line">腾讯云DNS申请</span><br><span class="line">root@cby:~/.acme.sh# export DP_Id=&quot;abcd&quot;</span><br><span class="line">root@cby:~/.acme.sh# export DP_Key=&quot;xxxxxxxxxx&quot;</span><br><span class="line">root@cby:~/.acme.sh# ./acme.sh --issue --dns dns_dp -d *.oiox.cn -d oiox.cn</span><br><span class="line"></span><br><span class="line">更多申请方式见：https://github.com/acmesh-official/acme.sh/wiki/dnsapi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a><br><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a><br><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a><br><a target="_blank" rel="noopener" href="https://weibo.com/u/5982474121">https://weibo.com/u/5982474121</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a><br><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a><br><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a><br>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、哔哩哔哩、今日头条、新浪微博、个人博客、全网可搜《小陈运维》</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%9B%E5%9F%9F%E5%90%8D"><span class="toc-number">1.</span> <span class="toc-text">泛域名</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%89%80%E9%9C%80%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">安装所需环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E5%85%A5%E5%AF%BC%E5%85%A5%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%B9%B6%E6%8F%90%E5%87%BA%E7%94%B3%E8%AF%B7"><span class="toc-number">3.</span> <span class="toc-text">进入导入环境变量并提出申请</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%B7%B2%E7%94%B3%E8%AF%B7%E5%87%BA%E6%9D%A5%E8%AF%81%E4%B9%A6"><span class="toc-number">4.</span> <span class="toc-text">查看已申请出来证书</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx%E9%83%A8%E7%BD%B2%E8%AF%81%E4%B9%A6"><span class="toc-number">5.</span> <span class="toc-text">Nginx部署证书</span></a></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

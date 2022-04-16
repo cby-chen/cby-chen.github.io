@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>docker方式实现postgres数据持久化离线安装 - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="小陈运维,
+保存镜像12345678910111213141516171819202122232425root@hello:~# docker pull postgresUsing default tag: ,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="docker方式实现postgres数据持久化离线安装 - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,
+保存镜像12345678910111213141516171819202122232425root@hello:~# docker pull postgresUsing default tag: ,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="docker方式实现postgres数据持久化离线安装 - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,
+保存镜像12345678910111213141516171819202122232425root@hello:~# docker pull postgresUsing default tag: ,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">docker方式实现postgres数据持久化离线安装</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">docker方式实现postgres数据持久化离线安装</h1>
+        <div class="stuff">
+            <span>四月 12, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/52545252ef3c4d689a27881538efc483~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h1 id="保存镜像"><a href="#保存镜像" class="headerlink" title="保存镜像"></a>保存镜像</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# docker pull postgres</span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from library/postgres</span><br><span class="line">a2abf6c4d29d: Already exists </span><br><span class="line">e1769f49f910: Pull complete </span><br><span class="line">33a59cfee47c: Pull complete </span><br><span class="line">461b2090c345: Pull complete </span><br><span class="line">8ed8ab6290ac: Pull complete </span><br><span class="line">495e42c822a0: Pull complete </span><br><span class="line">18e858c71c58: Pull complete </span><br><span class="line">594792c80d5f: Pull complete </span><br><span class="line">794976979956: Pull complete </span><br><span class="line">eb5e1a73c3ca: Pull complete </span><br><span class="line">6d6360292cba: Pull complete </span><br><span class="line">131e916e1a28: Pull complete </span><br><span class="line">757a73507e2e: Pull complete </span><br><span class="line">Digest: sha256:f329d076a8806c0ce014ce5e554ca70f4ae9407a16bb03baa7fef287ee6371f1</span><br><span class="line">Status: Downloaded newer image for postgres:latest</span><br><span class="line">docker.io/library/postgres:latest</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# docker save &gt; postgres.tar postgres:latest </span><br><span class="line">root@hello:~# ll postgres.tar</span><br><span class="line">-rw-r--r-- 1 root root 381950976 Mar 30 08:04 postgres.tar</span><br><span class="line">root@hello:~#</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="导入镜像"><a href="#导入镜像" class="headerlink" title="导入镜像"></a>导入镜像</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# docker load -i postgres.tar </span><br><span class="line">7ab4f6ae3ff7: Loading layer [==================================================&gt;]  10.18MB/10.18MB</span><br><span class="line">db8b35906c8d: Loading layer [==================================================&gt;]    340kB/340kB</span><br><span class="line">f9f2c722c092: Loading layer [==================================================&gt;]   4.19MB/4.19MB</span><br><span class="line">75be6af37d28: Loading layer [==================================================&gt;]   25.7MB/25.7MB</span><br><span class="line">15dd9dd29d12: Loading layer [==================================================&gt;]  1.682MB/1.682MB</span><br><span class="line">1d5d2439ed88: Loading layer [==================================================&gt;]  2.048kB/2.048kB</span><br><span class="line">920ba1e03a88: Loading layer [==================================================&gt;]  6.656kB/6.656kB</span><br><span class="line">eb96dca5c689: Loading layer [==================================================&gt;]  255.8MB/255.8MB</span><br><span class="line">3acb2bfab7b0: Loading layer [==================================================&gt;]  66.56kB/66.56kB</span><br><span class="line">140aef27609a: Loading layer [==================================================&gt;]  2.048kB/2.048kB</span><br><span class="line">c06253083edb: Loading layer [==================================================&gt;]  3.584kB/3.584kB</span><br><span class="line">e7b07b473569: Loading layer [==================================================&gt;]  15.36kB/15.36kB</span><br><span class="line">Loaded image: postgres:latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# mkdir /data/postgres -p</span><br><span class="line"></span><br><span class="line">root@hello:~# docker run --name postgres -e POSTGRES_PASSWORD=thinker -p 5432:5432 -v /data/postgres:/var/lib/postgresql/data -d postgres</span><br><span class="line">ae30b561a607210d4cbb42f5cc344898341124feeb1a2e5fe68031ec1a46b5b4</span><br><span class="line"></span><br><span class="line">root@hello:~# docker ps | grep postgres </span><br><span class="line">ae30b561a607   postgres             &quot;docker-entrypoint.s…&quot;   About a minute ago   Up About a minute   0.0.0.0:5432-&gt;5432/tcp, :::5432-&gt;5432/tcp                       postgres</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="访问测试"><a href="#访问测试" class="headerlink" title="访问测试"></a>访问测试</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# docker exec -it ae30b561a607 bash</span><br><span class="line">root@ae30b561a607:/# su postgres</span><br><span class="line">postgres@ae30b561a607:/$ psql</span><br><span class="line">psql (14.1 (Debian 14.1-1.pgdg110+1))</span><br><span class="line">Type &quot;help&quot; for help.</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">postgres-#</span><span class="language-bash"> \l</span></span><br><span class="line">                                 List of databases</span><br><span class="line">   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   </span><br><span class="line">-----------+----------+----------+------------+------------+-----------------------</span><br><span class="line"> postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | </span><br><span class="line"> template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +</span><br><span class="line">           |          |          |            |            | postgres=CTc/postgres</span><br><span class="line"> template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +</span><br><span class="line">           |          |          |            |            | postgres=CTc/postgres</span><br><span class="line">(3 rows)</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">postgres-#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"></span></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a></p>
+<p><a target="_blank" rel="noopener" href="https://weibo.com/u/5982474121">https://weibo.com/u/5982474121</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a></p>
+<p>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、哔哩哔哩、今日头条、新浪微博、个人博客、全网可搜《小陈运维》</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E9%95%9C%E5%83%8F"><span class="toc-number">1.</span> <span class="toc-text">保存镜像</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5%E9%95%9C%E5%83%8F"><span class="toc-number">2.</span> <span class="toc-text">导入镜像</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%AE%B9%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">启动容器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%B5%8B%E8%AF%95"><span class="toc-number">4.</span> <span class="toc-text">访问测试</span></a></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

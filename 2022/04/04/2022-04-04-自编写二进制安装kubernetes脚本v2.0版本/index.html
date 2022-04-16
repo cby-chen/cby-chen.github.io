@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>自编写二进制安装kubernetes脚本v2.0版本 - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="小陈运维,
+一键安装 二进制安装Kubernetes（k8s） v2.0
+手动安装：https://github.com/cby-chen/Kubernetes
+脚本安装：https://github.com,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="自编写二进制安装kubernetes脚本v2.0版本 - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,
+一键安装 二进制安装Kubernetes（k8s） v2.0
+手动安装：https://github.com/cby-chen/Kubernetes
+脚本安装：https://github.com,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="自编写二进制安装kubernetes脚本v2.0版本 - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,
+一键安装 二进制安装Kubernetes（k8s） v2.0
+手动安装：https://github.com/cby-chen/Kubernetes
+脚本安装：https://github.com,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">自编写二进制安装kubernetes脚本v2.0版本</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">自编写二进制安装kubernetes脚本v2.0版本</h1>
+        <div class="stuff">
+            <span>四月 04, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/63bf8ed4a3a744a5b0aae5d9275f2081~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>一键安装 二进制安装Kubernetes（k8s） v2.0</p>
+<p>手动安装：<a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes">https://github.com/cby-chen/Kubernetes</a></p>
+<p>脚本安装：<a target="_blank" rel="noopener" href="https://github.com/cby-chen/Binary_installation_of_Kubernetes">https://github.com/cby-chen/Binary_installation_of_Kubernetes</a></p>
+<p>使用说明：该脚本示例需要十一台服务器，在十一台服务器中有一台是用于执行该脚本的，</p>
+<p>另外有八台k8s服务器，其他俩台作为lb负载均衡服务器。</p>
+<p>将其中服务器配置好静态IP，修改如下变量中的IP即可。</p>
+<p>同时查看服务器中的网卡名，并将其修改。</p>
+<p>执行脚本可使用bash -x 即可显示执行中详细信息。</p>
+<p>该脚本已适配centos7和centos8。</p>
+<p>脚本中hosts有俩处，记得修改。</p>
+<p>2022-03更新：</p>
+<p>现已支持centos7 和centos8 自动适配</p>
+<p>同时支持自定义k8s node节点结构.</p>
+<p>在变量中需要几台节点就写几台节点即可 注意的是，新增节点，要在脚本中的hosts中也要修改 不建议乱改。</p>
+<p>2022-04更新：</p>
+<p>更新kubernetes自主版本选择</p>
+<p>优化执行结构</p>
+<p>适配多版本</p>
+<p>修复BUG</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">脚本中是需要在GitHub上下载软件包</span><br><span class="line"></span><br><span class="line">手动提前下载好</span><br><span class="line"></span><br><span class="line">wget https://github.com/cby-chen/Kubernetes/releases/download/cby/Kubernetes.tar</span><br><span class="line">wget https://github.com/cby-chen/Kubernetes/releases/download/v1.23.4/kubernetes-v1.23.4.tar</span><br><span class="line">wget https://github.com/cby-chen/Kubernetes/releases/download/v1.23.5/kubernetes-v1.23.5.tar</span><br><span class="line"></span><br><span class="line">下载脚本</span><br><span class="line"></span><br><span class="line">wget https://www.oiox.cn/Binary_installation_of_Kubernetes.sh</span><br><span class="line"></span><br><span class="line">修改参数</span><br><span class="line"></span><br><span class="line">vim Binary_installation_of_Kubernetes.sh</span><br><span class="line"></span><br><span class="line">如下：</span><br><span class="line"></span><br><span class="line">#每个节点的IP，以及vip</span><br><span class="line">export k8s_master01=&quot;192.168.1.61&quot;</span><br><span class="line">export k8s_master02=&quot;192.168.1.61&quot;</span><br><span class="line">export k8s_master03=&quot;192.168.1.63&quot;</span><br><span class="line">export k8s_node01=&quot;192.168.1.64&quot;</span><br><span class="line">export k8s_node02=&quot;192.168.1.65&quot;</span><br><span class="line">export k8s_node03=&quot;192.168.1.66&quot;</span><br><span class="line">export k8s_node04=&quot;192.168.1.67&quot;</span><br><span class="line">export k8s_node05=&quot;192.168.1.68&quot;</span><br><span class="line">export lb_01=&quot;192.168.1.57&quot;</span><br><span class="line">export lb_02=&quot;192.168.1.58&quot;</span><br><span class="line">export lb_vip=&quot;192.168.1.59&quot;</span><br><span class="line"></span><br><span class="line">#物理网络ip地址段，注意反斜杠转译</span><br><span class="line">export ip_segment=&quot;192.168.1.0\/24&quot;</span><br><span class="line"></span><br><span class="line">#k8s自定义域名</span><br><span class="line">export domain=&quot;x.oiox.cn&quot;</span><br><span class="line"></span><br><span class="line">#服务器网卡名</span><br><span class="line">export eth=&quot;ens18&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">修改hosts（有俩处）</span><br><span class="line"></span><br><span class="line">cat &gt; /etc/hosts &lt;&lt;EOF</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">$k8s_master01 k8s-master01</span><br><span class="line">$k8s_master02 k8s-master02</span><br><span class="line">$k8s_master03 k8s-master03</span><br><span class="line">$k8s_node01 k8s-node01</span><br><span class="line">$k8s_node02 k8s-node02</span><br><span class="line">$k8s_node03 k8s-node03</span><br><span class="line">$k8s_node04 k8s-node04</span><br><span class="line">$k8s_node05 k8s-node05</span><br><span class="line">$lb_01 lb01</span><br><span class="line">$lb_02 lb02</span><br><span class="line">$lb_vip lb-vip</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">执行脚本</span><br><span class="line"></span><br><span class="line">bash -x Binary_installation_of_Kubernetes.sh</span><br><span class="line"></span><br><span class="line">dashboard</span><br><span class="line"></span><br><span class="line">查看端口号</span><br><span class="line">kubectl get svc kubernetes-dashboard -n kubernetes-dashboard</span><br><span class="line"></span><br><span class="line">查看token</span><br><span class="line">kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a></p>
+<p><a target="_blank" rel="noopener" href="https://weibo.com/u/5982474121">https://weibo.com/u/5982474121</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a></p>
+<p>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、哔哩哔哩、今日头条、新浪微博、个人博客、全网可搜《小陈运维》</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+				
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>
