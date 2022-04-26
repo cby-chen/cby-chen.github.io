@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>经GitHub将kubernetes镜像推送到阿里云 - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="小陈运维,背景在安装kubernetes时会出现无法访问镜像站的情况，通过GitHub将kubernetes镜像推送到阿里云之后，即可使用阿里云地址引用所需镜像，现已同步镜像5000+，当前还在陆续同步。仓库,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="经GitHub将kubernetes镜像推送到阿里云 - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,背景在安装kubernetes时会出现无法访问镜像站的情况，通过GitHub将kubernetes镜像推送到阿里云之后，即可使用阿里云地址引用所需镜像，现已同步镜像5000+，当前还在陆续同步。仓库,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="经GitHub将kubernetes镜像推送到阿里云 - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,背景在安装kubernetes时会出现无法访问镜像站的情况，通过GitHub将kubernetes镜像推送到阿里云之后，即可使用阿里云地址引用所需镜像，现已同步镜像5000+，当前还在陆续同步。仓库,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">经GitHub将kubernetes镜像推送到阿里云</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">经GitHub将kubernetes镜像推送到阿里云</h1>
+        <div class="stuff">
+            <span>四月 19, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在安装kubernetes时会出现无法访问镜像站的情况，通过GitHub将kubernetes镜像推送到阿里云之后，即可使用阿里云地址引用所需镜像，现已同步镜像5000+，当前还在陆续同步。仓库使用 Github Action 每天自动运行脚本同步镜像到阿里云。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c70943782dff4128b8d70c31b1ce1205~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<h1 id="代码仓库"><a href="#代码仓库" class="headerlink" title="代码仓库"></a>代码仓库</h1><p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/sys/_images">https://github.com/cby-chen/sys\_images</a><br>若有需要自行研究 后续更新会在仓库更新</p>
+<h1 id="目前有如下镜像仓库，后续会陆续增加"><a href="#目前有如下镜像仓库，后续会陆续增加" class="headerlink" title="目前有如下镜像仓库，后续会陆续增加"></a>目前有如下镜像仓库，后续会陆续增加</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">  docker.elastic.co:</span><br><span class="line">    - elasticsearch/elasticsearch</span><br><span class="line">    - kibana/kibana</span><br><span class="line">    - logstash/logstash</span><br><span class="line">    - beats/filebeat</span><br><span class="line">    - beats/heartbeat</span><br><span class="line">    - beats/packetbeat</span><br><span class="line">    - beats/auditbeat</span><br><span class="line">    - beats/journalbeat</span><br><span class="line">    - beats/metricbeat</span><br><span class="line">    - apm/apm-server</span><br><span class="line">    - app-search/app-search</span><br><span class="line">  quay.io:</span><br><span class="line">    - coreos/flannel</span><br><span class="line">    - ceph/ceph</span><br><span class="line">    - cephcsi/cephcsi</span><br><span class="line">    - csiaddons/k8s-sidecar</span><br><span class="line">    - csiaddons/volumereplication-operator</span><br><span class="line">    - prometheus/prometheus</span><br><span class="line">    - prometheus/alertmanager</span><br><span class="line">    - prometheus/pushgateway</span><br><span class="line">    - prometheus/blackbox-exporter</span><br><span class="line">    - prometheus/node-exporter</span><br><span class="line">    - prometheus-operator/prometheus-config-reloader</span><br><span class="line">    - prometheus-operator/prometheus-operator</span><br><span class="line">    - brancz/kube-rbac-proxy</span><br><span class="line">  k8s.gcr.io:</span><br><span class="line">    - etcd</span><br><span class="line">    - kube-proxy</span><br><span class="line">    - kube-apiserver</span><br><span class="line">    - kube-scheduler</span><br><span class="line">    - kube-controller-manager</span><br><span class="line">    - coredns/coredns</span><br><span class="line">    - dns/k8s-dns-node-cache</span><br><span class="line">    - metrics-server/metrics-server</span><br><span class="line">    - ingress-nginx/controller</span><br><span class="line">    - ingress-nginx/kube-webhook-certgen</span><br><span class="line">    - kube-state-metrics/kube-state-metrics</span><br><span class="line">    - prometheus-adapter/prometheus-adapter</span><br><span class="line">    - sig-storage/nfs-subdir-external-provisioner</span><br><span class="line">    - sig-storage/csi-node-driver-registrar</span><br><span class="line">    - sig-storage/csi-provisioner</span><br><span class="line">    - sig-storage/csi-resizer</span><br><span class="line">    - sig-storage/csi-snapshotter</span><br><span class="line">    - sig-storage/csi-attacher</span><br><span class="line">  gcr.io:</span><br><span class="line">    - kaniko-project/executor</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker.elastic.co/kibana/&#123;image_name&#125;  ==&gt;  registry.cn-hangzhou.aliyuncs.com/chenby/&#123;image_name&#125;</span><br><span class="line">quay.io/csiaddons/&#123;image_name&#125;  ==&gt;  registry.cn-hangzhou.aliyuncs.com/chenby/&#123;image_name&#125;</span><br><span class="line">k8s.gcr.io/&#123;image_name&#125;  ==&gt;  registry.cn-hangzhou.aliyuncs.com/chenby/&#123;image_name&#125;</span><br><span class="line">....</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="拉去镜像"><a href="#拉去镜像" class="headerlink" title="拉去镜像"></a>拉去镜像</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/chenby/kube-scheduler:[镜像版本号]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4c1f91cee92c4c1bba037d531d90db5a~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a><br><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a><br><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a><br><a target="_blank" rel="noopener" href="https://weibo.com/u/5982474121">https://weibo.com/u/5982474121</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a><br><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a><br><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a><br>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、哔哩哔哩、今日头条、新浪微博、个人博客、全网可搜《小陈运维》  </p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E4%BB%93%E5%BA%93"><span class="toc-number">2.</span> <span class="toc-text">代码仓库</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%AE%E5%89%8D%E6%9C%89%E5%A6%82%E4%B8%8B%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93%EF%BC%8C%E5%90%8E%E7%BB%AD%E4%BC%9A%E9%99%86%E7%BB%AD%E5%A2%9E%E5%8A%A0"><span class="toc-number">3.</span> <span class="toc-text">目前有如下镜像仓库，后续会陆续增加</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">使用方式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8B%89%E5%8E%BB%E9%95%9C%E5%83%8F"><span class="toc-number">5.</span> <span class="toc-text">拉去镜像</span></a></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

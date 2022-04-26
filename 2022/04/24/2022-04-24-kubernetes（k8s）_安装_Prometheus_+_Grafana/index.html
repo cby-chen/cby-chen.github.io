@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>kubernetes（k8s） 安装 Prometheus + Grafana - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="小陈运维,kubernetes（k8s） 安装 Prometheus + Grafana组件说明MetricServer：是kubernetes集群资源使用情况的聚合器，收集数据给kubernetes集群内使,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="kubernetes（k8s） 安装 Prometheus + Grafana - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,kubernetes（k8s） 安装 Prometheus + Grafana组件说明MetricServer：是kubernetes集群资源使用情况的聚合器，收集数据给kubernetes集群内使,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="kubernetes（k8s） 安装 Prometheus + Grafana - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,kubernetes（k8s） 安装 Prometheus + Grafana组件说明MetricServer：是kubernetes集群资源使用情况的聚合器，收集数据给kubernetes集群内使,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">kubernetes（k8s） 安装 Prometheus + Grafana</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">kubernetes（k8s） 安装 Prometheus + Grafana</h1>
+        <div class="stuff">
+            <span>四月 24, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="kubernetes（k8s）-安装-Prometheus-Grafana"><a href="#kubernetes（k8s）-安装-Prometheus-Grafana" class="headerlink" title="kubernetes（k8s） 安装 Prometheus + Grafana"></a>kubernetes（k8s） 安装 Prometheus + Grafana</h1><h1 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h1><p><strong>MetricServer：是kubernetes集群资源使用情况的聚合器，收集数据给kubernetes集群内使用，如 kubectl,hpa,scheduler等。</strong></p>
+<p><strong>PrometheusOperator：是一个系统监测和警报工具箱，用来存储监控数据。</strong></p>
+<p><strong>NodeExporter：用于各node的关键度量指标状态数据。</strong></p>
+<p><strong>KubeStateMetrics：收集kubernetes集群内资源对象数 据，制定告警规则。</strong></p>
+<p><strong>Prometheus：采用pull方式收集apiserver，scheduler，controller-manager，kubelet组件数 据，通过http协议传输。</strong></p>
+<p><strong>Grafana：是可视化数据统计和监控平台。</strong></p>
+<p><strong><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a041fa6a689f48c3a45317369b2d13c5~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></strong></p>
+<h1 id="克隆代码"><a href="#克隆代码" class="headerlink" title="克隆代码"></a>克隆代码</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~#   git clone -b release-0.10 https://github.com/prometheus-operator/kube-prometheus.git</span><br><span class="line">Cloning into &#x27;kube-prometheus&#x27;...</span><br><span class="line">remote: Enumerating objects: 16026, done.</span><br><span class="line">remote: Counting objects: 100% (2639/2639), done.</span><br><span class="line">remote: Compressing objects: 100% (165/165), done.</span><br><span class="line">remote: Total 16026 (delta 2524), reused 2485 (delta 2470), pack-reused 13387</span><br><span class="line">Receiving objects: 100% (16026/16026), 7.81 MiB | 2.67 MiB/s, done.</span><br><span class="line">Resolving deltas: 100% (10333/10333), done.</span><br><span class="line">root@hello:~# </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="进入目录修改镜像地址"><a href="#进入目录修改镜像地址" class="headerlink" title="进入目录修改镜像地址"></a>进入目录修改镜像地址</h1><p>若访问Google畅通无阻即可无需修改，跳过即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# cd kube-prometheus/manifests</span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i &quot;s#quay.io/prometheus/#registry.cn-hangzhou.aliyuncs.com/chenby/#g&quot; *.yaml</span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i &quot;s#quay.io/brancz/#registry.cn-hangzhou.aliyuncs.com/chenby/#g&quot; *.yaml</span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i &quot;s#k8s.gcr.io/prometheus-adapter/#registry.cn-hangzhou.aliyuncs.com/chenby/#g&quot; *.yaml</span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i &quot;s#quay.io/prometheus-operator/#registry.cn-hangzhou.aliyuncs.com/chenby/#g&quot; *.yaml</span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i &quot;s#k8s.gcr.io/kube-state-metrics/#registry.cn-hangzhou.aliyuncs.com/chenby/#g&quot; *.yaml</span><br><span class="line">root@hello:~/kube-prometheus/manifests# </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="修改svc为NodePort"><a href="#修改svc为NodePort" class="headerlink" title="修改svc为NodePort"></a>修改svc为NodePort</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~/kube-prometheus/manifests# sed -i  &quot;/ports:/i\  type: NodePort&quot; grafana-service.yaml</span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i  &quot;/targetPort: http/i\    nodePort: 31100&quot; grafana-service.yaml</span><br><span class="line">root@hello:~/kube-prometheus/manifests# cat grafana-service.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app.kubernetes.io/component: grafana</span><br><span class="line">    app.kubernetes.io/name: grafana</span><br><span class="line">    app.kubernetes.io/part-of: kube-prometheus</span><br><span class="line">    app.kubernetes.io/version: 8.3.3</span><br><span class="line">  name: grafana</span><br><span class="line">  namespace: monitoring</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort</span><br><span class="line">  ports:</span><br><span class="line">  - name: http</span><br><span class="line">    port: 3000</span><br><span class="line">    nodePort: 31100</span><br><span class="line">    targetPort: http</span><br><span class="line">  selector:</span><br><span class="line">    app.kubernetes.io/component: grafana</span><br><span class="line">    app.kubernetes.io/name: grafana</span><br><span class="line">    app.kubernetes.io/part-of: kube-prometheus</span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i  &quot;/ports:/i\  type: NodePort&quot; prometheus-service.yaml</span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i  &quot;/targetPort: web/i\    nodePort: 31200&quot; prometheus-service.yaml</span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i  &quot;/targetPort: reloader-web/i\    nodePort: 31300&quot; prometheus-service.yaml</span><br><span class="line">root@hello:~/kube-prometheus/manifests# cat prometheus-service.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app.kubernetes.io/component: prometheus</span><br><span class="line">    app.kubernetes.io/instance: k8s</span><br><span class="line">    app.kubernetes.io/name: prometheus</span><br><span class="line">    app.kubernetes.io/part-of: kube-prometheus</span><br><span class="line">    app.kubernetes.io/version: 2.32.1</span><br><span class="line">  name: prometheus-k8s</span><br><span class="line">  namespace: monitoring</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort</span><br><span class="line">  ports:</span><br><span class="line">  - name: web</span><br><span class="line">    port: 9090</span><br><span class="line">    nodePort: 31200</span><br><span class="line">    targetPort: web</span><br><span class="line">  - name: reloader-web</span><br><span class="line">    port: 8080</span><br><span class="line">    nodePort: 31300</span><br><span class="line">    targetPort: reloader-web</span><br><span class="line">  selector:</span><br><span class="line">    app.kubernetes.io/component: prometheus</span><br><span class="line">    app.kubernetes.io/instance: k8s</span><br><span class="line">    app.kubernetes.io/name: prometheus</span><br><span class="line">    app.kubernetes.io/part-of: kube-prometheus</span><br><span class="line">  sessionAffinity: ClientIP</span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i  &quot;/ports:/i\  type: NodePort&quot; alertmanager-service.yaml </span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i  &quot;/targetPort: web/i\    nodePort: 31400&quot; alertmanager-service.yaml </span><br><span class="line">root@hello:~/kube-prometheus/manifests# sed -i  &quot;/targetPort: reloader-web/i\    nodePort: 31500&quot; alertmanager-service.yaml </span><br><span class="line">root@hello:~/kube-prometheus/manifests# cat alertmanager-service.yaml </span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app.kubernetes.io/component: alert-router</span><br><span class="line">    app.kubernetes.io/instance: main</span><br><span class="line">    app.kubernetes.io/name: alertmanager</span><br><span class="line">    app.kubernetes.io/part-of: kube-prometheus</span><br><span class="line">    app.kubernetes.io/version: 0.23.0</span><br><span class="line">  name: alertmanager-main</span><br><span class="line">  namespace: monitoring</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort</span><br><span class="line">  ports:</span><br><span class="line">  - name: web</span><br><span class="line">    port: 9093</span><br><span class="line">    nodePort: 31400</span><br><span class="line">    targetPort: web</span><br><span class="line">  - name: reloader-web</span><br><span class="line">    port: 8080</span><br><span class="line">    nodePort: 31500</span><br><span class="line">    targetPort: reloader-web</span><br><span class="line">  selector:</span><br><span class="line">    app.kubernetes.io/component: alert-router</span><br><span class="line">    app.kubernetes.io/instance: main</span><br><span class="line">    app.kubernetes.io/name: alertmanager</span><br><span class="line">    app.kubernetes.io/part-of: kube-prometheus</span><br><span class="line">  sessionAffinity: ClientIP</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="执行部署"><a href="#执行部署" class="headerlink" title="执行部署"></a>执行部署</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# </span><br><span class="line">root@hello:~#  kubectl create -f /root/kube-prometheus/manifests/setup</span><br><span class="line">customresourcedefinition.apiextensions.k8s.io/alertmanagerconfigs.monitoring.coreos.com created</span><br><span class="line">customresourcedefinition.apiextensions.k8s.io/alertmanagers.monitoring.coreos.com created</span><br><span class="line">customresourcedefinition.apiextensions.k8s.io/podmonitors.monitoring.coreos.com created</span><br><span class="line">customresourcedefinition.apiextensions.k8s.io/probes.monitoring.coreos.com created</span><br><span class="line">customresourcedefinition.apiextensions.k8s.io/prometheuses.monitoring.coreos.com created</span><br><span class="line">customresourcedefinition.apiextensions.k8s.io/prometheusrules.monitoring.coreos.com created</span><br><span class="line">customresourcedefinition.apiextensions.k8s.io/servicemonitors.monitoring.coreos.com created</span><br><span class="line">customresourcedefinition.apiextensions.k8s.io/thanosrulers.monitoring.coreos.com created</span><br><span class="line">namespace/monitoring created</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~#  kubectl create -f /root/kube-prometheus/manifests/</span><br><span class="line">alertmanager.monitoring.coreos.com/main created</span><br><span class="line">networkpolicy.networking.k8s.io/alertmanager-main created</span><br><span class="line">poddisruptionbudget.policy/alertmanager-main created</span><br><span class="line">prometheusrule.monitoring.coreos.com/alertmanager-main-rules created</span><br><span class="line">secret/alertmanager-main created</span><br><span class="line">service/alertmanager-main created</span><br><span class="line">serviceaccount/alertmanager-main created</span><br><span class="line">servicemonitor.monitoring.coreos.com/alertmanager-main created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/blackbox-exporter created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/blackbox-exporter created</span><br><span class="line">configmap/blackbox-exporter-configuration created</span><br><span class="line">deployment.apps/blackbox-exporter created</span><br><span class="line">networkpolicy.networking.k8s.io/blackbox-exporter created</span><br><span class="line">service/blackbox-exporter created</span><br><span class="line">serviceaccount/blackbox-exporter created</span><br><span class="line">servicemonitor.monitoring.coreos.com/blackbox-exporter created</span><br><span class="line">secret/grafana-config created</span><br><span class="line">secret/grafana-datasources created</span><br><span class="line">configmap/grafana-dashboard-alertmanager-overview created</span><br><span class="line">configmap/grafana-dashboard-apiserver created</span><br><span class="line">configmap/grafana-dashboard-cluster-total created</span><br><span class="line">configmap/grafana-dashboard-controller-manager created</span><br><span class="line">configmap/grafana-dashboard-grafana-overview created</span><br><span class="line">configmap/grafana-dashboard-k8s-resources-cluster created</span><br><span class="line">configmap/grafana-dashboard-k8s-resources-namespace created</span><br><span class="line">configmap/grafana-dashboard-k8s-resources-node created</span><br><span class="line">configmap/grafana-dashboard-k8s-resources-pod created</span><br><span class="line">configmap/grafana-dashboard-k8s-resources-workload created</span><br><span class="line">configmap/grafana-dashboard-k8s-resources-workloads-namespace created</span><br><span class="line">configmap/grafana-dashboard-kubelet created</span><br><span class="line">configmap/grafana-dashboard-namespace-by-pod created</span><br><span class="line">configmap/grafana-dashboard-namespace-by-workload created</span><br><span class="line">configmap/grafana-dashboard-node-cluster-rsrc-use created</span><br><span class="line">configmap/grafana-dashboard-node-rsrc-use created</span><br><span class="line">configmap/grafana-dashboard-nodes created</span><br><span class="line">configmap/grafana-dashboard-persistentvolumesusage created</span><br><span class="line">configmap/grafana-dashboard-pod-total created</span><br><span class="line">configmap/grafana-dashboard-prometheus-remote-write created</span><br><span class="line">configmap/grafana-dashboard-prometheus created</span><br><span class="line">configmap/grafana-dashboard-proxy created</span><br><span class="line">configmap/grafana-dashboard-scheduler created</span><br><span class="line">configmap/grafana-dashboard-workload-total created</span><br><span class="line">configmap/grafana-dashboards created</span><br><span class="line">deployment.apps/grafana created</span><br><span class="line">networkpolicy.networking.k8s.io/grafana created</span><br><span class="line">prometheusrule.monitoring.coreos.com/grafana-rules created</span><br><span class="line">service/grafana created</span><br><span class="line">serviceaccount/grafana created</span><br><span class="line">servicemonitor.monitoring.coreos.com/grafana created</span><br><span class="line">prometheusrule.monitoring.coreos.com/kube-prometheus-rules created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/kube-state-metrics created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/kube-state-metrics created</span><br><span class="line">deployment.apps/kube-state-metrics created</span><br><span class="line">networkpolicy.networking.k8s.io/kube-state-metrics created</span><br><span class="line">prometheusrule.monitoring.coreos.com/kube-state-metrics-rules created</span><br><span class="line">service/kube-state-metrics created</span><br><span class="line">serviceaccount/kube-state-metrics created</span><br><span class="line">servicemonitor.monitoring.coreos.com/kube-state-metrics created</span><br><span class="line">prometheusrule.monitoring.coreos.com/kubernetes-monitoring-rules created</span><br><span class="line">servicemonitor.monitoring.coreos.com/kube-apiserver created</span><br><span class="line">servicemonitor.monitoring.coreos.com/coredns created</span><br><span class="line">servicemonitor.monitoring.coreos.com/kube-controller-manager created</span><br><span class="line">servicemonitor.monitoring.coreos.com/kube-scheduler created</span><br><span class="line">servicemonitor.monitoring.coreos.com/kubelet created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/node-exporter created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/node-exporter created</span><br><span class="line">daemonset.apps/node-exporter created</span><br><span class="line">networkpolicy.networking.k8s.io/node-exporter created</span><br><span class="line">prometheusrule.monitoring.coreos.com/node-exporter-rules created</span><br><span class="line">service/node-exporter created</span><br><span class="line">serviceaccount/node-exporter created</span><br><span class="line">servicemonitor.monitoring.coreos.com/node-exporter created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/prometheus-k8s created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/prometheus-k8s created</span><br><span class="line">networkpolicy.networking.k8s.io/prometheus-k8s created</span><br><span class="line">poddisruptionbudget.policy/prometheus-k8s created</span><br><span class="line">prometheus.monitoring.coreos.com/k8s created</span><br><span class="line">prometheusrule.monitoring.coreos.com/prometheus-k8s-prometheus-rules created</span><br><span class="line">rolebinding.rbac.authorization.k8s.io/prometheus-k8s-config created</span><br><span class="line">rolebinding.rbac.authorization.k8s.io/prometheus-k8s created</span><br><span class="line">rolebinding.rbac.authorization.k8s.io/prometheus-k8s created</span><br><span class="line">rolebinding.rbac.authorization.k8s.io/prometheus-k8s created</span><br><span class="line">role.rbac.authorization.k8s.io/prometheus-k8s-config created</span><br><span class="line">role.rbac.authorization.k8s.io/prometheus-k8s created</span><br><span class="line">role.rbac.authorization.k8s.io/prometheus-k8s created</span><br><span class="line">role.rbac.authorization.k8s.io/prometheus-k8s created</span><br><span class="line">service/prometheus-k8s created</span><br><span class="line">serviceaccount/prometheus-k8s created</span><br><span class="line">servicemonitor.monitoring.coreos.com/prometheus-k8s created</span><br><span class="line">apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/prometheus-adapter created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/prometheus-adapter created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/resource-metrics:system:auth-delegator created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/resource-metrics-server-resources created</span><br><span class="line">configmap/adapter-config created</span><br><span class="line">deployment.apps/prometheus-adapter created</span><br><span class="line">networkpolicy.networking.k8s.io/prometheus-adapter created</span><br><span class="line">poddisruptionbudget.policy/prometheus-adapter created</span><br><span class="line">rolebinding.rbac.authorization.k8s.io/resource-metrics-auth-reader created</span><br><span class="line">service/prometheus-adapter created</span><br><span class="line">serviceaccount/prometheus-adapter created</span><br><span class="line">servicemonitor.monitoring.coreos.com/prometheus-adapter created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/prometheus-operator created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/prometheus-operator created</span><br><span class="line">deployment.apps/prometheus-operator created</span><br><span class="line">networkpolicy.networking.k8s.io/prometheus-operator created</span><br><span class="line">prometheusrule.monitoring.coreos.com/prometheus-operator-rules created</span><br><span class="line">service/prometheus-operator created</span><br><span class="line">serviceaccount/prometheus-operator created</span><br><span class="line">servicemonitor.monitoring.coreos.com/prometheus-operator created</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="查看验证"><a href="#查看验证" class="headerlink" title="查看验证"></a>查看验证</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# kubectl  get pod -n monitoring </span><br><span class="line">NAME                                   READY   STATUS    RESTARTS   AGE</span><br><span class="line">alertmanager-main-0                    2/2     Running   0          69s</span><br><span class="line">alertmanager-main-1                    2/2     Running   0          69s</span><br><span class="line">alertmanager-main-2                    2/2     Running   0          69s</span><br><span class="line">blackbox-exporter-6c559c5c66-kw6vd     3/3     Running   0          83s</span><br><span class="line">grafana-7fd69887fb-jmpmp               1/1     Running   0          81s</span><br><span class="line">kube-state-metrics-867b64476b-h84g4    3/3     Running   0          81s</span><br><span class="line">node-exporter-576bm                    2/2     Running   0          80s</span><br><span class="line">node-exporter-94gn9                    2/2     Running   0          80s</span><br><span class="line">node-exporter-cbjqk                    2/2     Running   0          80s</span><br><span class="line">node-exporter-mhlh7                    2/2     Running   0          80s</span><br><span class="line">node-exporter-pdc6k                    2/2     Running   0          80s</span><br><span class="line">node-exporter-pqqds                    2/2     Running   0          80s</span><br><span class="line">node-exporter-s9cz4                    2/2     Running   0          80s</span><br><span class="line">node-exporter-tdlnt                    2/2     Running   0          81s</span><br><span class="line">prometheus-adapter-8f88b5b45-rrsh4     1/1     Running   0          78s</span><br><span class="line">prometheus-adapter-8f88b5b45-wh6pf     1/1     Running   0          78s</span><br><span class="line">prometheus-k8s-0                       2/2     Running   0          68s</span><br><span class="line">prometheus-k8s-1                       2/2     Running   0          68s</span><br><span class="line">prometheus-operator-7f9d9c77f8-h5gkt   2/2     Running   0          78s</span><br><span class="line">root@hello:~# </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@hello:~# kubectl  get svc -n monitoring </span><br><span class="line">NAME                    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                         AGE</span><br><span class="line">alertmanager-main       NodePort    10.103.47.160    &lt;none&gt;        9093:31400/TCP,8080:31500/TCP   92s</span><br><span class="line">alertmanager-operated   ClusterIP   None             &lt;none&gt;        9093/TCP,9094/TCP,9094/UDP      78s</span><br><span class="line">blackbox-exporter       ClusterIP   10.102.108.160   &lt;none&gt;        9115/TCP,19115/TCP              92s</span><br><span class="line">grafana                 NodePort    10.106.2.21      &lt;none&gt;        3000:31100/TCP                  90s</span><br><span class="line">kube-state-metrics      ClusterIP   None             &lt;none&gt;        8443/TCP,9443/TCP               90s</span><br><span class="line">node-exporter           ClusterIP   None             &lt;none&gt;        9100/TCP                        90s</span><br><span class="line">prometheus-adapter      ClusterIP   10.108.65.108    &lt;none&gt;        443/TCP                         87s</span><br><span class="line">prometheus-k8s          NodePort    10.100.227.174   &lt;none&gt;        9090:31200/TCP,8080:31300/TCP   88s</span><br><span class="line">prometheus-operated     ClusterIP   None             &lt;none&gt;        9090/TCP                        77s</span><br><span class="line">prometheus-operator     ClusterIP   None             &lt;none&gt;        8443/TCP                        87s</span><br><span class="line">root@hello:~# </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http://192.168.1.81:31400/</span><br><span class="line">http://192.168.1.81:31200/</span><br><span class="line">http://192.168.1.81:31100/</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="一条命令执行"><a href="#一条命令执行" class="headerlink" title="一条命令执行"></a>一条命令执行</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /root ; git clone -b release-0.10 https://github.com/prometheus-operator/kube-prometheus.git ;cd kube-prometheus/manifests ;sed -i &quot;s#quay.io/prometheus/#registry.cn-hangzhou.aliyuncs.com/chenby/#g&quot; *.yaml ;sed -i &quot;s#quay.io/brancz/#registry.cn-hangzhou.aliyuncs.com/chenby/#g&quot; *.yaml ;sed -i &quot;s#k8s.gcr.io/prometheus-adapter/#registry.cn-hangzhou.aliyuncs.com/chenby/#g&quot; *.yaml ;sed -i &quot;s#quay.io/prometheus-operator/#registry.cn-hangzhou.aliyuncs.com/chenby/#g&quot; *.yaml ;sed -i &quot;s#k8s.gcr.io/kube-state-metrics/#registry.cn-hangzhou.aliyuncs.com/chenby/#g&quot; *.yaml ;sed -i  &quot;/ports:/i\  type: NodePort&quot; grafana-service.yaml ;sed -i  &quot;/targetPort: http/i\    nodePort: 31100&quot; grafana-service.yaml ;sed -i  &quot;/ports:/i\  type: NodePort&quot; prometheus-service.yaml ;sed -i  &quot;/targetPort: web/i\    nodePort: 31200&quot; prometheus-service.yaml ;sed -i  &quot;/targetPort: reloader-web/i\    nodePort: 31300&quot; prometheus-service.yaml ;sed -i  &quot;/ports:/i\  type: NodePort&quot; alertmanager-service.yaml  ;sed -i  &quot;/targetPort: web/i\    nodePort: 31400&quot; alertmanager-service.yaml  ;sed -i  &quot;/targetPort: reloader-web/i\    nodePort: 31500&quot; alertmanager-service.yaml  ;kubectl create -f /root/kube-prometheus/manifests/setup ;kubectl create -f /root/kube-prometheus/manifests/ ; sleep 30 ; kubectl  get pod -n monitoring  ; kubectl  get svc -n monitoring  ;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a></p>
+<p>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、今日头条、个人博客、全网可搜《小陈运维》</p>
+<p>文章主要发布于微信公众号：《Linux运维交流社区》</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes%EF%BC%88k8s%EF%BC%89-%E5%AE%89%E8%A3%85-Prometheus-Grafana"><span class="toc-number">1.</span> <span class="toc-text">kubernetes（k8s） 安装 Prometheus + Grafana</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="toc-number">2.</span> <span class="toc-text">组件说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%8B%E9%9A%86%E4%BB%A3%E7%A0%81"><span class="toc-number">3.</span> <span class="toc-text">克隆代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E5%85%A5%E7%9B%AE%E5%BD%95%E4%BF%AE%E6%94%B9%E9%95%9C%E5%83%8F%E5%9C%B0%E5%9D%80"><span class="toc-number">4.</span> <span class="toc-text">进入目录修改镜像地址</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9svc%E4%B8%BANodePort"><span class="toc-number">5.</span> <span class="toc-text">修改svc为NodePort</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E9%83%A8%E7%BD%B2"><span class="toc-number">6.</span> <span class="toc-text">执行部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E9%AA%8C%E8%AF%81"><span class="toc-number">7.</span> <span class="toc-text">查看验证</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E6%9D%A1%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="toc-number">8.</span> <span class="toc-text">一条命令执行</span></a></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>
