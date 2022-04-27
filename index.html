@@ -1,341 +1,222 @@
+<!DOCTYPE html><html lang="cn" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>小陈运维 - 小陈运维</title><meta name="author" content="chenby"><meta name="copyright" content="chenby"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="小陈运维">
+<meta property="og:type" content="website">
+<meta property="og:title" content="小陈运维">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="小陈运维">
+<meta property="og:description" content="小陈运维">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:author" content="chenby">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '小陈运维',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-04-27 15:01:29'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
 
-<!DOCTYPE html>
-<html lang="cn" class="loading">
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>小陈运维 - 小陈运维</title>
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="google" content="notranslate" />
-    <meta name="keywords" content="Fechin,"> 
-    <meta name="description" content="小陈运维,"> 
-    <meta name="author" content="chenby"> 
-    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
-    <link rel="icon" href="/img/1.ico"> 
-    
-    
-    
-    <meta name="twitter:card" content="summary"/>
-    <meta name="twitter:title" content="小陈运维 - 小陈运维"/>
-    <meta name="twitter:description" content="小陈运维,"/>
-    
-    
-    
-    
-    <meta property="og:site_name" content="小陈运维"/>
-    <meta property="og:type" content="object"/>
-    <meta property="og:title" content="小陈运维 - 小陈运维"/>
-    <meta property="og:description" content="小陈运维,"/>
-    
-<link rel="stylesheet" href="/css/diaspora.css">
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
 
-<meta name="generator" content="Hexo 6.1.0"></head>
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
 
-<body class="loading">
-    <span id="config-title" style="display:none">小陈运维</span>
-    <div id="loader"></div>
-    <div class="nav">
-    <ul id="menu-menu" class="menu">
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
         
-        <li class="pview menu-item menu-item-type-post_type menu-item-object-page">
-            <a href="//" title="首页" target="_blank" rel="noopener">首页</a>
-        </li>
-        
-        <li class="pview menu-item menu-item-type-post_type menu-item-object-page">
-            <a href="/archives/" title="归档" target="_blank" rel="noopener">归档</a>
-        </li>
-        
-        <li class="pview menu-item menu-item-type-post_type menu-item-object-page">
-            <a href="/about/" title="关于" target="_blank" rel="noopener">关于</a>
-        </li>
-        
-    </ul>
-	<span class="target"></span>
-	<center>
-	<div class="hitokoto">
-		<span class="typed" id="hitokoto" data-st="true"></span>
-	</div>
-	</center>
-	
-	<p class="footerlinks">
-		<a href="#" class="iconfont icon-null"></a>
-		
-            <a href="/" title="facebook" class="iconfont icon-facebook" target="_blank" rel="noopener"> </a>
-        
-            <a href="/" title="twitter" class="iconfont icon-twitter" target="_blank" rel="noopener"> </a>
-        
-            <a href="https://github.com/cby-chen/" title="github" class="iconfont icon-github" target="_blank" rel="noopener"> </a>
-        
-            <a href="/img/1.ico" title="wechat" class="iconfont icon-wechat" target="_blank" rel="noopener"> </a>
-        
-            <a href="mailto:cby@chenby.cn" title="email" class="iconfont icon-email" target="_blank" rel="noopener"> </a>
-        
-		<a href="#" class="iconfont icon-null"></a>
-	</p>
-	
-    <p id="copyright">
-        &copy; 2022 chenby.
-        <span> | </span>Powered by <a href="https://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
-        <span> | </span>Theme <a href="https://github.com/Fechin/hexo-theme-diaspora" title="Diaspora" target="_blank" rel="noopener">Diaspora</a> by Fechin
-		
-		<span> | </span><a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">京ICP备18055511号</a>
-		
-    </p>
-</div>
-
-<div id="container">
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
     
-<div id="screen">
-    <div id="mark">
-        <div class="layer" data-depth="0.4">
-            <img src="/img/wallhaven-8o3g1y.jpeg" id="cover" crossorigin="anonymous" width="1920" height="1080">
-        </div>
-    </div>
-    <div id="vibrant">
-        <svg viewbox="0 0 2880 1620" height="100%" preserveaspectratio="xMaxYMax slice">
-            <polygon opacity="0.7" points="2000,1620 0,1620 0,0 600,0 "/>
-        </svg>
-        <div></div>
-    </div>
-    <div id="header">
-        <div>
-            <a class="image-logo" href="/"></a>
-			
-			<div class="iconfont icon-search switchsearch" href="/search/" title="搜索"></div>
-			
-            <div class="iconfont icon-menu switchmenu"></div>
-        </div>
-    </div>
-    
-    <div id="post0">
-        <p>四月 24, 2022</p>
-        <h2><a href="/2022/04/24/2022-04-24-kubernetes%EF%BC%88k8s%EF%BC%89_%E5%AE%89%E8%A3%85_Prometheus_+_Grafana/" title="kubernetes（k8s） 安装 Prometheus + Grafana" class="posttitle">kubernetes（k8s） 安装 Prometheus + Grafana</a></h2>
-        <p class="summary">kubernetes（k8s） 安装 Prometheus + Grafana组件说明MetricServer：是...</p>
-    </div>
-    
-</div>
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">100</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr/></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小陈运维</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">小陈运维</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2022/04/24/2022-04-24-kubernetes%EF%BC%88k8s%EF%BC%89_%E5%AE%89%E8%A3%85_Prometheus_+_Grafana/" title="kubernetes（k8s） 安装 Prometheus + Grafana"><img class="post_bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="kubernetes（k8s） 安装 Prometheus + Grafana"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/24/2022-04-24-kubernetes%EF%BC%88k8s%EF%BC%89_%E5%AE%89%E8%A3%85_Prometheus_+_Grafana/" title="kubernetes（k8s） 安装 Prometheus + Grafana">kubernetes（k8s） 安装 Prometheus + Grafana</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-24T02:01:29.000Z" title="Created 2022-04-24 10:01:29">2022-04-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="content">kubernetes（k8s） 安装 Prometheus + Grafana组件说明MetricServer：是kubernetes集群资源使用情况的聚合器，收集数据给kubernetes集群内使用，如 kubectl,hpa,scheduler等。
+PrometheusOperator：是一个系统监测和警报工具箱，用来存储监控数据。
+NodeExporter：用于各node的关键度量指标状态数据。
+KubeStateMetrics：收集kubernetes集群内资源对象数 据，制定告警规则。
+Prometheus：采用pull方式收集apiserver，scheduler，controller-manager，kubelet组件数 据，通过http协议传输。
+Grafana：是可视化数据统计和监控平台。
 
-    <div id="primary">
-        
-<div class="post">
-    <a href="/2022/04/21/2022-04-21-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85Kubernetes%EF%BC%88k8s%EF%BC%89_v1.23.6/" title="二进制安装Kubernetes（k8s） v1.23.6">
-        <img src="/img/wallhaven-g71m5q.jpeg" class="cover" width="680" height="440">
-    </a>
-    <div class="else">
-        <p>四月 21, 2022</p>
-        <h3><a href="/2022/04/21/2022-04-21-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85Kubernetes%EF%BC%88k8s%EF%BC%89_v1.23.6/" title="二进制安装Kubernetes（k8s） v1.23.6" class="posttitle">二进制安装Kubernetes（k8s） v1.23.6</a></h3>
-        <p>二进制安装Kubernetes（k8s） v1.23.6背景kubernetes二进制安装
-1.23.3 和 1.23.4 和 1.23.5 和 1.23...</p>
-    </div>
-</div>
+克隆代码12345678910root@hello:~#   git clone -b release-0.10 https://github.com/prometheus-operator/kube-prometheus.gitCloning into &#x27;kube-p ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/04/21/2022-04-21-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85Kubernetes%EF%BC%88k8s%EF%BC%89_v1.23.6/" title="二进制安装Kubernetes（k8s） v1.23.6"><img class="post_bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="二进制安装Kubernetes（k8s） v1.23.6"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/21/2022-04-21-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85Kubernetes%EF%BC%88k8s%EF%BC%89_v1.23.6/" title="二进制安装Kubernetes（k8s） v1.23.6">二进制安装Kubernetes（k8s） v1.23.6</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-21T08:44:13.000Z" title="Created 2022-04-21 16:44:13">2022-04-21</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="content">二进制安装Kubernetes（k8s） v1.23.6背景kubernetes二进制安装
+1.23.3 和 1.23.4 和 1.23.5 和 1.23.6 文档以及安装包已生成。
+后续尽可能第一时间更新新版本文档
+https://github.com/cby-chen/Kubernetes/releases
+脚本项目地址：https://github.com/cby-chen/Binary_installation_of_Kubernetes
+手动项目地址：https://github.com/cby-chen/Kubernetes
+1.环境
 
 
-<div class="post">
-    <a href="/2022/04/21/2022-04-21-%E5%9C%A8k8s%EF%BC%88kubernetes%EF%BC%89%E4%B8%8A%E5%AE%89%E8%A3%85_ingress_V1.1.3/" title="在k8s（kubernetes）上安装 ingress V1.1.3">
-        <img src="/img/wallhaven-k7jd2q.jpeg" class="cover" width="680" height="440">
-    </a>
-    <div class="else">
-        <p>四月 21, 2022</p>
-        <h3><a href="/2022/04/21/2022-04-21-%E5%9C%A8k8s%EF%BC%88kubernetes%EF%BC%89%E4%B8%8A%E5%AE%89%E8%A3%85_ingress_V1.1.3/" title="在k8s（kubernetes）上安装 ingress V1.1.3" class="posttitle">在k8s（kubernetes）上安装 ingress V1.1.3</a></h3>
-        <p>介绍Ingress 公开了从集群外部到集群内服务的 HTTP 和 HTTPS 路由。流量路由由 Ingress 资源上定义的规则控制。
-下面是一个将所有流...</p>
-    </div>
-</div>
+主机名称
+IP地址
+说明
+软件
 
 
-<div class="post">
-    <a href="/2022/04/20/2022-04-20-%E5%9C%A8Kubernetes%E4%B8%8A%E5%AE%89%E8%A3%85Netdata%E7%9A%84%E6%96%B9%E6%B3%95/" title="在Kubernetes上安装Netdata的方法">
-        <img src="/img/wallhaven-3z9pgy.jpg" class="cover" width="680" height="440">
-    </a>
-    <div class="else">
-        <p>四月 20, 2022</p>
-        <h3><a href="/2022/04/20/2022-04-20-%E5%9C%A8Kubernetes%E4%B8%8A%E5%AE%89%E8%A3%85Netdata%E7%9A%84%E6%96%B9%E6%B3%95/" title="在Kubernetes上安装Netdata的方法" class="posttitle">在Kubernetes上安装Netdata的方法</a></h3>
-        <p>介绍Netdata可用于监视kubernetes集群并显示有关集群的信息，包括节点内存使用率、CPU、网络等，简单的说，Netdata仪表板可让您全面了解...</p>
-    </div>
-</div>
+
+Master01
+192.168.1.81
+master节点
+kube-apiserver、kube-controller-manager、kube-scheduler、etcd、kubelet、kube-proxy、nfs-client
 
 
-<div class="post">
-    <a href="/2022/04/19/2022-04-19-%E7%BB%8FGitHub%E5%B0%86kubernetes%E9%95%9C%E5%83%8F%E6%8E%A8%E9%80%81%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91/" title="经GitHub将kubernetes镜像推送到阿里云">
-        <img src="/img/wallhaven-3z9pgy.jpg" class="cover" width="680" height="440">
-    </a>
-    <div class="else">
-        <p>四月 19, 2022</p>
-        <h3><a href="/2022/04/19/2022-04-19-%E7%BB%8FGitHub%E5%B0%86kubernetes%E9%95%9C%E5%83%8F%E6%8E%A8%E9%80%81%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91/" title="经GitHub将kubernetes镜像推送到阿里云" class="posttitle">经GitHub将kubernetes镜像推送到阿里云</a></h3>
-        <p>背景在安装kubernetes时会出现无法访问镜像站的情况，通过GitHub将kubernetes镜像推送到阿里云之后，即可使用阿里云地址引用所需镜像，现...</p>
-    </div>
-</div>
+Master02
+192.168.1.82
+master节点
+kube-apiserver、kube-controller-manager、kube-sched ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/04/21/2022-04-21-%E5%9C%A8k8s%EF%BC%88kubernetes%EF%BC%89%E4%B8%8A%E5%AE%89%E8%A3%85_ingress_V1.1.3/" title="在k8s（kubernetes）上安装 ingress V1.1.3"><img class="post_bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在k8s（kubernetes）上安装 ingress V1.1.3"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/21/2022-04-21-%E5%9C%A8k8s%EF%BC%88kubernetes%EF%BC%89%E4%B8%8A%E5%AE%89%E8%A3%85_ingress_V1.1.3/" title="在k8s（kubernetes）上安装 ingress V1.1.3">在k8s（kubernetes）上安装 ingress V1.1.3</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-21T01:20:00.000Z" title="Created 2022-04-21 09:20:00">2022-04-21</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="content">介绍Ingress 公开了从集群外部到集群内服务的 HTTP 和 HTTPS 路由。流量路由由 Ingress 资源上定义的规则控制。
+下面是一个将所有流量都发送到同一 Service 的简单 Ingress 示例：
 
+写入配置文件，并执行12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210310410510610710810911011111211311411511611711811912012112212312412512612712812913013113213313413513613713813914014114214314414514614714814915015115215315415515615715815916016116216 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/04/20/2022-04-20-%E5%9C%A8Kubernetes%E4%B8%8A%E5%AE%89%E8%A3%85Netdata%E7%9A%84%E6%96%B9%E6%B3%95/" title="在Kubernetes上安装Netdata的方法"><img class="post_bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在Kubernetes上安装Netdata的方法"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/20/2022-04-20-%E5%9C%A8Kubernetes%E4%B8%8A%E5%AE%89%E8%A3%85Netdata%E7%9A%84%E6%96%B9%E6%B3%95/" title="在Kubernetes上安装Netdata的方法">在Kubernetes上安装Netdata的方法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-20T02:40:05.000Z" title="Created 2022-04-20 10:40:05">2022-04-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="content">介绍Netdata可用于监视kubernetes集群并显示有关集群的信息，包括节点内存使用率、CPU、网络等，简单的说，Netdata仪表板可让您全面了解Kubernetes集群，包括在每个节点上运行的服务和Pod。
+安装HELM123456root@hello:~# curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -root@hello:~# sudo apt-get install apt-transport-https --yesroot@hello:~# echo &quot;deb https://baltocdn.com/helm/stable/debian/ all main&quot; | sudo tee /etc/apt/sources.list.d/helm-stable-debian.listroot@hello:~# sudo apt-get updateroot@hello:~# sudo apt-get install helm
 
-<div class="post">
-    <a href="/2022/04/15/2022-04-15-Let's_Encrypt_%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/" title="Let's Encrypt 泛域名证书申请">
-        <img src="/img/wallhaven-1ko2rv.png" class="cover" width="680" height="440">
-    </a>
-    <div class="else">
-        <p>四月 15, 2022</p>
-        <h3><a href="/2022/04/15/2022-04-15-Let's_Encrypt_%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/" title="Let&#39;s Encrypt 泛域名证书申请" class="posttitle">Let&#39;s Encrypt 泛域名证书申请</a></h3>
-        <p>泛域名泛域名证书又名通配符证书是SSL证书中的其中一种形式，一般会以通配符的形式(如：*.domain.com)来指定证书所要保护的域名。
-OV证书和DV...</p>
-    </div>
-</div>
+添加源并安装1234567891011121314 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/04/19/2022-04-19-%E7%BB%8FGitHub%E5%B0%86kubernetes%E9%95%9C%E5%83%8F%E6%8E%A8%E9%80%81%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91/" title="经GitHub将kubernetes镜像推送到阿里云"><img class="post_bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="经GitHub将kubernetes镜像推送到阿里云"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/19/2022-04-19-%E7%BB%8FGitHub%E5%B0%86kubernetes%E9%95%9C%E5%83%8F%E6%8E%A8%E9%80%81%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91/" title="经GitHub将kubernetes镜像推送到阿里云">经GitHub将kubernetes镜像推送到阿里云</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-19T07:36:07.000Z" title="Created 2022-04-19 15:36:07">2022-04-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="content">背景在安装kubernetes时会出现无法访问镜像站的情况，通过GitHub将kubernetes镜像推送到阿里云之后，即可使用阿里云地址引用所需镜像，现已同步镜像5000+，当前还在陆续同步。仓库使用 Github Action 每天自动运行脚本同步镜像到阿里云。
 
+代码仓库https://github.com/cby-chen/sys\_images若有需要自行研究 后续更新会在仓库更新
+目前有如下镜像仓库，后续会陆续增加123456789101112131415161718192021222324252627282930313233343536373839404142434445464748  docker.elastic.co:    - elasticsearch/elasticsearch    - kibana/kibana    - logstash/logstash    - beats/filebeat    - beats/heartbeat    - beats/packetbeat    - beats/auditbeat    - beats/journal ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/04/15/2022-04-15-Let's_Encrypt_%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/" title="Let's Encrypt 泛域名证书申请"><img class="post_bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Let's Encrypt 泛域名证书申请"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/15/2022-04-15-Let's_Encrypt_%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%94%B3%E8%AF%B7/" title="Let's Encrypt 泛域名证书申请">Let's Encrypt 泛域名证书申请</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-15T06:58:50.000Z" title="Created 2022-04-15 14:58:50">2022-04-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="content">泛域名泛域名证书又名通配符证书是SSL证书中的其中一种形式，一般会以通配符的形式(如：*.domain.com)来指定证书所要保护的域名。
+OV证书和DV证书都会有通配符的域名形式提供，而EV证书一般没有通配符的证书形式。
+1.配置灵活方便
+由于采用了通配符的形式对域名进行配置，那么对于拥有多个二级域名的网站是一件非常便利的事情。只要申请一张通配符证书，就能用于所有的二级域名网站中。而且如果以后需要继续增加二级域名，也不需要再去申请购买证书，只需继续使用原有的证书就可以，对于网站管理者来说确实是非常的方便。
+2.性价比高
+一般而言，通配符证书是会比单域名证书会贵上不少，但是假如按每个二级域名的证书价格摊分下来，那其实证书单价是及其的低。当然这要看你的二级域名数量总数有多少而定。但如今互联网时代，很多公司企业他们都会用户多个二级域名。对于这些企业而言，通配符证书无疑是一种高性价比的SSL证书。
 
-<div class="post">
-    <a href="/2022/04/12/2022-04-12-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0postgres%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现postgres数据持久化离线安装">
-        <img src="/img/wallhaven-xlo73z.jpg" class="cover" width="680" height="440">
-    </a>
-    <div class="else">
-        <p>四月 12, 2022</p>
-        <h3><a href="/2022/04/12/2022-04-12-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0postgres%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现postgres数据持久化离线安装" class="posttitle">docker方式实现postgres数据持久化离线安装</a></h3>
-        <p>
-保存镜像12345678910111213141516171819202122232425root@hello:~# docker pull postg...</p>
-    </div>
-</div>
-
-
-<div class="post">
-    <a href="/2022/04/08/2022-04-08-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0minio%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现minio数据持久化离线安装">
-        <img src="/img/wallhaven-1ko2rv.png" class="cover" width="680" height="440">
-    </a>
-    <div class="else">
-        <p>四月 08, 2022</p>
-        <h3><a href="/2022/04/08/2022-04-08-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0minio%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现minio数据持久化离线安装" class="posttitle">docker方式实现minio数据持久化离线安装</a></h3>
-        <p>
+安装所需环境12345678910111213141516171819202122232425root@cby:~# apt-get install socat -yroot@cby:~# cu ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/04/12/2022-04-12-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0postgres%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现postgres数据持久化离线安装"><img class="post_bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker方式实现postgres数据持久化离线安装"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/12/2022-04-12-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0postgres%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现postgres数据持久化离线安装">docker方式实现postgres数据持久化离线安装</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-12T06:46:07.000Z" title="Created 2022-04-12 14:46:07">2022-04-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="content">
+保存镜像12345678910111213141516171819202122232425root@hello:~# docker pull postgresUsing default tag: latestlatest: Pulling from library/postgresa2abf6c4d29d: Already exists e1769f49f910: Pull complete 33a59cfee47c: Pull complete 461b2090c345: Pull complete 8ed8ab6290ac: Pull complete 495e42c822a0: Pull complete 18e858c71c58: Pull complete 594792c80d5f: Pull complete 794976979956: Pull complete eb5e1a73c3ca: Pull complete 6d6360292cba: Pull complete 131e916e1a28: Pull complete 757a73507e2e: Pull co ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/04/08/2022-04-08-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0minio%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现minio数据持久化离线安装"><img class="post_bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker方式实现minio数据持久化离线安装"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/08/2022-04-08-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0minio%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现minio数据持久化离线安装">docker方式实现minio数据持久化离线安装</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-08T06:21:02.000Z" title="Created 2022-04-08 14:21:02">2022-04-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="content">
 保存镜像
-123456789101112131415161718root@hello:~# docker pull minio/minioUsing d...</p>
-    </div>
-</div>
-
-
-<div class="post">
-    <a href="/2022/04/06/2022-04-06-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0redis%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现redis数据持久化离线安装">
-        <img src="/img/wallhaven-l3ylm2.jpeg" class="cover" width="680" height="440">
-    </a>
-    <div class="else">
-        <p>四月 06, 2022</p>
-        <h3><a href="/2022/04/06/2022-04-06-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0redis%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现redis数据持久化离线安装" class="posttitle">docker方式实现redis数据持久化离线安装</a></h3>
-        <p>
+123456789101112131415161718root@hello:~# docker pull minio/minioUsing default tag: latestlatest: Pulling from minio/miniod46336f50433: Pull complete be961ec68663: Pull complete 44173c602141: Pull complete a9809a6a679b: Pull complete df29d4a76971: Pull complete 2b5a8853d302: Pull complete 84f01ee8dfc1: Pull complete Digest: sha256:d786220feef7d8fe0239d41b5d74501dc824f6e7dd0e5a05749c502fff225bf3Status: Downloaded newer image for minio/minio:latestdocker.io/minio/minio:latestroot@hello:~#root ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/04/06/2022-04-06-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0redis%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现redis数据持久化离线安装"><img class="post_bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker方式实现redis数据持久化离线安装"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/06/2022-04-06-docker%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0redis%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" title="docker方式实现redis数据持久化离线安装">docker方式实现redis数据持久化离线安装</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-06T02:35:34.000Z" title="Created 2022-04-06 10:35:34">2022-04-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="content">
 保存镜像  
-1234567891011121314151617root@hello:~# docker pull redis:latestlatest...</p>
-    </div>
-</div>
-
-
-<div class="post">
-    <a href="/2022/04/04/2022-04-04-%E8%87%AA%E7%BC%96%E5%86%99%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85kubernetes%E8%84%9A%E6%9C%ACv2.0%E7%89%88%E6%9C%AC/" title="自编写二进制安装kubernetes脚本v2.0版本">
-        <img src="/img/wallhaven-pkgqg9.jpeg" class="cover" width="680" height="440">
-    </a>
-    <div class="else">
-        <p>四月 04, 2022</p>
-        <h3><a href="/2022/04/04/2022-04-04-%E8%87%AA%E7%BC%96%E5%86%99%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85kubernetes%E8%84%9A%E6%9C%ACv2.0%E7%89%88%E6%9C%AC/" title="自编写二进制安装kubernetes脚本v2.0版本" class="posttitle">自编写二进制安装kubernetes脚本v2.0版本</a></h3>
-        <p>
+1234567891011121314151617root@hello:~# docker pull redis:latestlatest: Pulling from library/redisa2abf6c4d29d: Already exists c7a4e4382001: Pull complete 4044b9ba67c9: Pull complete c8388a79482f: Pull complete 413c8bb60be2: Pull complete 1abfd3011519: Pull complete Digest: sha256:db485f2e245b5b3329fdc7eff4eb00f913e09d8feb9ca720788059fdc2ed8339Status: Downloaded newer image for redis:latestdocker.io/library/redis:latestroot@hello:~# root@hello:~# docker save &gt; redis.tar redis:latest ro ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/04/04/2022-04-04-%E8%87%AA%E7%BC%96%E5%86%99%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85kubernetes%E8%84%9A%E6%9C%ACv2.0%E7%89%88%E6%9C%AC/" title="自编写二进制安装kubernetes脚本v2.0版本"><img class="post_bg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="自编写二进制安装kubernetes脚本v2.0版本"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/04/2022-04-04-%E8%87%AA%E7%BC%96%E5%86%99%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85kubernetes%E8%84%9A%E6%9C%ACv2.0%E7%89%88%E6%9C%AC/" title="自编写二进制安装kubernetes脚本v2.0版本">自编写二进制安装kubernetes脚本v2.0版本</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-04-04T15:15:00.000Z" title="Created 2022-04-04 23:15:00">2022-04-04</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="content">
 一键安装 二进制安装Kubernetes（k8s） v2.0
 手动安装：https://github.com/cby-chen/Kubernetes
-脚...</p>
-    </div>
-</div>
-
-
-    </div>
-    
-    <div id="pager"><a href="/page/2/" class="more">加载更多</a></div>
-    
-</div>
-<div id="preview"></div>
-
-	<center><a rel="nofollow" style="color: #666;" href="http://www.beian.miit.gov.cn" target="_blank">京ICP备18055511号</a></center>
-
-
-
-</body>
-
-
-<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
-<script src="/js/plugin.js"></script>
-<script src="/js/typed.js"></script>
-<script src="/js/diaspora.js"></script>
-
-
-<link rel="stylesheet" href="/photoswipe/photoswipe.css">
-<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
-
-
-<script src="/photoswipe/photoswipe.min.js"></script>
-<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
-
-
-<!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-    <!-- Background of PhotoSwipe. 
-         It's a separate element as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
-        <!-- Container that holds slides. 
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-            <div class="pswp__top-bar">
-                <!--  Controls are self-explanatory. Order can be changed. -->
-                <div class="pswp__counter"></div>
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                      <div class="pswp__preloader__cut">
-                        <div class="pswp__preloader__donut"></div>
-                      </div>
-                    </div>
-                </div>
+脚本安装：https://github.com/cby-chen/Binary_installation_of_Kubernetes
+使用说明：该脚本示例需要十一台服务器，在十一台服务器中有一台是用于执行该脚本的，
+另外有八台k8s服务器，其他俩台作为lb负载均衡服务器。
+将其中服务器配置好静态IP，修改如下变量中的IP即可。
+同时查看服务器中的网卡名，并将其修改。
+执行脚本可使用bash -x 即可显示执行中详细信息。
+该脚本已适配centos7和centos8。
+脚本中hosts有俩处，记得修改。
+2022-03更新：
+现已支持centos7 和centos8 自动适配
+同时支持自定义k8s node节点结构.
+在变量中需要几台节点就写几台节点即可 注意的是，新增节点，要在脚本中的hosts中也要修改 不建议乱改。
+2022-04更新：
+更新kubernetes自主版本选择
+优化执行结构
+适配多版本
+修复BUG
+1234567891 ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#content-inner">10</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">chenby</div><div class="author-info__description">小陈运维</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">100</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/04/24/2022-04-24-kubernetes%EF%BC%88k8s%EF%BC%89_%E5%AE%89%E8%A3%85_Prometheus_+_Grafana/" title="kubernetes（k8s） 安装 Prometheus + Grafana"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="kubernetes（k8s） 安装 Prometheus + Grafana"/></a><div class="content"><a class="title" href="/2022/04/24/2022-04-24-kubernetes%EF%BC%88k8s%EF%BC%89_%E5%AE%89%E8%A3%85_Prometheus_+_Grafana/" title="kubernetes（k8s） 安装 Prometheus + Grafana">kubernetes（k8s） 安装 Prometheus + Grafana</a><time datetime="2022-04-24T02:01:29.000Z" title="Created 2022-04-24 10:01:29">2022-04-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/21/2022-04-21-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85Kubernetes%EF%BC%88k8s%EF%BC%89_v1.23.6/" title="二进制安装Kubernetes（k8s） v1.23.6"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="二进制安装Kubernetes（k8s） v1.23.6"/></a><div class="content"><a class="title" href="/2022/04/21/2022-04-21-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85Kubernetes%EF%BC%88k8s%EF%BC%89_v1.23.6/" title="二进制安装Kubernetes（k8s） v1.23.6">二进制安装Kubernetes（k8s） v1.23.6</a><time datetime="2022-04-21T08:44:13.000Z" title="Created 2022-04-21 16:44:13">2022-04-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/21/2022-04-21-%E5%9C%A8k8s%EF%BC%88kubernetes%EF%BC%89%E4%B8%8A%E5%AE%89%E8%A3%85_ingress_V1.1.3/" title="在k8s（kubernetes）上安装 ingress V1.1.3"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在k8s（kubernetes）上安装 ingress V1.1.3"/></a><div class="content"><a class="title" href="/2022/04/21/2022-04-21-%E5%9C%A8k8s%EF%BC%88kubernetes%EF%BC%89%E4%B8%8A%E5%AE%89%E8%A3%85_ingress_V1.1.3/" title="在k8s（kubernetes）上安装 ingress V1.1.3">在k8s（kubernetes）上安装 ingress V1.1.3</a><time datetime="2022-04-21T01:20:00.000Z" title="Created 2022-04-21 09:20:00">2022-04-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/20/2022-04-20-%E5%9C%A8Kubernetes%E4%B8%8A%E5%AE%89%E8%A3%85Netdata%E7%9A%84%E6%96%B9%E6%B3%95/" title="在Kubernetes上安装Netdata的方法"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在Kubernetes上安装Netdata的方法"/></a><div class="content"><a class="title" href="/2022/04/20/2022-04-20-%E5%9C%A8Kubernetes%E4%B8%8A%E5%AE%89%E8%A3%85Netdata%E7%9A%84%E6%96%B9%E6%B3%95/" title="在Kubernetes上安装Netdata的方法">在Kubernetes上安装Netdata的方法</a><time datetime="2022-04-20T02:40:05.000Z" title="Created 2022-04-20 10:40:05">2022-04-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/19/2022-04-19-%E7%BB%8FGitHub%E5%B0%86kubernetes%E9%95%9C%E5%83%8F%E6%8E%A8%E9%80%81%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91/" title="经GitHub将kubernetes镜像推送到阿里云"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="经GitHub将kubernetes镜像推送到阿里云"/></a><div class="content"><a class="title" href="/2022/04/19/2022-04-19-%E7%BB%8FGitHub%E5%B0%86kubernetes%E9%95%9C%E5%83%8F%E6%8E%A8%E9%80%81%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91/" title="经GitHub将kubernetes镜像推送到阿里云">经GitHub将kubernetes镜像推送到阿里云</a><time datetime="2022-04-19T07:36:07.000Z" title="Created 2022-04-19 15:36:07">2022-04-19</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            
             </div>
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div> 
-            </div>
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
-        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
-        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
-        messageStyle: "none"
-    });
-</script>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
-
-
-
-</html>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/"><span class="card-category-list-name">默认分类</span><span class="card-category-list-count">100</span></a></li>
+            </ul></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/04/"><span class="card-archive-list-date">April 2022</span><span class="card-archive-list-count">12</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/03/"><span class="card-archive-list-date">March 2022</span><span class="card-archive-list-count">8</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/02/"><span class="card-archive-list-date">February 2022</span><span class="card-archive-list-count">7</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/01/"><span class="card-archive-list-date">January 2022</span><span class="card-archive-list-count">7</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/12/"><span class="card-archive-list-date">December 2021</span><span class="card-archive-list-count">66</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article :</div><div class="item-count">100</div></div><div class="webinfo-item"><div class="item-name">UV :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">PV :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">Last Push :</div><div class="item-count" id="last-push-date" data-lastPushDate="2022-04-27T07:01:28.956Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By chenby</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

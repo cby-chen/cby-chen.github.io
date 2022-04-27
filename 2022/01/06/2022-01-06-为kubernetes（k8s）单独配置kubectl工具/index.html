@@ -1,69 +1,147 @@
+<!DOCTYPE html><html lang="cn" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>为kubernetes（k8s）单独配置kubectl工具 | 小陈运维</title><meta name="author" content="chenby"><meta name="copyright" content="chenby"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="介绍Kubernetes API 是一个 HTTP REST API。这个 API 是真正的 Kubernetes 用户界面，通过它可以完全控制它。这意味着每个 Kubernetes 操作都作为 API 端点公开，并且可以通过对该端点的 HTTP 请求进行。因此，kubectl 的主要目的是向 Kubernetes API 发出 HTTP 请求： 配置apt软件源12345678910111213">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为kubernetes（k8s）单独配置kubectl工具">
+<meta property="og:url" content="http://example.com/2022/01/06/2022-01-06-%E4%B8%BAkubernetes%EF%BC%88k8s%EF%BC%89%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AEkubectl%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:site_name" content="小陈运维">
+<meta property="og:description" content="介绍Kubernetes API 是一个 HTTP REST API。这个 API 是真正的 Kubernetes 用户界面，通过它可以完全控制它。这意味着每个 Kubernetes 操作都作为 API 端点公开，并且可以通过对该端点的 HTTP 请求进行。因此，kubectl 的主要目的是向 Kubernetes API 发出 HTTP 请求： 配置apt软件源12345678910111213">
+<meta property="og:locale">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+<meta property="article:published_time" content="2022-01-06T07:31:21.000Z">
+<meta property="article:modified_time" content="2022-01-06T07:31:21.000Z">
+<meta property="article:author" content="chenby">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2022/01/06/2022-01-06-%E4%B8%BAkubernetes%EF%BC%88k8s%EF%BC%89%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AEkubectl%E5%B7%A5%E5%85%B7/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '为kubernetes（k8s）单独配置kubectl工具',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-01-06 15:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
 
-<!DOCTYPE html>
-<html lang="cn" class="loading">
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>为kubernetes（k8s）单独配置kubectl工具 - 小陈运维</title>
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="google" content="notranslate" />
-    <meta name="keywords" content="Fechin,"> 
-    <meta name="description" content="小陈运维,介绍Kubernetes API 是一个 HTTP REST API。这个 API 是真正的 Kubernetes 用户界面，通过它可以完全控制它。这意味着每个 Kubernetes 操作都作为 A,"> 
-    <meta name="author" content="chenby"> 
-    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
-    <link rel="icon" href="/img/1.ico"> 
-    
-    
-    
-    <meta name="twitter:card" content="summary"/>
-    <meta name="twitter:title" content="为kubernetes（k8s）单独配置kubectl工具 - 小陈运维"/>
-    <meta name="twitter:description" content="小陈运维,介绍Kubernetes API 是一个 HTTP REST API。这个 API 是真正的 Kubernetes 用户界面，通过它可以完全控制它。这意味着每个 Kubernetes 操作都作为 A,"/>
-    
-    
-    
-    
-    <meta property="og:site_name" content="小陈运维"/>
-    <meta property="og:type" content="object"/>
-    <meta property="og:title" content="为kubernetes（k8s）单独配置kubectl工具 - 小陈运维"/>
-    <meta property="og:description" content="小陈运维,介绍Kubernetes API 是一个 HTTP REST API。这个 API 是真正的 Kubernetes 用户界面，通过它可以完全控制它。这意味着每个 Kubernetes 操作都作为 A,"/>
-    
-<link rel="stylesheet" href="/css/diaspora.css">
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
 
-<meta name="generator" content="Hexo 6.1.0"></head>
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
 
-<body class="loading">
-    <span id="config-title" style="display:none">小陈运维</span>
-    <div id="loader"></div>
-    <div id="single">
-    <div id="top" style="display: block;">
-    <div class="bar" style="width: 0;"></div>
-    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
-    <div title="播放/暂停" class="iconfont icon-play"></div>
-    <h3 class="subtitle">为kubernetes（k8s）单独配置kubectl工具</h3>
-    <div class="social">
-        <div>
-            <div class="share">
-                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
-            </div>
-            <div id="qr"></div>
-        </div>
-    </div>
-    <div class="scrollbar"></div>
-</div>
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
 
-    <div class="section">
-        <div class="article">
-    <div class='main'>
-        <h1 class="title">为kubernetes（k8s）单独配置kubectl工具</h1>
-        <div class="stuff">
-            <span>一月 06, 2022</span>
-            
-
-        </div>
-        <div class="content markdown">
-            <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>Kubernetes API 是一个 HTTP REST API。这个 API 是真正的 Kubernetes 用户界面，通过它可以完全控制它。这意味着每个 Kubernetes 操作都作为 API 端点公开，并且可以通过对该端点的 HTTP 请求进行。因此，kubectl 的主要目的是向 Kubernetes API 发出 HTTP 请求：<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3dd62e455489487985d282b6867f10c6~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">100</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小陈运维</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">为kubernetes（k8s）单独配置kubectl工具</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-01-06T07:31:21.000Z" title="Created 2022-01-06 15:31:21">2022-01-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-01-06T07:31:21.000Z" title="Updated 2022-01-06 15:31:21">2022-01-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="为kubernetes（k8s）单独配置kubectl工具"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>Kubernetes API 是一个 HTTP REST API。这个 API 是真正的 Kubernetes 用户界面，通过它可以完全控制它。这意味着每个 Kubernetes 操作都作为 API 端点公开，并且可以通过对该端点的 HTTP 请求进行。因此，kubectl 的主要目的是向 Kubernetes API 发出 HTTP 请求：<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3dd62e455489487985d282b6867f10c6~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
 <h1 id="配置apt软件源"><a href="#配置apt软件源" class="headerlink" title="配置apt软件源"></a>配置apt软件源</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# apt-get update &amp;&amp; apt-get install -y apt-transport-https</span><br><span class="line">Hit:1 http://192.168.1.104:81/ubuntu focal InRelease</span><br><span class="line">Hit:2 http://192.168.1.104:81/ubuntu focal-security InRelease</span><br><span class="line">Hit:3 http://192.168.1.104:81/ubuntu focal-updates InRelease</span><br><span class="line">Hit:4 http://192.168.1.104:81/ubuntu focal-proposed InRelease</span><br><span class="line">Hit:5 https://mirrors.aliyun.com/docker-ce/linux/ubuntu focal InRelease</span><br><span class="line">Reading package lists... Done        </span><br><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree       </span><br><span class="line">Reading state information... Done</span><br><span class="line">apt-transport-https is already the newest version (2.0.6).</span><br><span class="line">0 upgraded, 0 newly installed, 0 to remove and 54 not upgraded.</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - </span><br><span class="line"><span class="meta prompt_">  % </span><span class="language-bash">Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span></span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100  2537  100  2537    0     0  26989      0 --:--:-- --:--:-- --:--:-- 26989</span><br><span class="line">OK</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list</span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main</span></span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">EOF</span></span><br><span class="line">root@hello:~# apt-get update</span><br><span class="line">Hit:1 http://192.168.1.104:81/ubuntu focal InRelease</span><br><span class="line">Hit:2 http://192.168.1.104:81/ubuntu focal-security InRelease</span><br><span class="line">Hit:3 http://192.168.1.104:81/ubuntu focal-updates InRelease</span><br><span class="line">Hit:4 http://192.168.1.104:81/ubuntu focal-proposed InRelease</span><br><span class="line">Hit:5 https://mirrors.aliyun.com/docker-ce/linux/ubuntu focal InRelease</span><br><span class="line">Get:6 https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial InRelease [9,383 B]</span><br><span class="line">Ign:7 https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial/main amd64 Packages</span><br><span class="line">Get:7 https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial/main amd64 Packages [52.6 kB]</span><br><span class="line">Fetched 62.0 kB in 1s (59.9 kB/s)   </span><br><span class="line">Reading package lists... Done</span><br><span class="line">root@hello:~#</span><br></pre></td></tr></table></figure>
 
 <h1 id="使用apt安装kubectl工具"><a href="#使用apt安装kubectl工具" class="headerlink" title="使用apt安装kubectl工具"></a>使用apt安装kubectl工具</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# apt-get install -y kubectl</span><br><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree       </span><br><span class="line">Reading state information... Done</span><br><span class="line">The following NEW packages will be installed:</span><br><span class="line">  kubectl</span><br><span class="line">0 upgraded, 1 newly installed, 0 to remove and 54 not upgraded.</span><br><span class="line">Need to get 8,928 kB of archives.</span><br><span class="line">After this operation, 46.6 MB of additional disk space will be used.</span><br><span class="line">Get:1 https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial/main amd64 kubectl amd64 1.23.1-00 [8,928 kB]</span><br><span class="line">Fetched 8,928 kB in 2s (5,599 kB/s)   </span><br><span class="line">Selecting previously unselected package kubectl.</span><br><span class="line">(Reading database ... 129153 files and directories currently installed.)</span><br><span class="line">Preparing to unpack .../kubectl_1.23.1-00_amd64.deb ...</span><br><span class="line">Unpacking kubectl (1.23.1-00) ...</span><br><span class="line">Setting up kubectl (1.23.1-00) ...</span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# </span><br><span class="line">root@hello:~# mkdir /root/.kube/</span><br></pre></td></tr></table></figure>
@@ -89,136 +167,4 @@
 <p><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a></p>
 <p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云、简书、今日头条</p>
-
-            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
-            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
-                <source type="audio/mpeg" src="">
-            </audio>
-            
-                <ul id="audio-list" style="display:none">
-                    
-                        
-                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
-                        
-                    
-                        
-                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
-                        
-                    
-                </ul>
-            
-        </div>
-        
-    <div id="gitalk-container" class="comment link"
-		data-enable="false"
-        data-ae="false"
-        data-ci=""
-        data-cs=""
-        data-r=""
-        data-o=""
-        data-a=""
-        data-d="false"
-    >查看评论</div>
-
-
-    </div>
-    
-        <div class="side">
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEapt%E8%BD%AF%E4%BB%B6%E6%BA%90"><span class="toc-number">2.</span> <span class="toc-text">配置apt软件源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8apt%E5%AE%89%E8%A3%85kubectl%E5%B7%A5%E5%85%B7"><span class="toc-number">3.</span> <span class="toc-text">使用apt安装kubectl工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEkubectl%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">配置kubectl配置文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%EF%BC%8C%E5%B9%B6%E6%B5%8B%E8%AF%95kubectl"><span class="toc-number">5.</span> <span class="toc-text">配置自动补全，并测试kubectl</span></a></li></ol>	
-        </div>
-    
-</div>
-
-
-    </div>
-</div>
-</body>
-
-
-<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
-<script src="/js/plugin.js"></script>
-<script src="/js/typed.js"></script>
-<script src="/js/diaspora.js"></script>
-
-
-<link rel="stylesheet" href="/photoswipe/photoswipe.css">
-<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
-
-
-<script src="/photoswipe/photoswipe.min.js"></script>
-<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
-
-
-<!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-    <!-- Background of PhotoSwipe. 
-         It's a separate element as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
-        <!-- Container that holds slides. 
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-            <div class="pswp__top-bar">
-                <!--  Controls are self-explanatory. Order can be changed. -->
-                <div class="pswp__counter"></div>
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                      <div class="pswp__preloader__cut">
-                        <div class="pswp__preloader__donut"></div>
-                      </div>
-                    </div>
-                </div>
-            </div>
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div> 
-            </div>
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
-        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
-        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
-        messageStyle: "none"
-    });
-</script>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
-
-
-
-</html>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://example.com">chenby</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2022/01/06/2022-01-06-%E4%B8%BAkubernetes%EF%BC%88k8s%EF%BC%89%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AEkubectl%E5%B7%A5%E5%85%B7/">http://example.com/2022/01/06/2022-01-06-%E4%B8%BAkubernetes%EF%BC%88k8s%EF%BC%89%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AEkubectl%E5%B7%A5%E5%85%B7/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/01/07/2022-01-07-kubectl%E7%AE%A1%E7%90%86%E5%A4%9A%E4%B8%AA%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/"><img class="prev-cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">kubectl管理多个集群配置</div></div></a></div><div class="next-post pull-right"><a href="/2022/01/04/2022-01-04-GitLab_%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2%E4%BD%BF%E7%94%A8/"><img class="next-cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">GitLab 安装部署使用</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">chenby</div><div class="author-info__description">小陈运维</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">100</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEapt%E8%BD%AF%E4%BB%B6%E6%BA%90"><span class="toc-number">2.</span> <span class="toc-text">配置apt软件源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8apt%E5%AE%89%E8%A3%85kubectl%E5%B7%A5%E5%85%B7"><span class="toc-number">3.</span> <span class="toc-text">使用apt安装kubectl工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEkubectl%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">配置kubectl配置文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%EF%BC%8C%E5%B9%B6%E6%B5%8B%E8%AF%95kubectl"><span class="toc-number">5.</span> <span class="toc-text">配置自动补全，并测试kubectl</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/04/24/2022-04-24-kubernetes%EF%BC%88k8s%EF%BC%89_%E5%AE%89%E8%A3%85_Prometheus_+_Grafana/" title="kubernetes（k8s） 安装 Prometheus + Grafana"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="kubernetes（k8s） 安装 Prometheus + Grafana"/></a><div class="content"><a class="title" href="/2022/04/24/2022-04-24-kubernetes%EF%BC%88k8s%EF%BC%89_%E5%AE%89%E8%A3%85_Prometheus_+_Grafana/" title="kubernetes（k8s） 安装 Prometheus + Grafana">kubernetes（k8s） 安装 Prometheus + Grafana</a><time datetime="2022-04-24T02:01:29.000Z" title="Created 2022-04-24 10:01:29">2022-04-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/21/2022-04-21-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85Kubernetes%EF%BC%88k8s%EF%BC%89_v1.23.6/" title="二进制安装Kubernetes（k8s） v1.23.6"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="二进制安装Kubernetes（k8s） v1.23.6"/></a><div class="content"><a class="title" href="/2022/04/21/2022-04-21-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85Kubernetes%EF%BC%88k8s%EF%BC%89_v1.23.6/" title="二进制安装Kubernetes（k8s） v1.23.6">二进制安装Kubernetes（k8s） v1.23.6</a><time datetime="2022-04-21T08:44:13.000Z" title="Created 2022-04-21 16:44:13">2022-04-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/21/2022-04-21-%E5%9C%A8k8s%EF%BC%88kubernetes%EF%BC%89%E4%B8%8A%E5%AE%89%E8%A3%85_ingress_V1.1.3/" title="在k8s（kubernetes）上安装 ingress V1.1.3"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在k8s（kubernetes）上安装 ingress V1.1.3"/></a><div class="content"><a class="title" href="/2022/04/21/2022-04-21-%E5%9C%A8k8s%EF%BC%88kubernetes%EF%BC%89%E4%B8%8A%E5%AE%89%E8%A3%85_ingress_V1.1.3/" title="在k8s（kubernetes）上安装 ingress V1.1.3">在k8s（kubernetes）上安装 ingress V1.1.3</a><time datetime="2022-04-21T01:20:00.000Z" title="Created 2022-04-21 09:20:00">2022-04-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/20/2022-04-20-%E5%9C%A8Kubernetes%E4%B8%8A%E5%AE%89%E8%A3%85Netdata%E7%9A%84%E6%96%B9%E6%B3%95/" title="在Kubernetes上安装Netdata的方法"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在Kubernetes上安装Netdata的方法"/></a><div class="content"><a class="title" href="/2022/04/20/2022-04-20-%E5%9C%A8Kubernetes%E4%B8%8A%E5%AE%89%E8%A3%85Netdata%E7%9A%84%E6%96%B9%E6%B3%95/" title="在Kubernetes上安装Netdata的方法">在Kubernetes上安装Netdata的方法</a><time datetime="2022-04-20T02:40:05.000Z" title="Created 2022-04-20 10:40:05">2022-04-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/04/19/2022-04-19-%E7%BB%8FGitHub%E5%B0%86kubernetes%E9%95%9C%E5%83%8F%E6%8E%A8%E9%80%81%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91/" title="经GitHub将kubernetes镜像推送到阿里云"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="经GitHub将kubernetes镜像推送到阿里云"/></a><div class="content"><a class="title" href="/2022/04/19/2022-04-19-%E7%BB%8FGitHub%E5%B0%86kubernetes%E9%95%9C%E5%83%8F%E6%8E%A8%E9%80%81%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91/" title="经GitHub将kubernetes镜像推送到阿里云">经GitHub将kubernetes镜像推送到阿里云</a><time datetime="2022-04-19T07:36:07.000Z" title="Created 2022-04-19 15:36:07">2022-04-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By chenby</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
