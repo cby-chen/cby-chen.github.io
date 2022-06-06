@@ -1,0 +1,183 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>创建用户认证授权的 kubeconfig 文件 | 小陈运维</title><meta name="keywords" content="Kubernetes,k8s,二进制,"><meta name="author" content="chenby"><meta name="copyright" content="chenby"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="创建用户认证授权的 kubeconfig 文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="创建用户认证授权的 kubeconfig 文件">
+<meta property="og:url" content="http://www.chenby.cn/2022/05/25/2022-05-25-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E7%9A%84_kubeconfig_%E6%96%87%E4%BB%B6/index.html">
+<meta property="og:site_name" content="小陈运维">
+<meta property="og:description" content="创建用户认证授权的 kubeconfig 文件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.oiox.cn/images/wallhaven-xlo73z.jpg">
+<meta property="article:published_time" content="2022-05-25T10:52:37.000Z">
+<meta property="article:modified_time" content="2022-05-25T10:52:37.000Z">
+<meta property="article:author" content="chenby">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.oiox.cn/images/wallhaven-xlo73z.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://www.chenby.cn/2022/05/25/2022-05-25-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E7%9A%84_kubeconfig_%E6%96%87%E4%BB%B6/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '创建用户认证授权的 kubeconfig 文件',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-05-25 18:52:37'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">120</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://www.oiox.cn/images/wallhaven-xlo73z.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小陈运维</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">创建用户认证授权的 kubeconfig 文件</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-25T10:52:37.000Z" title="发表于 2022-05-25 18:52:37">2022-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-05-25T10:52:37.000Z" title="更新于 2022-05-25 18:52:37">2022-05-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="创建用户认证授权的 kubeconfig 文件"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="创建用户认证授权的-kubeconfig-文件"><a href="#创建用户认证授权的-kubeconfig-文件" class="headerlink" title="创建用户认证授权的 kubeconfig 文件"></a>创建用户认证授权的 kubeconfig 文件</h1><p>当我们安装好集群后，如果想要把 kubectl 命令交给用户使用，就不得不对用户的身份进行认证和对其权限做出限制。</p>
+<p>下面以创建一个 cby 用户并将其绑定到 cby 和 chenby 的 namespace 为例说明。</p>
+<h2 id="创建生成证书配置文件"><a href="#创建生成证书配置文件" class="headerlink" title="创建生成证书配置文件"></a>创建生成证书配置文件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">详细见：https://github.com/cby-chen/Kubernetes#23%E5%88%9B%E5%BB%BA%E8%AF%81%E4%B9%A6%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6</span><br><span class="line"></span><br><span class="line">cat &gt; ca-config.json &lt;&lt; EOF </span><br><span class="line">&#123;</span><br><span class="line">  &quot;signing&quot;: &#123;</span><br><span class="line">    &quot;default&quot;: &#123;</span><br><span class="line">      &quot;expiry&quot;: &quot;876000h&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;profiles&quot;: &#123;</span><br><span class="line">      &quot;kubernetes&quot;: &#123;</span><br><span class="line">        &quot;usages&quot;: [</span><br><span class="line">            &quot;signing&quot;,</span><br><span class="line">            &quot;key encipherment&quot;,</span><br><span class="line">            &quot;server auth&quot;,</span><br><span class="line">            &quot;client auth&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;expiry&quot;: &quot;876000h&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cat &gt; cby-csr.json &lt;&lt; EOF </span><br><span class="line">&#123;</span><br><span class="line">  &quot;CN&quot;: &quot;cby&quot;,</span><br><span class="line">  &quot;key&quot;: &#123;</span><br><span class="line">    &quot;algo&quot;: &quot;rsa&quot;,</span><br><span class="line">    &quot;size&quot;: 2048</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;names&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;C&quot;: &quot;CN&quot;,</span><br><span class="line">      &quot;ST&quot;: &quot;Beijing&quot;,</span><br><span class="line">      &quot;L&quot;: &quot;Beijing&quot;,</span><br><span class="line">      &quot;O&quot;: &quot;system:masters&quot;,</span><br><span class="line">      &quot;OU&quot;: &quot;Kubernetes-manual&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="生成-CA-证书和私钥"><a href="#生成-CA-证书和私钥" class="headerlink" title="生成 CA 证书和私钥"></a>生成 CA 证书和私钥</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cfssl gencert \</span><br><span class="line">   -ca=/etc/kubernetes/pki/ca.pem \</span><br><span class="line">   -ca-key=/etc/kubernetes/pki/ca-key.pem \</span><br><span class="line">   -config=ca-config.json \</span><br><span class="line">   -profile=kubernetes \</span><br><span class="line">   cby-csr.json | cfssljson -bare /etc/kubernetes/pki/cby</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ll /etc/kubernetes/pki/cby*</span><br><span class="line">-rw-r--r-- 1 root root 1021 May 25 17:36 /etc/kubernetes/pki/cby.csr</span><br><span class="line">-rw------- 1 root root 1679 May 25 17:36 /etc/kubernetes/pki/cby-key.pem</span><br><span class="line">-rw-r--r-- 1 root root 1440 May 25 17:36 /etc/kubernetes/pki/cby.pem</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="创建-kubeconfig-文件"><a href="#创建-kubeconfig-文件" class="headerlink" title="创建 kubeconfig 文件"></a>创建 kubeconfig 文件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">kubectl config set-cluster kubernetes     \</span><br><span class="line">  --certificate-authority=/etc/kubernetes/pki/ca.pem     \</span><br><span class="line">  --embed-certs=true     \</span><br><span class="line">  --server=https://10.0.0.89:8443     \</span><br><span class="line">  --kubeconfig=/etc/kubernetes/cby.kubeconfig</span><br><span class="line"></span><br><span class="line">kubectl config set-credentials cby  \</span><br><span class="line">  --client-certificate=/etc/kubernetes/pki/cby.pem     \</span><br><span class="line">  --client-key=/etc/kubernetes/pki/cby-key.pem     \</span><br><span class="line">  --embed-certs=true     \</span><br><span class="line">  --kubeconfig=/etc/kubernetes/cby.kubeconfig</span><br><span class="line"></span><br><span class="line">kubectl config set-context cby@kubernetes    \</span><br><span class="line">  --cluster=kubernetes     \</span><br><span class="line">  --user=cby     \</span><br><span class="line">  --kubeconfig=/etc/kubernetes/cby.kubeconfig</span><br><span class="line"></span><br><span class="line">kubectl config use-context cby@kubernetes  --kubeconfig=/etc/kubernetes/cby.kubeconfig</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="添加用户并将配置其用户"><a href="#添加用户并将配置其用户" class="headerlink" title="添加用户并将配置其用户"></a>添加用户并将配置其用户</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">useradd cby</span><br><span class="line">su - cby</span><br><span class="line">mkdir .kube/</span><br><span class="line">exit </span><br><span class="line">cp /etc/kubernetes/cby.kubeconfig  /home/cby/.kube/config</span><br><span class="line">chown cby.cby /home/cby/.kube/config</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="RoleBinding"><a href="#RoleBinding" class="headerlink" title="RoleBinding"></a>RoleBinding</h2><p>需要使用 RBAC创建角色绑定以将该用户的行为限制在某个或某几个 namespace 空间范围内</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">kubectl create namespace cby</span><br><span class="line">kubectl create namespace chenby</span><br><span class="line">kubectl create rolebinding cby --clusterrole=cluster-admin --user=cby --namespace=cby</span><br><span class="line">kubectl create rolebinding cby --clusterrole=cluster-admin --user=cby --namespace=chenby</span><br><span class="line"></span><br><span class="line">kubectl  describe -n chenby rolebindings.rbac.authorization.k8s.io cby </span><br><span class="line">Name:         cby</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  &lt;none&gt;</span><br><span class="line">Role:</span><br><span class="line">  Kind:  ClusterRole</span><br><span class="line">  Name:  cluster-admin</span><br><span class="line">Subjects:</span><br><span class="line">  Kind  Name  Namespace</span><br><span class="line">  ----  ----  ---------</span><br><span class="line">  User  cby   </span><br><span class="line"></span><br><span class="line">kubectl  describe -n cby rolebindings.rbac.authorization.k8s.io cby </span><br><span class="line">Name:         cby</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  &lt;none&gt;</span><br><span class="line">Role:</span><br><span class="line">  Kind:  ClusterRole</span><br><span class="line">  Name:  cluster-admin</span><br><span class="line">Subjects:</span><br><span class="line">  Kind  Name  Namespace</span><br><span class="line">  ----  ----  ---------</span><br><span class="line">  User  cby   </span><br><span class="line"></span><br><span class="line">su - cby</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="获取当前的-context"><a href="#获取当前的-context" class="headerlink" title="获取当前的 context"></a>获取当前的 context</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl config get-contexts</span><br><span class="line">CURRENT   NAME                        CLUSTER      AUTHINFO         NAMESPACE</span><br><span class="line"></span><br><span class="line">*         kubernetes-cby@kubernetes   kubernetes   kubernetes-cby   cby</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="无法访问-default-namespace"><a href="#无法访问-default-namespace" class="headerlink" title="无法访问 default namespace"></a>无法访问 default namespace</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[cby@k8s-master01 ~]$ kubectl get pods --namespace default</span><br><span class="line">Error from server (Forbidden): pods is forbidden: User &quot;cby&quot; cannot list resource &quot;pods&quot; in API group &quot;&quot; in the namespace &quot;default&quot;</span><br><span class="line">[cby@k8s-master01 ~]$ </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="可以访问-cby-namespace"><a href="#可以访问-cby-namespace" class="headerlink" title="可以访问 cby namespace"></a>可以访问 cby namespace</h2><p>这样 cby 用户对 cby 和 chenby 两个 namespace 具有完全访问权限。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[cby@k8s-master01 ~]$ kubectl get pods --namespace cby</span><br><span class="line">No resources found in cby namespace.</span><br><span class="line">[cby@k8s-master01 ~]$ kubectl get pods --namespace chenby</span><br><span class="line">No resources found in chenby namespace.</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a><br><a href="https://www.chenby.cn/">https://www.chenby.cn/</a><br><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a><br><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a><br>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、今日头条、个人博客、全网可搜《小陈运维》<br>文章主要发布于微信公众号：《Linux运维交流社区》</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://www.chenby.cn">chenby</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://www.chenby.cn/2022/05/25/2022-05-25-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E7%9A%84_kubeconfig_%E6%96%87%E4%BB%B6/">http://www.chenby.cn/2022/05/25/2022-05-25-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E7%9A%84_kubeconfig_%E6%96%87%E4%BB%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://www.chenby.cn" target="_blank">小陈运维</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://www.oiox.cn/images/wallhaven-xlo73z.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/05/26/2022-05-26-%E4%BF%AE%E5%A4%8Dkube-proxy%E8%AF%81%E4%B9%A6%E6%9D%83%E9%99%90%E8%BF%87%E5%A4%A7%E9%97%AE%E9%A2%98/"><img class="prev-cover" src="https://www.oiox.cn/images/wallhaven-6o7md7.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">修复kube-proxy证书权限过大问题</div></div></a></div><div class="next-post pull-right"><a href="/2022/05/25/2022-05-25-%E5%85%B3%E4%BA%8E_ServiceAccounts_%E5%8F%8A%E5%85%B6_Secrets_%E7%9A%84%E9%87%8D%E5%A4%A7%E5%8F%98%E5%8C%96/"><img class="next-cover" src="https://www.oiox.cn/images/wallhaven-o3exq5.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">关于 ServiceAccounts 及其 Secrets 的重大变化</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">chenby</div><div class="author-info__description">小陈运维</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">120</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cby-chen/"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这是我的博客,欢迎访问小陈运维,订阅消息即关注微信公众号,微信公众号《Linux运维交流社区》</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E7%9A%84-kubeconfig-%E6%96%87%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">创建用户认证授权的 kubeconfig 文件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%94%9F%E6%88%90%E8%AF%81%E4%B9%A6%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">创建生成证书配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90-CA-%E8%AF%81%E4%B9%A6%E5%92%8C%E7%A7%81%E9%92%A5"><span class="toc-number">1.2.</span> <span class="toc-text">生成 CA 证书和私钥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-kubeconfig-%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">创建 kubeconfig 文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%E5%B9%B6%E5%B0%86%E9%85%8D%E7%BD%AE%E5%85%B6%E7%94%A8%E6%88%B7"><span class="toc-number">1.4.</span> <span class="toc-text">添加用户并将配置其用户</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RoleBinding"><span class="toc-number">1.5.</span> <span class="toc-text">RoleBinding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%9A%84-context"><span class="toc-number">1.6.</span> <span class="toc-text">获取当前的 context</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE-default-namespace"><span class="toc-number">1.7.</span> <span class="toc-text">无法访问 default namespace</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE-cby-namespace"><span class="toc-number">1.8.</span> <span class="toc-text">可以访问 cby namespace</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/06/03/2022-06-03-%E5%AE%89%E8%A3%85_Metrics_server/" title="安装 Metrics server"><img src="https://www.oiox.cn/images/wallhaven-m9olo8.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="安装 Metrics server"/></a><div class="content"><a class="title" href="/2022/06/03/2022-06-03-%E5%AE%89%E8%A3%85_Metrics_server/" title="安装 Metrics server">安装 Metrics server</a><time datetime="2022-06-03T07:16:57.000Z" title="发表于 2022-06-03 15:16:57">2022-06-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/29/2022-05-29-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85_Kubernetes%EF%BC%88k8s%EF%BC%89/" title="二进制安装 Kubernetes（k8s）"><img src="https://www.oiox.cn/images/wallhaven-9my3o8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="二进制安装 Kubernetes（k8s）"/></a><div class="content"><a class="title" href="/2022/05/29/2022-05-29-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85_Kubernetes%EF%BC%88k8s%EF%BC%89/" title="二进制安装 Kubernetes（k8s）">二进制安装 Kubernetes（k8s）</a><time datetime="2022-05-29T14:07:00.000Z" title="发表于 2022-05-29 22:07:00">2022-05-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/29/2022-05-29-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85Kubernetes%EF%BC%88k8s%EF%BC%89_v1.24.1_IPv4_IPv6%E5%8F%8C%E6%A0%88/" title="二进制安装Kubernetes（k8s） v1.24.1 IPv4/IPv6双栈"><img src="https://www.oiox.cn/images/wallhaven-g7m7xe.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="二进制安装Kubernetes（k8s） v1.24.1 IPv4/IPv6双栈"/></a><div class="content"><a class="title" href="/2022/05/29/2022-05-29-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85Kubernetes%EF%BC%88k8s%EF%BC%89_v1.24.1_IPv4_IPv6%E5%8F%8C%E6%A0%88/" title="二进制安装Kubernetes（k8s） v1.24.1 IPv4/IPv6双栈">二进制安装Kubernetes（k8s） v1.24.1 IPv4/IPv6双栈</a><time datetime="2022-05-29T13:25:11.000Z" title="发表于 2022-05-29 21:25:11">2022-05-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/26/2022-05-26-%E4%BF%AE%E5%A4%8Dkube-proxy%E8%AF%81%E4%B9%A6%E6%9D%83%E9%99%90%E8%BF%87%E5%A4%A7%E9%97%AE%E9%A2%98/" title="修复kube-proxy证书权限过大问题"><img src="https://www.oiox.cn/images/wallhaven-6o7md7.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="修复kube-proxy证书权限过大问题"/></a><div class="content"><a class="title" href="/2022/05/26/2022-05-26-%E4%BF%AE%E5%A4%8Dkube-proxy%E8%AF%81%E4%B9%A6%E6%9D%83%E9%99%90%E8%BF%87%E5%A4%A7%E9%97%AE%E9%A2%98/" title="修复kube-proxy证书权限过大问题">修复kube-proxy证书权限过大问题</a><time datetime="2022-05-26T02:41:00.000Z" title="发表于 2022-05-26 10:41:00">2022-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/25/2022-05-25-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E7%9A%84_kubeconfig_%E6%96%87%E4%BB%B6/" title="创建用户认证授权的 kubeconfig 文件"><img src="https://www.oiox.cn/images/wallhaven-xlo73z.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="创建用户认证授权的 kubeconfig 文件"/></a><div class="content"><a class="title" href="/2022/05/25/2022-05-25-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E7%9A%84_kubeconfig_%E6%96%87%E4%BB%B6/" title="创建用户认证授权的 kubeconfig 文件">创建用户认证授权的 kubeconfig 文件</a><time datetime="2022-05-25T10:52:37.000Z" title="发表于 2022-05-25 18:52:37">2022-05-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By chenby</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
