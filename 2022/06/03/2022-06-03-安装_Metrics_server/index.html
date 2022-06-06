@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>安装 Metrics server - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="小陈运维,#安装 Metrics server
+Metrics Server 是 Kubernetes 内置自动缩放管道的可扩展、高效的容器资源指标来源。
+Metrics Server 从 Kubelets ,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="安装 Metrics server - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,#安装 Metrics server
+Metrics Server 是 Kubernetes 内置自动缩放管道的可扩展、高效的容器资源指标来源。
+Metrics Server 从 Kubelets ,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="安装 Metrics server - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,#安装 Metrics server
+Metrics Server 是 Kubernetes 内置自动缩放管道的可扩展、高效的容器资源指标来源。
+Metrics Server 从 Kubelets ,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">安装 Metrics server</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">安装 Metrics server</h1>
+        <div class="stuff">
+            <span>六月 03, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p>#安装 Metrics server</p>
+<p>Metrics Server 是 Kubernetes 内置自动缩放管道的可扩展、高效的容器资源指标来源。</p>
+<p>Metrics Server 从 Kubelets 收集资源指标，并通过Metrics API在 Kubernetes apiserver 中公开它们，以供 Horizo​​ntal Pod Autoscaler和Vertical Pod Autoscaler使用。Metrics API 也可以通过 访问kubectl top，从而更容易调试自动缩放管道。</p>
+<h2 id="单机版"><a href="#单机版" class="headerlink" title="单机版"></a>单机版</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">单机版 </span><br><span class="line">wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml</span><br><span class="line"></span><br><span class="line">查看镜像地址</span><br><span class="line">grep -rn image components.yaml </span><br><span class="line">140:        image: k8s.gcr.io/metrics-server/metrics-server:v0.6.1</span><br><span class="line">141:        imagePullPolicy: IfNotPresent</span><br><span class="line"></span><br><span class="line">设置镜像地址为阿里云</span><br><span class="line">sed -i &quot;s#k8s.gcr.io/metrics-server#registry.cn-hangzhou.aliyuncs.com/chenby#g&quot; components.yaml</span><br><span class="line"></span><br><span class="line">查看镜像地址已更新</span><br><span class="line">grep -rn image components.yaml </span><br><span class="line">140:        image: registry.cn-hangzhou.aliyuncs.com/chenby/metrics-server:v0.6.1</span><br><span class="line">141:        imagePullPolicy: IfNotPresent</span><br><span class="line"></span><br><span class="line">args添加tls证书配置选项</span><br><span class="line">vim components.yaml</span><br><span class="line"></span><br><span class="line">添加&quot;- --kubelet-insecure-tls&quot;</span><br><span class="line"></span><br><span class="line">例：</span><br><span class="line">	    args:</span><br><span class="line">        - --cert-dir=/tmp</span><br><span class="line">        - --secure-port=4443</span><br><span class="line">        - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname</span><br><span class="line">        - --kubelet-use-node-status-port</span><br><span class="line">        - --metric-resolution=15s</span><br><span class="line">        - --kubelet-insecure-tls</span><br><span class="line">        image: registry.cn-hangzhou.aliyuncs.com/chenby/metrics-server:v0.6.1</span><br><span class="line"></span><br><span class="line">执行配置</span><br><span class="line">kubectl apply -f components.yaml </span><br><span class="line">serviceaccount/metrics-server created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/system:metrics-server created</span><br><span class="line">rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created</span><br><span class="line">service/metrics-server created</span><br><span class="line">deployment.apps/metrics-server created</span><br><span class="line">apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="高可用版本"><a href="#高可用版本" class="headerlink" title="高可用版本"></a>高可用版本</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">高可用版本</span><br><span class="line">wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/high-availability.yaml</span><br><span class="line"></span><br><span class="line">查看镜像地址</span><br><span class="line">grep -rn image high-availability.yaml </span><br><span class="line">150:        image: k8s.gcr.io/metrics-server/metrics-server:v0.6.1</span><br><span class="line">151:        imagePullPolicy: IfNotPresent</span><br><span class="line"></span><br><span class="line">设置镜像地址为阿里云</span><br><span class="line">sed -i &quot;s#k8s.gcr.io/metrics-server#registry.cn-hangzhou.aliyuncs.com/chenby#g&quot; high-availability.yaml</span><br><span class="line"></span><br><span class="line">查看镜像地址已更新</span><br><span class="line">grep -rn image high-availability.yaml </span><br><span class="line">150:        image: registry.cn-hangzhou.aliyuncs.com/chenby/metrics-server:v0.6.1</span><br><span class="line">151:        imagePullPolicy: IfNotPresent</span><br><span class="line"></span><br><span class="line">args添加tls证书配置选项</span><br><span class="line">vim high-availability.yaml</span><br><span class="line"></span><br><span class="line">添加&quot;- --kubelet-insecure-tls&quot;</span><br><span class="line"></span><br><span class="line">例：</span><br><span class="line">	    args:</span><br><span class="line">        - --cert-dir=/tmp</span><br><span class="line">        - --secure-port=4443</span><br><span class="line">        - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname</span><br><span class="line">        - --kubelet-use-node-status-port</span><br><span class="line">        - --metric-resolution=15s</span><br><span class="line">        - --kubelet-insecure-tls</span><br><span class="line">        image: registry.cn-hangzhou.aliyuncs.com/chenby/metrics-server:v0.6.1</span><br><span class="line"></span><br><span class="line">执行配置</span><br><span class="line">kubectl apply -f high-availability.yaml</span><br><span class="line">serviceaccount/metrics-server created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/system:metrics-server created</span><br><span class="line">rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created</span><br><span class="line">service/metrics-server created</span><br><span class="line">deployment.apps/metrics-server created</span><br><span class="line">Warning: policy/v1beta1 PodDisruptionBudget is deprecated in v1.21+, unavailable in v1.25+; use policy/v1 PodDisruptionBudget</span><br><span class="line">poddisruptionbudget.policy/metrics-server created</span><br><span class="line">apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">查看metrics资源</span><br><span class="line">kubectl  get pod -n kube-system | grep metrics</span><br><span class="line">metrics-server-65fb95948b-2bcht            1/1     Running   0             32s</span><br><span class="line">metrics-server-65fb95948b-vqp5s            1/1     Running   0             32s</span><br><span class="line"></span><br><span class="line">查看node资源情况</span><br><span class="line">kubectl  top node</span><br><span class="line">NAME           CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   </span><br><span class="line">k8s-master01   127m         1%     2439Mi          64%       </span><br><span class="line">k8s-node01     50m          0%     1825Mi          23%       </span><br><span class="line">k8s-node02     53m          0%     1264Mi          16%   </span><br><span class="line"></span><br><span class="line">查看pod资源情况</span><br><span class="line">kubectl  top pod </span><br><span class="line">NAME                      CPU(cores)   MEMORY(bytes)   </span><br><span class="line">chenby-57479d5997-44926   0m           10Mi            </span><br><span class="line">chenby-57479d5997-tbpqc   0m           11Mi            </span><br><span class="line">chenby-57479d5997-w8cp2   0m           6Mi </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a><br>https:&#x2F;blog.oiox.cn&#x2F;<br><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a><br><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a><br><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a><br>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、今日头条、个人博客、全网可搜《小陈运维》<br>文章主要发布于微信公众号：《Linux运维交流社区》</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E6%9C%BA%E7%89%88"><span class="toc-number">1.</span> <span class="toc-text">单机版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E7%89%88%E6%9C%AC"><span class="toc-number">2.</span> <span class="toc-text">高可用版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81"><span class="toc-number">3.</span> <span class="toc-text">验证</span></a></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

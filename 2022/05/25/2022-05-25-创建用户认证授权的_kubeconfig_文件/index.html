@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>创建用户认证授权的 kubeconfig 文件 - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,Kubernetes,k8s,二进制,"> 
+    <meta name="description" content="小陈运维,创建用户认证授权的 kubeconfig 文件当我们安装好集群后，如果想要把 kubectl 命令交给用户使用，就不得不对用户的身份进行认证和对其权限做出限制。
+下面以创建一个 cby 用户并将其绑,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="创建用户认证授权的 kubeconfig 文件 - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,创建用户认证授权的 kubeconfig 文件当我们安装好集群后，如果想要把 kubectl 命令交给用户使用，就不得不对用户的身份进行认证和对其权限做出限制。
+下面以创建一个 cby 用户并将其绑,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="创建用户认证授权的 kubeconfig 文件 - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,创建用户认证授权的 kubeconfig 文件当我们安装好集群后，如果想要把 kubectl 命令交给用户使用，就不得不对用户的身份进行认证和对其权限做出限制。
+下面以创建一个 cby 用户并将其绑,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">创建用户认证授权的 kubeconfig 文件</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">创建用户认证授权的 kubeconfig 文件</h1>
+        <div class="stuff">
+            <span>五月 25, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="创建用户认证授权的-kubeconfig-文件"><a href="#创建用户认证授权的-kubeconfig-文件" class="headerlink" title="创建用户认证授权的 kubeconfig 文件"></a>创建用户认证授权的 kubeconfig 文件</h1><p>当我们安装好集群后，如果想要把 kubectl 命令交给用户使用，就不得不对用户的身份进行认证和对其权限做出限制。</p>
+<p>下面以创建一个 cby 用户并将其绑定到 cby 和 chenby 的 namespace 为例说明。</p>
+<h2 id="创建生成证书配置文件"><a href="#创建生成证书配置文件" class="headerlink" title="创建生成证书配置文件"></a>创建生成证书配置文件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">详细见：https://github.com/cby-chen/Kubernetes#23%E5%88%9B%E5%BB%BA%E8%AF%81%E4%B9%A6%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6</span><br><span class="line"></span><br><span class="line">cat &gt; ca-config.json &lt;&lt; EOF </span><br><span class="line">&#123;</span><br><span class="line">  &quot;signing&quot;: &#123;</span><br><span class="line">    &quot;default&quot;: &#123;</span><br><span class="line">      &quot;expiry&quot;: &quot;876000h&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;profiles&quot;: &#123;</span><br><span class="line">      &quot;kubernetes&quot;: &#123;</span><br><span class="line">        &quot;usages&quot;: [</span><br><span class="line">            &quot;signing&quot;,</span><br><span class="line">            &quot;key encipherment&quot;,</span><br><span class="line">            &quot;server auth&quot;,</span><br><span class="line">            &quot;client auth&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;expiry&quot;: &quot;876000h&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cat &gt; cby-csr.json &lt;&lt; EOF </span><br><span class="line">&#123;</span><br><span class="line">  &quot;CN&quot;: &quot;cby&quot;,</span><br><span class="line">  &quot;key&quot;: &#123;</span><br><span class="line">    &quot;algo&quot;: &quot;rsa&quot;,</span><br><span class="line">    &quot;size&quot;: 2048</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;names&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;C&quot;: &quot;CN&quot;,</span><br><span class="line">      &quot;ST&quot;: &quot;Beijing&quot;,</span><br><span class="line">      &quot;L&quot;: &quot;Beijing&quot;,</span><br><span class="line">      &quot;O&quot;: &quot;system:masters&quot;,</span><br><span class="line">      &quot;OU&quot;: &quot;Kubernetes-manual&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="生成-CA-证书和私钥"><a href="#生成-CA-证书和私钥" class="headerlink" title="生成 CA 证书和私钥"></a>生成 CA 证书和私钥</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cfssl gencert \</span><br><span class="line">   -ca=/etc/kubernetes/pki/ca.pem \</span><br><span class="line">   -ca-key=/etc/kubernetes/pki/ca-key.pem \</span><br><span class="line">   -config=ca-config.json \</span><br><span class="line">   -profile=kubernetes \</span><br><span class="line">   cby-csr.json | cfssljson -bare /etc/kubernetes/pki/cby</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ll /etc/kubernetes/pki/cby*</span><br><span class="line">-rw-r--r-- 1 root root 1021 May 25 17:36 /etc/kubernetes/pki/cby.csr</span><br><span class="line">-rw------- 1 root root 1679 May 25 17:36 /etc/kubernetes/pki/cby-key.pem</span><br><span class="line">-rw-r--r-- 1 root root 1440 May 25 17:36 /etc/kubernetes/pki/cby.pem</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="创建-kubeconfig-文件"><a href="#创建-kubeconfig-文件" class="headerlink" title="创建 kubeconfig 文件"></a>创建 kubeconfig 文件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">kubectl config set-cluster kubernetes     \</span><br><span class="line">  --certificate-authority=/etc/kubernetes/pki/ca.pem     \</span><br><span class="line">  --embed-certs=true     \</span><br><span class="line">  --server=https://10.0.0.89:8443     \</span><br><span class="line">  --kubeconfig=/etc/kubernetes/cby.kubeconfig</span><br><span class="line"></span><br><span class="line">kubectl config set-credentials cby  \</span><br><span class="line">  --client-certificate=/etc/kubernetes/pki/cby.pem     \</span><br><span class="line">  --client-key=/etc/kubernetes/pki/cby-key.pem     \</span><br><span class="line">  --embed-certs=true     \</span><br><span class="line">  --kubeconfig=/etc/kubernetes/cby.kubeconfig</span><br><span class="line"></span><br><span class="line">kubectl config set-context cby@kubernetes    \</span><br><span class="line">  --cluster=kubernetes     \</span><br><span class="line">  --user=cby     \</span><br><span class="line">  --kubeconfig=/etc/kubernetes/cby.kubeconfig</span><br><span class="line"></span><br><span class="line">kubectl config use-context cby@kubernetes  --kubeconfig=/etc/kubernetes/cby.kubeconfig</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="添加用户并将配置其用户"><a href="#添加用户并将配置其用户" class="headerlink" title="添加用户并将配置其用户"></a>添加用户并将配置其用户</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">useradd cby</span><br><span class="line">su - cby</span><br><span class="line">mkdir .kube/</span><br><span class="line">exit </span><br><span class="line">cp /etc/kubernetes/cby.kubeconfig  /home/cby/.kube/config</span><br><span class="line">chown cby.cby /home/cby/.kube/config</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="RoleBinding"><a href="#RoleBinding" class="headerlink" title="RoleBinding"></a>RoleBinding</h2><p>需要使用 RBAC创建角色绑定以将该用户的行为限制在某个或某几个 namespace 空间范围内</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">kubectl create namespace cby</span><br><span class="line">kubectl create namespace chenby</span><br><span class="line">kubectl create rolebinding cby --clusterrole=cluster-admin --user=cby --namespace=cby</span><br><span class="line">kubectl create rolebinding cby --clusterrole=cluster-admin --user=cby --namespace=chenby</span><br><span class="line"></span><br><span class="line">kubectl  describe -n chenby rolebindings.rbac.authorization.k8s.io cby </span><br><span class="line">Name:         cby</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  &lt;none&gt;</span><br><span class="line">Role:</span><br><span class="line">  Kind:  ClusterRole</span><br><span class="line">  Name:  cluster-admin</span><br><span class="line">Subjects:</span><br><span class="line">  Kind  Name  Namespace</span><br><span class="line">  ----  ----  ---------</span><br><span class="line">  User  cby   </span><br><span class="line"></span><br><span class="line">kubectl  describe -n cby rolebindings.rbac.authorization.k8s.io cby </span><br><span class="line">Name:         cby</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  &lt;none&gt;</span><br><span class="line">Role:</span><br><span class="line">  Kind:  ClusterRole</span><br><span class="line">  Name:  cluster-admin</span><br><span class="line">Subjects:</span><br><span class="line">  Kind  Name  Namespace</span><br><span class="line">  ----  ----  ---------</span><br><span class="line">  User  cby   </span><br><span class="line"></span><br><span class="line">su - cby</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="获取当前的-context"><a href="#获取当前的-context" class="headerlink" title="获取当前的 context"></a>获取当前的 context</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl config get-contexts</span><br><span class="line">CURRENT   NAME                        CLUSTER      AUTHINFO         NAMESPACE</span><br><span class="line"></span><br><span class="line">*         kubernetes-cby@kubernetes   kubernetes   kubernetes-cby   cby</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="无法访问-default-namespace"><a href="#无法访问-default-namespace" class="headerlink" title="无法访问 default namespace"></a>无法访问 default namespace</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[cby@k8s-master01 ~]$ kubectl get pods --namespace default</span><br><span class="line">Error from server (Forbidden): pods is forbidden: User &quot;cby&quot; cannot list resource &quot;pods&quot; in API group &quot;&quot; in the namespace &quot;default&quot;</span><br><span class="line">[cby@k8s-master01 ~]$ </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="可以访问-cby-namespace"><a href="#可以访问-cby-namespace" class="headerlink" title="可以访问 cby namespace"></a>可以访问 cby namespace</h2><p>这样 cby 用户对 cby 和 chenby 两个 namespace 具有完全访问权限。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[cby@k8s-master01 ~]$ kubectl get pods --namespace cby</span><br><span class="line">No resources found in cby namespace.</span><br><span class="line">[cby@k8s-master01 ~]$ kubectl get pods --namespace chenby</span><br><span class="line">No resources found in chenby namespace.</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a><br><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a><br><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a><br><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a><br>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、今日头条、个人博客、全网可搜《小陈运维》<br>文章主要发布于微信公众号：《Linux运维交流社区》</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E7%9A%84-kubeconfig-%E6%96%87%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">创建用户认证授权的 kubeconfig 文件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%94%9F%E6%88%90%E8%AF%81%E4%B9%A6%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">创建生成证书配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90-CA-%E8%AF%81%E4%B9%A6%E5%92%8C%E7%A7%81%E9%92%A5"><span class="toc-number">1.2.</span> <span class="toc-text">生成 CA 证书和私钥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-kubeconfig-%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">创建 kubeconfig 文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%E5%B9%B6%E5%B0%86%E9%85%8D%E7%BD%AE%E5%85%B6%E7%94%A8%E6%88%B7"><span class="toc-number">1.4.</span> <span class="toc-text">添加用户并将配置其用户</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RoleBinding"><span class="toc-number">1.5.</span> <span class="toc-text">RoleBinding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%9A%84-context"><span class="toc-number">1.6.</span> <span class="toc-text">获取当前的 context</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE-default-namespace"><span class="toc-number">1.7.</span> <span class="toc-text">无法访问 default namespace</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE-cby-namespace"><span class="toc-number">1.8.</span> <span class="toc-text">可以访问 cby namespace</span></a></li></ol></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

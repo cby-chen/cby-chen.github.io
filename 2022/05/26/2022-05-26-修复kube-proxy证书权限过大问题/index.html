@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>修复kube-proxy证书权限过大问题 - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,Kubernetes,k8s,二进制,"> 
+    <meta name="description" content="小陈运维,修复kube-proxy证书权限过大问题之前kube-proxy服务都是用admin集群证书，造成权限过大不安全，后续该问题，将在文档中修复
+请关注 https://github.com/cby-c,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="修复kube-proxy证书权限过大问题 - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,修复kube-proxy证书权限过大问题之前kube-proxy服务都是用admin集群证书，造成权限过大不安全，后续该问题，将在文档中修复
+请关注 https://github.com/cby-c,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="修复kube-proxy证书权限过大问题 - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,修复kube-proxy证书权限过大问题之前kube-proxy服务都是用admin集群证书，造成权限过大不安全，后续该问题，将在文档中修复
+请关注 https://github.com/cby-c,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">修复kube-proxy证书权限过大问题</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">修复kube-proxy证书权限过大问题</h1>
+        <div class="stuff">
+            <span>五月 26, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="修复kube-proxy证书权限过大问题"><a href="#修复kube-proxy证书权限过大问题" class="headerlink" title="修复kube-proxy证书权限过大问题"></a>修复kube-proxy证书权限过大问题</h1><p>之前kube-proxy服务都是用admin集群证书，造成权限过大不安全，后续该问题，将在文档中修复</p>
+<p>请关注 <a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes">https://github.com/cby-chen/Kubernetes</a></p>
+<h2 id="创建生成证书配置文件"><a href="#创建生成证书配置文件" class="headerlink" title="创建生成证书配置文件"></a>创建生成证书配置文件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">详细见：https://github.com/cby-chen/Kubernetes#23%E5%88%9B%E5%BB%BA%E8%AF%81%E4%B9%A6%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6</span><br><span class="line"></span><br><span class="line">cat &gt; ca-config.json &lt;&lt; EOF </span><br><span class="line">&#123;</span><br><span class="line">  &quot;signing&quot;: &#123;</span><br><span class="line">    &quot;default&quot;: &#123;</span><br><span class="line">      &quot;expiry&quot;: &quot;876000h&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;profiles&quot;: &#123;</span><br><span class="line">      &quot;kubernetes&quot;: &#123;</span><br><span class="line">        &quot;usages&quot;: [</span><br><span class="line">            &quot;signing&quot;,</span><br><span class="line">            &quot;key encipherment&quot;,</span><br><span class="line">            &quot;server auth&quot;,</span><br><span class="line">            &quot;client auth&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;expiry&quot;: &quot;876000h&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat &gt; kube-proxy-csr.json  &lt;&lt; EOF </span><br><span class="line">&#123;</span><br><span class="line">  &quot;CN&quot;: &quot;system:kube-proxy&quot;,</span><br><span class="line">  &quot;key&quot;: &#123;</span><br><span class="line">    &quot;algo&quot;: &quot;rsa&quot;,</span><br><span class="line">    &quot;size&quot;: 2048</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;names&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;C&quot;: &quot;CN&quot;,</span><br><span class="line">      &quot;ST&quot;: &quot;Beijing&quot;,</span><br><span class="line">      &quot;L&quot;: &quot;Beijing&quot;,</span><br><span class="line">      &quot;O&quot;: &quot;system:kube-proxy&quot;,</span><br><span class="line">      &quot;OU&quot;: &quot;Kubernetes-manual&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="生成-CA-证书和私钥"><a href="#生成-CA-证书和私钥" class="headerlink" title="生成 CA 证书和私钥"></a>生成 CA 证书和私钥</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cfssl gencert \</span><br><span class="line">   -ca=/etc/kubernetes/pki/ca.pem \</span><br><span class="line">   -ca-key=/etc/kubernetes/pki/ca-key.pem \</span><br><span class="line">   -config=ca-config.json \</span><br><span class="line">   -profile=kubernetes \</span><br><span class="line">   kube-proxy-csr.json | cfssljson -bare /etc/kubernetes/pki/kube-proxy</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ll /etc/kubernetes/pki/kube-proxy*</span><br><span class="line">-rw-r--r-- 1 root root 1045 May 26 10:21 /etc/kubernetes/pki/kube-proxy.csr</span><br><span class="line">-rw------- 1 root root 1675 May 26 10:21 /etc/kubernetes/pki/kube-proxy-key.pem</span><br><span class="line">-rw-r--r-- 1 root root 1464 May 26 10:21 /etc/kubernetes/pki/kube-proxy.pem</span><br></pre></td></tr></table></figure>
+
+<p>设置集群参数和客户端认证参数时 –embed-certs 都为 true，这会将 certificate-authority、client-certificate 和 client-key 指向的证书文件内容写入到生成的 kube-proxy.kubeconfig 文件中；</p>
+<p>kube-proxy.pem 证书中 CN 为 system:kube-proxy，kube-apiserver 预定义的 RoleBinding cluster-admin 将User system:kube-proxy 与 Role system:node-proxier 绑定，该 Role 授予了调用 kube-apiserver Proxy 相关 API 的权限；</p>
+<h2 id="创建-kubeconfig-文件"><a href="#创建-kubeconfig-文件" class="headerlink" title="创建 kubeconfig 文件"></a>创建 kubeconfig 文件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">kubectl config set-cluster kubernetes     \</span><br><span class="line">  --certificate-authority=/etc/kubernetes/pki/ca.pem     \</span><br><span class="line">  --embed-certs=true     \</span><br><span class="line">  --server=https://10.0.0.89:8443     \</span><br><span class="line">  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig</span><br><span class="line"></span><br><span class="line">kubectl config set-credentials kube-proxy  \</span><br><span class="line">  --client-certificate=/etc/kubernetes/pki/kube-proxy.pem     \</span><br><span class="line">  --client-key=/etc/kubernetes/pki/kube-proxy-key.pem     \</span><br><span class="line">  --embed-certs=true     \</span><br><span class="line">  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig</span><br><span class="line"></span><br><span class="line">kubectl config set-context kube-proxy@kubernetes    \</span><br><span class="line">  --cluster=kubernetes     \</span><br><span class="line">  --user=kube-proxy     \</span><br><span class="line">  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig</span><br><span class="line"></span><br><span class="line">kubectl config use-context kube-proxy@kubernetes  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="无法访问-pod资源"><a href="#无法访问-pod资源" class="headerlink" title="无法访问 pod资源"></a>无法访问 pod资源</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[cby@k8s-master01 ~]$ kubectl  get pod </span><br><span class="line">Error from server (Forbidden): pods is forbidden: User &quot;system:kube-proxy&quot; cannot list resource &quot;pods&quot; in API group &quot;&quot; in the namespace &quot;default&quot;</span><br><span class="line">[cby@k8s-master01 ~]$ </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="可以访问-node资源"><a href="#可以访问-node资源" class="headerlink" title="可以访问 node资源"></a>可以访问 node资源</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[cby@k8s-master01 ~]$ kubectl  get node</span><br><span class="line">NAME           STATUS   ROLES    AGE     VERSION</span><br><span class="line">k8s-master01   Ready    &lt;none&gt;   2d21h   v1.24.0</span><br><span class="line">k8s-master02   Ready    &lt;none&gt;   2d21h   v1.24.0</span><br><span class="line">k8s-master03   Ready    &lt;none&gt;   2d21h   v1.24.0</span><br><span class="line">k8s-node01     Ready    &lt;none&gt;   2d21h   v1.24.0</span><br><span class="line">k8s-node02     Ready    &lt;none&gt;   2d21h   v1.24.0</span><br><span class="line">[cby@k8s-master01 ~]$ </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="将配置进行替换"><a href="#将配置进行替换" class="headerlink" title="将配置进行替换"></a>将配置进行替换</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">for NODE in k8s-master02 k8s-master03; do scp /etc/kubernetes/kube-proxy.kubeconfig $NODE:/etc/kubernetes/kube-proxy.kubeconfig; done</span><br><span class="line"></span><br><span class="line">for NODE in k8s-node01 k8s-node02; do scp /etc/kubernetes/kube-proxy.kubeconfig $NODE:/etc/kubernetes/kube-proxy.kubeconfig;  done</span><br><span class="line"></span><br><span class="line">[root@k8s-master01 ~]# cat /etc/kubernetes/kube-proxy.yaml </span><br><span class="line">apiVersion: kubeproxy.config.k8s.io/v1alpha1</span><br><span class="line">bindAddress: 0.0.0.0</span><br><span class="line">clientConnection:</span><br><span class="line">  acceptContentTypes: &quot;&quot;</span><br><span class="line">  burst: 10</span><br><span class="line">  contentType: application/vnd.kubernetes.protobuf</span><br><span class="line">  kubeconfig: /etc/kubernetes/kube-proxy.kubeconfig</span><br><span class="line">  qps: 5</span><br><span class="line">clusterCIDR: 172.16.0.0/12,fc00::/48 </span><br><span class="line">configSyncPeriod: 15m0s</span><br><span class="line">conntrack:</span><br><span class="line">  max: null</span><br><span class="line">  maxPerCore: 32768</span><br><span class="line">  min: 131072</span><br><span class="line">  tcpCloseWaitTimeout: 1h0m0s</span><br><span class="line">  tcpEstablishedTimeout: 24h0m0s</span><br><span class="line">enableProfiling: false</span><br><span class="line">healthzBindAddress: 0.0.0.0:10256</span><br><span class="line">hostnameOverride: &quot;&quot;</span><br><span class="line">iptables:</span><br><span class="line">  masqueradeAll: false</span><br><span class="line">  masqueradeBit: 14</span><br><span class="line">  minSyncPeriod: 0s</span><br><span class="line">  syncPeriod: 30s</span><br><span class="line">ipvs:</span><br><span class="line">  masqueradeAll: true</span><br><span class="line">  minSyncPeriod: 5s</span><br><span class="line">  scheduler: &quot;rr&quot;</span><br><span class="line">  syncPeriod: 30s</span><br><span class="line">kind: KubeProxyConfiguration</span><br><span class="line">metricsBindAddress: 127.0.0.1:10249</span><br><span class="line">mode: &quot;ipvs&quot;</span><br><span class="line">nodePortAddresses: null</span><br><span class="line">oomScoreAdj: -999</span><br><span class="line">portRange: &quot;&quot;</span><br><span class="line">udpIdleTimeout: 250ms</span><br><span class="line"></span><br><span class="line">[root@k8s-master01 ~]# systemctl  restart kube-proxy</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a><br><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a><br><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a><br><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a><br>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、今日头条、个人博客、全网可搜《小陈运维》<br>文章主要发布于微信公众号：《Linux运维交流社区》</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8Dkube-proxy%E8%AF%81%E4%B9%A6%E6%9D%83%E9%99%90%E8%BF%87%E5%A4%A7%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">修复kube-proxy证书权限过大问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%94%9F%E6%88%90%E8%AF%81%E4%B9%A6%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">创建生成证书配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90-CA-%E8%AF%81%E4%B9%A6%E5%92%8C%E7%A7%81%E9%92%A5"><span class="toc-number">1.2.</span> <span class="toc-text">生成 CA 证书和私钥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-kubeconfig-%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">创建 kubeconfig 文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE-pod%E8%B5%84%E6%BA%90"><span class="toc-number">1.4.</span> <span class="toc-text">无法访问 pod资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE-node%E8%B5%84%E6%BA%90"><span class="toc-number">1.5.</span> <span class="toc-text">可以访问 node资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E9%85%8D%E7%BD%AE%E8%BF%9B%E8%A1%8C%E6%9B%BF%E6%8D%A2"><span class="toc-number">1.6.</span> <span class="toc-text">将配置进行替换</span></a></li></ol></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

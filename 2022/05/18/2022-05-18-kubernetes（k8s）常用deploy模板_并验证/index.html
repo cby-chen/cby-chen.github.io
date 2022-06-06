@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>kubernetes（k8s）常用deploy模板 并验证 - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="小陈运维,kubernetes常用deploy模板，并验证
+编写deploy配置文件12345678910111213141516171819202122232425262728293031323334353,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="kubernetes（k8s）常用deploy模板 并验证 - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,kubernetes常用deploy模板，并验证
+编写deploy配置文件12345678910111213141516171819202122232425262728293031323334353,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="kubernetes（k8s）常用deploy模板 并验证 - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,kubernetes常用deploy模板，并验证
+编写deploy配置文件12345678910111213141516171819202122232425262728293031323334353,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">kubernetes（k8s）常用deploy模板 并验证</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">kubernetes（k8s）常用deploy模板 并验证</h1>
+        <div class="stuff">
+            <span>五月 18, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="kubernetes常用deploy模板，并验证"><a href="#kubernetes常用deploy模板，并验证" class="headerlink" title="kubernetes常用deploy模板，并验证"></a>kubernetes常用deploy模板，并验证</h1><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bcf3087eeb74496cbe982ff78aef0ac3~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<h1 id="编写deploy配置文件"><a href="#编写deploy配置文件" class="headerlink" title="编写deploy配置文件"></a>编写deploy配置文件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# cat deploy.yaml </span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata: </span><br><span class="line">  name: hostname-test-cby</span><br><span class="line">  labels:</span><br><span class="line">    name: hostname-test-cby</span><br><span class="line">spec:</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash"> 副本数</span></span><br><span class="line">  replicas: 10</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash"> 标签选择器</span></span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      name: hostname-test-cby</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash"> 更新策略</span></span><br><span class="line">  strategy:</span><br><span class="line">    rollingUpdate:</span><br><span class="line">      maxSurge: 3    # 更新最大数量</span><br><span class="line">      maxUnavailable: 3    #更新时最大不可用数量</span><br><span class="line">    type: RollingUpdate  #滚动更新</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash"> 模板</span></span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        name: hostname-test-cby</span><br><span class="line">    spec:</span><br><span class="line">      # 配置容器</span><br><span class="line">      containers:</span><br><span class="line">      - name: hostname-test-cby #容器名</span><br><span class="line">        image: nginx #镜像</span><br><span class="line">        imagePullPolicy: IfNotPresent # 拉取策略</span><br><span class="line">        resources:</span><br><span class="line">          requests:</span><br><span class="line">            cpu: &quot;100m&quot; #CPU限制</span><br><span class="line">            memory: &quot;300M&quot; #内存限制</span><br><span class="line">        # 健康监测</span><br><span class="line">        livenessProbe:</span><br><span class="line">          httpGet:</span><br><span class="line">            path: / # 探测路径</span><br><span class="line">            port: 80 # 端口</span><br><span class="line">          initialDelaySeconds: 15 # 第一次探测等待</span><br><span class="line">          timeoutSeconds: 3 # 探测的超时后等待多少秒</span><br><span class="line">        # 就绪探测</span><br><span class="line">        readinessProbe:</span><br><span class="line">          httpGet:</span><br><span class="line">            path: / # 探测路径</span><br><span class="line">            port: 80 # 端口</span><br><span class="line">          initialDelaySeconds: 10 # 第一次探测等待</span><br><span class="line">          timeoutSeconds: 3 # 探测的超时后等待多少秒</span><br><span class="line">        #环境变量</span><br><span class="line">        env:</span><br><span class="line">        - name: cby</span><br><span class="line">          value: chenby</span><br><span class="line">        # 配置容器端口</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 80</span><br><span class="line">        # 配置挂载到目录</span><br><span class="line">        volumeMounts:</span><br><span class="line">        - mountPath: /usr/share/nginx/html/</span><br><span class="line">          name: data</span><br><span class="line">      # 配置目录挂载</span><br><span class="line">      volumes:</span><br><span class="line">      - name: data</span><br><span class="line">        hostPath:</span><br><span class="line">          path: /html/</span><br><span class="line">          type: Directory</span><br><span class="line">      # 配置指定解析</span><br><span class="line">      hostAliases:</span><br><span class="line">      - ip: &quot;192.168.1.1&quot; #IP地址</span><br><span class="line">        hostnames:</span><br><span class="line">        - &quot;cby&quot; #主机名</span><br><span class="line">        - &quot;cby.chenby.cn&quot; #主机名</span><br><span class="line">      - ip: &quot;192.168.1.10&quot;#IP地址</span><br><span class="line">        hostnames:</span><br><span class="line">        - &quot;chenby&quot; #主机名</span><br><span class="line">        - &quot;chenby.chenby.cn&quot; #主机名</span><br><span class="line">root@hello:~# </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="执行deploy配置文件"><a href="#执行deploy配置文件" class="headerlink" title="执行deploy配置文件"></a>执行deploy配置文件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">root@hello:~# kubectl apply -f deploy.yaml </span><br><span class="line">deployment.apps/hostname-test-cby created</span><br><span class="line"></span><br><span class="line">root@hello:~# mkdir /html</span><br><span class="line">root@hello:~# echo 123 &gt; /html/index.html</span><br><span class="line"></span><br><span class="line">root@hello:~# kubectl  get pod  -o wide</span><br><span class="line">NAME                               READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES</span><br><span class="line">hostname-test-cby-86df45bf-9fx5n   1/1     Running   0          43s   172.17.125.38   k8s-node01   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">hostname-test-cby-86df45bf-cmv2b   1/1     Running   0          43s   172.17.125.37   k8s-node01   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">hostname-test-cby-86df45bf-f6drb   1/1     Running   0          43s   172.17.125.41   k8s-node01   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">hostname-test-cby-86df45bf-g79x2   1/1     Running   0          43s   172.27.14.232   k8s-node02   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">hostname-test-cby-86df45bf-h6blv   1/1     Running   0          43s   172.27.14.233   k8s-node02   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">hostname-test-cby-86df45bf-hqjnj   1/1     Running   0          43s   172.17.125.40   k8s-node01   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">hostname-test-cby-86df45bf-jt2rz   1/1     Running   0          43s   172.27.14.236   k8s-node02   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">hostname-test-cby-86df45bf-s5jjn   1/1     Running   0          43s   172.27.14.235   k8s-node02   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">hostname-test-cby-86df45bf-vfkbt   1/1     Running   0          43s   172.17.125.39   k8s-node01   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">hostname-test-cby-86df45bf-z2x2b   1/1     Running   0          43s   172.27.14.234   k8s-node02   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">root@hello:~# </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="进入pod进行检查"><a href="#进入pod进行检查" class="headerlink" title="进入pod进行检查"></a>进入pod进行检查</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash"> 访问测试</span></span><br><span class="line">root@hello:~# curl 172.17.125.38</span><br><span class="line">123</span><br><span class="line">root@hello:~# </span><br><span class="line"></span><br><span class="line">root@hello:~# kubectl  exec hostname-test-cby-86df45bf-9fx5n -it -- /bin/bash </span><br><span class="line">root@hostname-test-cby-86df45bf-9fx5n:/# </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"> 查看dns解析</span></span><br><span class="line">root@hostname-test-cby-86df45bf-9fx5n:/# cat /etc/resolv.conf </span><br><span class="line">search default.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 10.96.0.10</span><br><span class="line">options ndots:5</span><br><span class="line">root@hostname-test-cby-86df45bf-9fx5n:/# </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"> 查看host配置已生效</span></span><br><span class="line">root@hostname-test-cby-86df45bf-9fx5n:/# cat /etc/hosts </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"> Kubernetes-managed hosts file.</span></span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">172.27.14.197   hostname-test-cby-86df45bf-9fx5n</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"> Entries added by HostAliases.</span></span><br><span class="line">192.168.1.1     cby     cby.chenby.cn</span><br><span class="line">192.168.1.10    chenby  chenby.chenby.cn</span><br><span class="line">root@hostname-test-cby-86df45bf-9fx5n:/#</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"> 查看环境变量</span></span><br><span class="line">root@hostname-test-cby-86df45bf-9fx5n:/# echo $cby</span><br><span class="line">chenby</span><br><span class="line">root@hostname-test-cby-86df45bf-9fx5n:/#</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a><br><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a><br><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq/_33921750">https://blog.csdn.net/qq\_33921750</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a><br><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a><br>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、今日头条、个人博客、全网可搜《小陈运维》<br>文章主要发布于微信公众号：《Linux运维交流社区》</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes%E5%B8%B8%E7%94%A8deploy%E6%A8%A1%E6%9D%BF%EF%BC%8C%E5%B9%B6%E9%AA%8C%E8%AF%81"><span class="toc-number">1.</span> <span class="toc-text">kubernetes常用deploy模板，并验证</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E5%86%99deploy%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">编写deploy配置文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%A7%E8%A1%8Cdeploy%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">执行deploy配置文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E5%85%A5pod%E8%BF%9B%E8%A1%8C%E6%A3%80%E6%9F%A5"><span class="toc-number">4.</span> <span class="toc-text">进入pod进行检查</span></a></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>
