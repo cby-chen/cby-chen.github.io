@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>kubernetes 设置 Master 可调度与不可调度 - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,小陈运维,小陈,小陈博客,文档,"> 
+    <meta name="description" content="小陈运维,kubernetes 设置 Master 可调度与不可调度语法kubectl taint node [node] key&amp;#x3D;value[effect]
+[effect] 可取值: [ NoS,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="kubernetes 设置 Master 可调度与不可调度 - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,kubernetes 设置 Master 可调度与不可调度语法kubectl taint node [node] key&amp;#x3D;value[effect]
+[effect] 可取值: [ NoS,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="kubernetes 设置 Master 可调度与不可调度 - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,kubernetes 设置 Master 可调度与不可调度语法kubectl taint node [node] key&amp;#x3D;value[effect]
+[effect] 可取值: [ NoS,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">kubernetes 设置 Master 可调度与不可调度</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">kubernetes 设置 Master 可调度与不可调度</h1>
+        <div class="stuff">
+            <span>六月 10, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="kubernetes-设置-Master-可调度与不可调度"><a href="#kubernetes-设置-Master-可调度与不可调度" class="headerlink" title="kubernetes 设置 Master 可调度与不可调度"></a>kubernetes 设置 Master 可调度与不可调度</h1><h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p>kubectl taint node [node] key&#x3D;value[effect]</p>
+<p>[effect] 可取值: [ NoSchedule | PreferNoSchedule | NoExecute ]</p>
+<p>NoSchedule: 一定不能被调度</p>
+<p>PreferNoSchedule: 尽量不要调度</p>
+<p>NoExecute: 不仅不会调度, 还会驱逐Node上已有的Pod</p>
+<h2 id="取消污点"><a href="#取消污点" class="headerlink" title="取消污点"></a>取消污点</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">取消污点</span><br><span class="line">[root@k8s-master01 ~]# kubectl taint node k8s-master node-role.kubernetes.io/master-</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="设置污点"><a href="#设置污点" class="headerlink" title="设置污点"></a>设置污点</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置为一定不能被调度</span></span><br><span class="line"></span><br><span class="line">[root@k8s-master01 ~]# kubectl taint node k8s-master01 node-role.kubernetes.io/master=&quot;&quot;:NoSchedule</span><br><span class="line">node/k8s-master01 tainted</span><br><span class="line">[root@k8s-master01 ~]# kubectl taint node k8s-master02 node-role.kubernetes.io/master=&quot;&quot;:NoSchedule</span><br><span class="line">node/k8s-master02 tainted</span><br><span class="line">[root@k8s-master01 ~]# kubectl taint node k8s-master03 node-role.kubernetes.io/master=&quot;&quot;:NoSchedule</span><br><span class="line">node/k8s-master03 tainted</span><br><span class="line">[root@k8s-master01 ~]# </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看污点</span></span><br><span class="line">[root@k8s-master01 ~]# kubectl  describe  node | grep Ta</span><br><span class="line">Taints:             node-role.kubernetes.io/master:NoSchedule</span><br><span class="line">Taints:             node-role.kubernetes.io/master:NoSchedule</span><br><span class="line">Taints:             node-role.kubernetes.io/master:NoSchedule</span><br><span class="line">Taints:             &lt;none&gt;</span><br><span class="line">Taints:             &lt;none&gt;</span><br><span class="line">Taints:             &lt;none&gt;</span><br><span class="line">Taints:             &lt;none&gt;</span><br><span class="line">Taints:             &lt;none&gt;</span><br><span class="line">[root@k8s-master01 ~]# </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="查看验证"><a href="#查看验证" class="headerlink" title="查看验证"></a>查看验证</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看已经调度到maser上的pod没有被驱逐</span></span><br><span class="line">[root@k8s-master01 ~]# kubectl  get pod -o wide</span><br><span class="line">NAMESPACE              NAME                                         READY   STATUS    RESTARTS       AGE   IP               NODE           NOMINATED NODE   READINESS GATES</span><br><span class="line">default                hostname-test-cby-58d85dccdb-7zgjj           1/1     Running   1 (2d1h ago)   19d   172.25.244.195   k8s-master01   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">default                hostname-test-cby-58d85dccdb-8t7zv           1/1     Running   1 (2d1h ago)   19d   172.25.244.196   k8s-master01   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">default                hostname-test-cby-58d85dccdb-9bqsq           1/1     Running   1 (2d1h ago)   19d   172.25.92.74     k8s-master02   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">default                hostname-test-cby-58d85dccdb-jj2ml           1/1     Running   1 (2d1h ago)   19d   172.17.125.3     k8s-node01     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">default                hostname-test-cby-58d85dccdb-k96zl           1/1     Running   1 (2d1h ago)   19d   172.18.195.3     k8s-master03   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">default                hostname-test-cby-58d85dccdb-lng8b           1/1     Running   1 (2d1h ago)   19d   172.29.115.131   k8s-node04     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">default                hostname-test-cby-58d85dccdb-lsrbg           1/1     Running   1 (2d1h ago)   19d   172.25.214.195   k8s-node03     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">default                hostname-test-cby-58d85dccdb-mlv24           1/1     Running   1 (2d1h ago)   19d   172.17.54.131    k8s-node05     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">default                hostname-test-cby-58d85dccdb-p5vc8           1/1     Running   1 (2d1h ago)   19d   172.27.14.195    k8s-node02     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">default                hostname-test-cby-58d85dccdb-z6ptf           1/1     Running   1 (2d1h ago)   19d   172.25.214.196   k8s-node03   </span><br><span class="line">  &lt;none&gt;           &lt;none&gt;</span><br><span class="line">[root@k8s-master01 ~]# </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="设置污点-1"><a href="#设置污点-1" class="headerlink" title="设置污点"></a>设置污点</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置为不仅不会调度, 还会驱逐Node上已有的Pod</span></span><br><span class="line">[root@k8s-master01 ~]# kubectl taint node k8s-master03 node-role.kubernetes.io/master=&quot;&quot;:NoExecute</span><br><span class="line">node/k8s-master03 tainted</span><br><span class="line">[root@k8s-master01 ~]# kubectl taint node k8s-master02 node-role.kubernetes.io/master=&quot;&quot;:NoExecute</span><br><span class="line">node/k8s-master02 tainted</span><br><span class="line">[root@k8s-master01 ~]# kubectl taint node k8s-master01 node-role.kubernetes.io/master=&quot;&quot;:NoExecute</span><br><span class="line">node/k8s-master01 tainted</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看污点</span></span><br><span class="line">[root@k8s-master01 ~]# kubectl  describe  node | grep Ta</span><br><span class="line">Taints:             node-role.kubernetes.io/master:NoExecute</span><br><span class="line">Taints:             node-role.kubernetes.io/master:NoExecute</span><br><span class="line">Taints:             node-role.kubernetes.io/master:NoExecute</span><br><span class="line">Taints:             &lt;none&gt;</span><br><span class="line">Taints:             &lt;none&gt;</span><br><span class="line">Taints:             &lt;none&gt;</span><br><span class="line">Taints:             &lt;none&gt;</span><br><span class="line">Taints:             &lt;none&gt;</span><br><span class="line">[root@k8s-master01 ~]# </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="查看验证-1"><a href="#查看验证-1" class="headerlink" title="查看验证"></a>查看验证</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看已经调度到master节点的pod已进行驱逐</span></span><br><span class="line">[root@k8s-master01 ~]# kubectl  get pod  -A -o wide</span><br><span class="line">NAMESPACE              NAME                                         READY   STATUS              RESTARTS       AGE   IP               NODE           NOMINATED NODE   READINESS GATES</span><br><span class="line">default                mysql-0                                      2/2     Running             0              34m   172.27.14.206    k8s-node02     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">default                mysql-1                                      2/2     Running             0              34m   172.17.125.11    k8s-node01     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">default                mysql-2                                      2/2     Terminating         0              34m   172.18.195.10    k8s-master03   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">[root@k8s-master01 ~]# </span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a><br><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a><br><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a><br><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a></p>
+<p>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、今日头条、个人博客、全网可搜《小陈运维》</p>
+<p>文章主要发布于微信公众号：《Linux运维交流社区》</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes-%E8%AE%BE%E7%BD%AE-Master-%E5%8F%AF%E8%B0%83%E5%BA%A6%E4%B8%8E%E4%B8%8D%E5%8F%AF%E8%B0%83%E5%BA%A6"><span class="toc-number">1.</span> <span class="toc-text">kubernetes 设置 Master 可调度与不可调度</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%96%E6%B6%88%E6%B1%A1%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text">取消污点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%B1%A1%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">设置污点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E9%AA%8C%E8%AF%81"><span class="toc-number">1.4.</span> <span class="toc-text">查看验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%B1%A1%E7%82%B9-1"><span class="toc-number">1.5.</span> <span class="toc-text">设置污点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E9%AA%8C%E8%AF%81-1"><span class="toc-number">1.6.</span> <span class="toc-text">查看验证</span></a></li></ol></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>kubernetes 启用 PHP + Nginx 网页环境 - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,小陈运维,小陈,小陈博客,文档,"> 
+    <meta name="description" content="小陈运维,kubernetes 启用 PHP + Nginx 网页环境传统安装方式进行安装步骤较多，使用kubernetes可以实现快速启用环境，在测试或者线上都可以做到快速 启用
+编写 yaml 文件123,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="kubernetes 启用 PHP + Nginx 网页环境 - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,kubernetes 启用 PHP + Nginx 网页环境传统安装方式进行安装步骤较多，使用kubernetes可以实现快速启用环境，在测试或者线上都可以做到快速 启用
+编写 yaml 文件123,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="kubernetes 启用 PHP + Nginx 网页环境 - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,kubernetes 启用 PHP + Nginx 网页环境传统安装方式进行安装步骤较多，使用kubernetes可以实现快速启用环境，在测试或者线上都可以做到快速 启用
+编写 yaml 文件123,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">kubernetes 启用 PHP + Nginx 网页环境</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">kubernetes 启用 PHP + Nginx 网页环境</h1>
+        <div class="stuff">
+            <span>六月 09, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="kubernetes-启用-PHP-Nginx-网页环境"><a href="#kubernetes-启用-PHP-Nginx-网页环境" class="headerlink" title="kubernetes 启用 PHP + Nginx 网页环境"></a>kubernetes 启用 PHP + Nginx 网页环境</h1><p>传统安装方式进行安装步骤较多，使用kubernetes可以实现快速启用环境，在测试或者线上都可以做到<code>快速</code> 启用</p>
+<h3 id="编写-yaml-文件"><a href="#编写-yaml-文件" class="headerlink" title="编写 yaml 文件"></a>编写 yaml 文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master01 ~]# vim PHP-Nginx-Deployment-ConfMap-Service.yaml</span><br><span class="line">[root@k8s-master01 ~]# cat PHP-Nginx-Deployment-ConfMap-Service.yaml</span><br><span class="line">kind: Service # 对象类型</span><br><span class="line">apiVersion: v1 # api 版本</span><br><span class="line">metadata: # 元数据</span><br><span class="line">  name: php-fpm-nginx #Service 服务名</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort # 类型为nodeport</span><br><span class="line">  selector: #标签选择器</span><br><span class="line">    app: php-fpm-nginx </span><br><span class="line">  ports: #端口信息</span><br><span class="line">    - port: 80  # 容器端口80</span><br><span class="line">      protocol: TCP #tcp类型</span><br><span class="line">      targetPort: 80 # Service 将 nginx 容器的 80 端口暴露出来</span><br><span class="line">---</span><br><span class="line">kind: ConfigMap # 对象类型</span><br><span class="line">apiVersion: v1 # api 版本</span><br><span class="line">metadata: # 元数据</span><br><span class="line">  name: nginx-config # 对象名称</span><br><span class="line">data: # key-value 数据集合</span><br><span class="line">  nginx.conf: | # 将 nginx config 配置写入 ConfigMap 中，经典的 php-fpm 代理设置，这里就不再多说了</span><br><span class="line">    user  nginx;</span><br><span class="line">    worker_processes  auto;</span><br><span class="line">    error_log  /var/log/nginx/error.log notice;</span><br><span class="line">    pid        /var/run/nginx.pid;</span><br><span class="line">    events &#123;</span><br><span class="line">        worker_connections  1024;</span><br><span class="line">    &#125;</span><br><span class="line">    http &#123;</span><br><span class="line">        include       /etc/nginx/mime.types;</span><br><span class="line">        default_type  application/octet-stream;</span><br><span class="line">        log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="line">                          &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="line">                          &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><span class="line">        access_log  /var/log/nginx/access.log  main;</span><br><span class="line">        sendfile        on;</span><br><span class="line">        keepalive_timeout  65;</span><br><span class="line">        server &#123;</span><br><span class="line">        listen 80 default_server;</span><br><span class="line">        listen [::]:80 default_server;</span><br><span class="line">        root /var/www/html;</span><br><span class="line">        index index.php;</span><br><span class="line">        server_name _;</span><br><span class="line">        if (-f $request_filename/index.html) &#123;</span><br><span class="line">        rewrite (.*) $1/index.html break;</span><br><span class="line">        &#125;</span><br><span class="line">        if (-f $request_filename/index.php) &#123;</span><br><span class="line">        rewrite (.*) $1/index.php;</span><br><span class="line">        &#125;</span><br><span class="line">        if (!-f $request_filename) &#123;</span><br><span class="line">        rewrite (.*) /index.php;</span><br><span class="line">        &#125;</span><br><span class="line">        location / &#123;</span><br><span class="line">          try_files $uri $uri/ =404;</span><br><span class="line">        &#125;</span><br><span class="line">        location ~ \.php$ &#123;</span><br><span class="line">          include fastcgi_params;</span><br><span class="line">          fastcgi_param REQUEST_METHOD $request_method;</span><br><span class="line">          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</span><br><span class="line">          fastcgi_pass 127.0.0.1:9000;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">        include /etc/nginx/conf.d/*.conf;</span><br><span class="line">    &#125;</span><br><span class="line">---</span><br><span class="line">kind: Deployment # 对象类型</span><br><span class="line">apiVersion: apps/v1 # api 版本</span><br><span class="line">metadata: # 元数据</span><br><span class="line">  name: php-fpm-nginx # Deployment 对象名称</span><br><span class="line">spec: # Deployment 对象规约</span><br><span class="line">  selector: # 选择器</span><br><span class="line">    matchLabels: # 标签匹配</span><br><span class="line">      app: php-fpm-nginx</span><br><span class="line">  replicas: 3 # 副本数量</span><br><span class="line">  template: # 模版</span><br><span class="line">    metadata: # Pod 对象的元数据</span><br><span class="line">      labels: # Pod 对象的标签</span><br><span class="line">        app: php-fpm-nginx</span><br><span class="line">    spec: # Pod 对象规约</span><br><span class="line">      containers: # 这里设置了两个容器</span><br><span class="line">        - name: php-fpm # 第一个容器名称</span><br><span class="line">          image: php:7.4.29-fpm # 容器镜像</span><br><span class="line">          imagePullPolicy: IfNotPresent #镜像拉取策略</span><br><span class="line">          livenessProbe: # 存活探测</span><br><span class="line">            initialDelaySeconds: 5 # 容器启动后要等待多少秒后才启动存活和就绪探测器</span><br><span class="line">            periodSeconds: 10 # 每多少秒执行一次存活探测</span><br><span class="line">            tcpSocket: # 监测tcp端口</span><br><span class="line">              port: 9000 #监测端口</span><br><span class="line">          readinessProbe: # 就绪探测</span><br><span class="line">            initialDelaySeconds: 5 # 容器启动后要等待多少秒后才启动存活和就绪探测器</span><br><span class="line">            periodSeconds: 10 # 每多少秒执行一次存活探测</span><br><span class="line">            tcpSocket: # 监测tcp端口</span><br><span class="line">              port: 9000 #监测端口</span><br><span class="line">          resources: # 资源约束</span><br><span class="line">            requests: # 最小限制</span><br><span class="line">              memory: &quot;64Mi&quot; # 内存最新64M </span><br><span class="line">              cpu: &quot;250m&quot; # CPU最大使用0.25核</span><br><span class="line">            limits: # 最大限制</span><br><span class="line">              memory: &quot;128Mi&quot; # 内存最新128M </span><br><span class="line">              cpu: &quot;500m&quot; # CPU最大使用0.5核</span><br><span class="line">          ports:</span><br><span class="line">            - containerPort: 9000 # php-fpm 端口</span><br><span class="line">          volumeMounts: # 挂载数据卷</span><br><span class="line">            - mountPath: /var/www/html # 挂载两个容器共享的 volume </span><br><span class="line">              name: nginx-www</span><br><span class="line">          lifecycle: # 生命周期</span><br><span class="line">            postStart: # 当容器处于 postStart 阶段时，执行一下命令</span><br><span class="line">              exec:</span><br><span class="line">                command: [&quot;/bin/sh&quot;, &quot;-c&quot;, &quot;echo startup...&quot;] # 将 /app/index.php 复制到挂载的 volume </span><br><span class="line">            preStop:</span><br><span class="line">              exec:</span><br><span class="line">                command:</span><br><span class="line">                  - sh</span><br><span class="line">                  - &#x27;-c&#x27;</span><br><span class="line">                  - sleep 5 &amp;&amp; kill -SIGQUIT 1 # 优雅退出</span><br><span class="line">        - name: nginx # 第二个容器名称</span><br><span class="line">          image: nginx # 容器镜像</span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          livenessProbe: # 存活探测</span><br><span class="line">            initialDelaySeconds: 5 # 容器启动后要等待多少秒后才启动存活和就绪探测器</span><br><span class="line">            periodSeconds: 10 # 每多少秒执行一次存活探测</span><br><span class="line">            httpGet: # 以httpGet方式进行探测</span><br><span class="line">              path: / # 探测路径</span><br><span class="line">              port: 80 # 探测端口</span><br><span class="line">          readinessProbe:  # 就绪探测</span><br><span class="line">            initialDelaySeconds: 5 # 容器启动后要等待多少秒后才启动存活和就绪探测器</span><br><span class="line">            periodSeconds: 10 # 每多少秒执行一次存活探测</span><br><span class="line">            httpGet: # 以httpGet方式进行探测</span><br><span class="line">              path: / # 探测路径</span><br><span class="line">              port: 80 # 探测端口</span><br><span class="line">          resources: # 资源约束</span><br><span class="line">            requests: # 最小限制</span><br><span class="line">              memory: &quot;64Mi&quot; # 内存最新64M </span><br><span class="line">              cpu: &quot;250m&quot; # CPU最大使用0.25核</span><br><span class="line">            limits: # 最大限制</span><br><span class="line">              memory: &quot;128Mi&quot; # 内存最新128M </span><br><span class="line">              cpu: &quot;500m&quot; # CPU最大使用0.5核</span><br><span class="line">          ports:</span><br><span class="line">            - containerPort: 80 # nginx 端口</span><br><span class="line">          volumeMounts: # nginx 容器挂载了两个 volume，一个是与 php-fpm 容器共享的 volume，另外一个是配置了 nginx.conf 的 volume</span><br><span class="line">            - mountPath: /var/www/html # 挂载两个容器共享的 volume </span><br><span class="line">              name: nginx-www</span><br><span class="line">            - mountPath: /etc/nginx/nginx.conf #  挂载配置了 nginx.conf 的 volume</span><br><span class="line">              subPath: nginx.conf</span><br><span class="line">              name: nginx-config</span><br><span class="line">          lifecycle:</span><br><span class="line">            preStop:</span><br><span class="line">              exec:</span><br><span class="line">                command:</span><br><span class="line">                  - sh</span><br><span class="line">                  - &#x27;-c&#x27;</span><br><span class="line">                  - sleep 5 &amp;&amp; /usr/sbin/nginx -s quit # 优雅退出</span><br><span class="line">      volumes:</span><br><span class="line">        - name: nginx-www # 网站文件通过nfs挂载</span><br><span class="line">          nfs:</span><br><span class="line">            path: /html/</span><br><span class="line">            server: 192.168.1.123</span><br><span class="line">        - name: nginx-config </span><br><span class="line">          configMap: # configMap </span><br><span class="line">            name: nginx-config</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="部署网站"><a href="#部署网站" class="headerlink" title="部署网站"></a>部署网站</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载网站代码</span></span><br><span class="line">wget https://typecho.org/downloads/1.1-17.10.30-release.tar.gz</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">解压源码包</span></span><br><span class="line">tar xvf 1.1-17.10.30-release.tar.gz</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">移动到当前目录下</span></span><br><span class="line">mv build/* .</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置权限</span></span><br><span class="line">chmod 777 -R *</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="创建资源"><a href="#创建资源" class="headerlink" title="创建资源"></a>创建资源</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl  apply -f PHP-Nginx-Deployment-ConfMap-Service.yaml</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">kubectl  get pod -l app=php-fpm-nginx</span><br><span class="line">NAME                            READY   STATUS    RESTARTS        AGE</span><br><span class="line">php-fpm-nginx-8b4bfb457-24bpd   2/2     Running   1 (6m34s ago)   16m</span><br><span class="line">php-fpm-nginx-8b4bfb457-fvqd6   2/2     Running   2 (5m39s ago)   16m</span><br><span class="line">php-fpm-nginx-8b4bfb457-kmzsc   2/2     Running   1 (6m34s ago)   16m</span><br><span class="line"></span><br><span class="line">kubectl get configmaps  | grep nginx</span><br><span class="line">NAME               DATA   AGE</span><br><span class="line">nginx-config       1      17m</span><br><span class="line"></span><br><span class="line">kubectl get svc | grep nginx</span><br><span class="line">php-fpm-nginx   NodePort    10.98.66.104     &lt;none&gt;        80:31937/TCP   16m</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ea12c829c0e34ca1839b623334197ca9~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a><br><a target="_blank" rel="noopener" href="https://www.chenby.cn/">https://www.chenby.cn/</a><br><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/0f894314ae2c">https://www.jianshu.com/u/0f894314ae2c</a><br><a target="_blank" rel="noopener" href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/">https://www.toutiao.com/c/user/token/MS4wLjABAAAAeqOrhjsoRZSj7iBJbjLJyMwYT5D0mLOgCoo4pEmpr4A/</a></p>
+<p>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、腾讯云、今日头条、个人博客、全网可搜《小陈运维》</p>
+<p>文章主要发布于微信公众号：《Linux运维交流社区》</p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes-%E5%90%AF%E7%94%A8-PHP-Nginx-%E7%BD%91%E9%A1%B5%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">kubernetes 启用 PHP + Nginx 网页环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99-yaml-%E6%96%87%E4%BB%B6"><span class="toc-number">1.0.1.</span> <span class="toc-text">编写 yaml 文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99"><span class="toc-number">1.0.2.</span> <span class="toc-text">部署网站</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%B5%84%E6%BA%90"><span class="toc-number">1.0.3.</span> <span class="toc-text">创建资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83"><span class="toc-number">1.0.4.</span> <span class="toc-text">测试环境</span></a></li></ol></li></ol></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

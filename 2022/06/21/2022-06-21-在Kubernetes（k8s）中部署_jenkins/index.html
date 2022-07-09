@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>在Kubernetes（k8s）中部署 jenkins - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,Kubernetes,k8s,二进制,"> 
+    <meta name="description" content="小陈运维,在Kubernetes（k8s）中部署 jenkins
+YAML配置文件由于jenkins需要持久化存储，通过nfs动态供给pvc存储卷。
+可以参考我之前的文档：https://cloud.tenc,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="在Kubernetes（k8s）中部署 jenkins - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,在Kubernetes（k8s）中部署 jenkins
+YAML配置文件由于jenkins需要持久化存储，通过nfs动态供给pvc存储卷。
+可以参考我之前的文档：https://cloud.tenc,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="在Kubernetes（k8s）中部署 jenkins - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,在Kubernetes（k8s）中部署 jenkins
+YAML配置文件由于jenkins需要持久化存储，通过nfs动态供给pvc存储卷。
+可以参考我之前的文档：https://cloud.tenc,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">在Kubernetes（k8s）中部署 jenkins</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">在Kubernetes（k8s）中部署 jenkins</h1>
+        <div class="stuff">
+            <span>六月 21, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="在Kubernetes（k8s）中部署-jenkins"><a href="#在Kubernetes（k8s）中部署-jenkins" class="headerlink" title="在Kubernetes（k8s）中部署 jenkins"></a>在Kubernetes（k8s）中部署 jenkins</h1><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0fd830306fba4d5eb8aac7ce67221e8b~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<h3 id="YAML配置文件"><a href="#YAML配置文件" class="headerlink" title="YAML配置文件"></a>YAML配置文件</h3><p>由于jenkins需要持久化存储，通过nfs动态供给pvc存储卷。</p>
+<p>可以参考我之前的文档：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1902519">https://cloud.tencent.com/developer/article/1902519</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br></pre></td><td class="code"><pre><span class="line">vim jenkins-deploy.yaml</span><br><span class="line">cat jenkins-deploy.yaml</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment">##############使用 storageClass 创建 pvc ###################</span></span></span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolumeClaim</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins-data-pvc</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteMany</span><br><span class="line">  resources:</span><br><span class="line">    requests:</span><br><span class="line">      storage: 1Gi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment">##############创建一个ServiceAccount 名称为：jenkins-admin###################</span></span></span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ServiceAccount</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins-admin</span><br><span class="line">  namespace: default</span><br><span class="line">  labels:</span><br><span class="line">    name: jenkins</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment">##############绑定账户jenkins-admin 为集群管理员角色，为了控制权限建议绑定自定义角色###################</span></span></span><br><span class="line">---</span><br><span class="line">kind: ClusterRoleBinding</span><br><span class="line">apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins-admin</span><br><span class="line">  labels:</span><br><span class="line">    name: jenkins</span><br><span class="line">subjects:</span><br><span class="line">  - kind: ServiceAccount</span><br><span class="line">    name: jenkins-admin</span><br><span class="line">    namespace: default</span><br><span class="line">roleRef:</span><br><span class="line">  kind: ClusterRole</span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">cluster-admin 是 k8s 集群中默认的管理员角色</span></span><br><span class="line">  name: cluster-admin</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment">############## 在 default 命名空间创建 deployment ###################</span></span></span><br><span class="line">---</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: jenkins</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: jenkins</span><br><span class="line">    spec:</span><br><span class="line">      terminationGracePeriodSeconds: 10</span><br><span class="line">      # 注意：k8s 1.21.x 中 serviceAccount 改名为 serviceAccountName</span><br><span class="line">      # 这里填写上面创建的 serviceAccount 的 name</span><br><span class="line">      serviceAccount: jenkins-admin</span><br><span class="line">      containers:</span><br><span class="line">        - name: jenkins</span><br><span class="line">          image: jenkins/jenkins:latest</span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          env:</span><br><span class="line">            - name: JAVA_OPTS</span><br><span class="line">              value: -Duser.timezone=Asia/Shanghai</span><br><span class="line">          ports:</span><br><span class="line">            - containerPort: 8080</span><br><span class="line">              name: web</span><br><span class="line">              protocol: TCP</span><br><span class="line">            - containerPort: 50000</span><br><span class="line">              name: agent</span><br><span class="line">              protocol: TCP</span><br><span class="line">          resources:</span><br><span class="line">            limits:</span><br><span class="line">              cpu: 1000m</span><br><span class="line">              memory: 1Gi</span><br><span class="line">            requests:</span><br><span class="line">              cpu: 500m</span><br><span class="line">              memory: 512Mi</span><br><span class="line">          livenessProbe:</span><br><span class="line">            httpGet:</span><br><span class="line">              path: /login</span><br><span class="line">              port: 8080</span><br><span class="line">            initialDelaySeconds: 60</span><br><span class="line">            timeoutSeconds: 5</span><br><span class="line">            failureThreshold: 12</span><br><span class="line">          readinessProbe:</span><br><span class="line">            httpGet:</span><br><span class="line">              path: /login</span><br><span class="line">              port: 8080</span><br><span class="line">            initialDelaySeconds: 60</span><br><span class="line">            timeoutSeconds: 5</span><br><span class="line">            failureThreshold: 12</span><br><span class="line">          volumeMounts:</span><br><span class="line">            - name: jenkinshome</span><br><span class="line">              mountPath: /var/jenkins_home</span><br><span class="line">      volumes:</span><br><span class="line">        - name: jenkinshome</span><br><span class="line">          persistentVolumeClaim:</span><br><span class="line">            claimName: jenkins-data-pvc</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment">############## 在 default 命名空间创建 service ###################</span></span></span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins</span><br><span class="line">  namespace: default</span><br><span class="line">  labels:</span><br><span class="line">    app: jenkins</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    app: jenkins</span><br><span class="line">  type: ClusterIP</span><br><span class="line">  ports:</span><br><span class="line">    - name: web</span><br><span class="line">      port: 8080</span><br><span class="line">      targetPort: 8080</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins-agent</span><br><span class="line">  namespace: default</span><br><span class="line">  labels:</span><br><span class="line">    app: jenkins</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    app: jenkins</span><br><span class="line">  type: ClusterIP</span><br><span class="line">  ports:</span><br><span class="line">    - name: agent</span><br><span class="line">      port: 50000</span><br><span class="line">      targetPort: 50000</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="执行部署"><a href="#执行部署" class="headerlink" title="执行部署"></a>执行部署</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f jenkins-deploy.yaml</span><br><span class="line">persistentvolumeclaim/jenkins-data-pvc created</span><br><span class="line">serviceaccount/jenkins-admin created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/jenkins-admin created</span><br><span class="line">deployment.apps/jenkins created</span><br><span class="line">service/jenkins created</span><br><span class="line">service/jenkins-agent created</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="访问测试"><a href="#访问测试" class="headerlink" title="访问测试"></a>访问测试</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看svc</span></span><br><span class="line">kubectl  get svc | grep jenkins</span><br><span class="line">NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE</span><br><span class="line">jenkins         ClusterIP   10.99.124.103   &lt;none&gt;        8080/TCP       3m7s</span><br><span class="line">jenkins-agent   ClusterIP   10.98.21.139    &lt;none&gt;        50000/TCP      3m6s</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改为NodePort</span></span><br><span class="line">kubectl  edit svc jenkins</span><br><span class="line">type: NodePort</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看修改后的svc端口</span></span><br><span class="line">kubectl  get svc | grep jenkins</span><br><span class="line">jenkins         NodePort    10.99.124.103   &lt;none&gt;        8080:31613/TCP   4m24s</span><br><span class="line">jenkins-agent   ClusterIP   10.98.21.139    &lt;none&gt;        50000/TCP        4m23s</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="查看密码"><a href="#查看密码" class="headerlink" title="查看密码"></a>查看密码</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看pod名称</span></span><br><span class="line">kubectl get pod -n default | grep jenkins</span><br><span class="line">jenkins-7db75dbcb9-76l7l                  1/1     Running   0          5m11s</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看默认密码</span></span><br><span class="line">kubectl  exec jenkins-7db75dbcb9-76l7l -- cat /var/jenkins_home/secrets/initialAdminPassword</span><br><span class="line">a9b2d13bc4c9453f93bb83e43a780f7c</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p><strong>关于</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/index.php/start-page.html">https://www.oiox.cn/index.php/start-page.html</a></p>
+<p><strong>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、华为云、阿里云、腾讯云、哔哩哔哩、今日头条、新浪微博、个人博客</strong></p>
+<p><strong>全网可搜《小陈运维》</strong></p>
+<p><strong>文章主要发布于微信公众号</strong></p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8Kubernetes%EF%BC%88k8s%EF%BC%89%E4%B8%AD%E9%83%A8%E7%BD%B2-jenkins"><span class="toc-number">1.</span> <span class="toc-text">在Kubernetes（k8s）中部署 jenkins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#YAML%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.0.1.</span> <span class="toc-text">YAML配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E9%83%A8%E7%BD%B2"><span class="toc-number">1.0.2.</span> <span class="toc-text">执行部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%B5%8B%E8%AF%95"><span class="toc-number">1.0.3.</span> <span class="toc-text">访问测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%AF%86%E7%A0%81"><span class="toc-number">1.0.4.</span> <span class="toc-text">查看密码</span></a></li></ol></li></ol></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>

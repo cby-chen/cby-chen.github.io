@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="cn" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6 - 小陈运维</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,Kubernetes,k8s,二进制,"> 
+    <meta name="description" content="小陈运维,kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6BGP是互联网上一个核心的去中心化自治路由协议，它通过维护IP路由表或“前缀”表来实现自治系统AS之间的可达性，属于,"> 
+    <meta name="author" content="chenby"> 
+    <link rel="alternative" href="atom.xml" title="小陈运维" type="application/atom+xml"> 
+    <link rel="icon" href="/img/1.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6 - 小陈运维"/>
+    <meta name="twitter:description" content="小陈运维,kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6BGP是互联网上一个核心的去中心化自治路由协议，它通过维护IP路由表或“前缀”表来实现自治系统AS之间的可达性，属于,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈运维"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6 - 小陈运维"/>
+    <meta property="og:description" content="小陈运维,kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6BGP是互联网上一个核心的去中心化自治路由协议，它通过维护IP路由表或“前缀”表来实现自治系统AS之间的可达性，属于,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈运维</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6</h1>
+        <div class="stuff">
+            <span>六月 16, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6"><a href="#kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6" class="headerlink" title="kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6"></a>kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6</h1><p>BGP是互联网上一个核心的去中心化自治路由协议，它通过维护IP路由表或“前缀”表来实现自治系统AS之间的可达性，属于矢量路由协议。不过，考虑到并非所有的网络都能支持BGP，以及Calico控制平面的设计要求物理网络必须是二层网络，以确保 vRouter间均直接可达，路由不能够将物理设备当作下一跳等原因，为了支持三层网络，Calico还推出了IP-in-IP叠加的模型，它也使用Overlay的方式来传输数据。IPIP的包头非常小，而且也是内置在内核中，因此理论上它的速度要比VxLAN快一点 ，但安全性更差。Calico 3.x的默认配置使用的是IPIP类型的传输方案而非BGP。</p>
+<p>Calico的系统架构如图所示：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c3887ac0fa7f4151a5133451ebcb46c0~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>Calico 主要由 Felix、etcd、BGP client 以及 BGP Route Reflector 组成</p>
+<ol>
+<li><p>Felix，Calico Agent，跑在每台需要运行 Workload 的节点上，主要负责配置路由及 ACLs 等信息来确保 Endpoint 的连通状态；</p>
+</li>
+<li><p>etcd，分布式键值存储，主要负责网络元数据一致性，确保 Calico 网络状态的准确性；</p>
+</li>
+<li><p>BGP Client（BIRD）, 主要负责把 Felix 写入 Kernel 的路由信息分发到当前 Calico 网络，确保 Workload 间的通信的有效性；</p>
+</li>
+<li><p>BGP Route Reflector（BIRD），大规模部署时使用，摒弃所有节点互联的 mesh 模式，通过一个或者多个 BGP Route Reflector 来完成集中式的路由分发。</p>
+</li>
+<li><p>calico&#x2F;calico-ipam，主要用作 Kubernetes 的 CNI 插件</p>
+</li>
+</ol>
+<h3 id="配置NetworkManager防止干扰calico"><a href="#配置NetworkManager防止干扰calico" class="headerlink" title="配置NetworkManager防止干扰calico"></a>配置NetworkManager防止干扰calico</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master01 ~]# vim /etc/NetworkManager/conf.d/calico.conf</span><br><span class="line">[root@k8s-master01 ~]# cat /etc/NetworkManager/conf.d/calico.conf</span><br><span class="line">[keyfile]</span><br><span class="line">unmanaged-devices=interface-name:cali*;interface-name:tunl*</span><br><span class="line">[root@k8s-master01 ~]# </span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="下载官方最新calico配置文件"><a href="#下载官方最新calico配置文件" class="headerlink" title="下载官方最新calico配置文件"></a>下载官方最新calico配置文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master01 ~]# curl https://projectcalico.docs.tigera.io/manifests/calico-typha.yaml -o calico.yaml</span><br><span class="line"><span class="meta prompt_">  % </span><span class="language-bash">Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span></span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100  228k  100  228k    0     0  83974      0  0:00:02  0:00:02 --:--:-- 83974</span><br><span class="line">[root@k8s-master01 ~]# </span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="修改calico配置得以支持IPV6"><a href="#修改calico配置得以支持IPV6" class="headerlink" title="修改calico配置得以支持IPV6"></a>修改calico配置得以支持IPV6</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master01 ~]# cp calico.yaml calico-ipv6.yaml</span><br><span class="line">[root@k8s-master01 ~]# vim calico-ipv6.yaml</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">calico-config ConfigMap处</span></span><br><span class="line">    &quot;ipam&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;calico-ipam&quot;,</span><br><span class="line">        &quot;assign_ipv4&quot;: &quot;true&quot;,</span><br><span class="line">        &quot;assign_ipv6&quot;: &quot;true&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    </span><br><span class="line">    - name: CLUSTER_TYPE</span><br><span class="line">      value: &quot;k8s,bgp&quot;</span><br><span class="line"></span><br><span class="line">    - name: IP</span><br><span class="line">      value: &quot;autodetect&quot;</span><br><span class="line"></span><br><span class="line">    - name: IP6</span><br><span class="line">      value: &quot;autodetect&quot;</span><br><span class="line"></span><br><span class="line">    - name: CALICO_IPV4POOL_CIDR</span><br><span class="line">      value: &quot;172.16.0.0/16&quot;</span><br><span class="line"></span><br><span class="line">    - name: CALICO_IPV6POOL_CIDR</span><br><span class="line">      value: &quot;fc00::/48&quot;</span><br><span class="line"></span><br><span class="line">    - name: FELIX_IPV6SUPPORT</span><br><span class="line">      value: &quot;true&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="修改calico配置得以支持IPV4"><a href="#修改calico配置得以支持IPV4" class="headerlink" title="修改calico配置得以支持IPV4"></a>修改calico配置得以支持IPV4</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master01 ~]# grep &quot;IPV4POOL_CIDR&quot; calico.yaml  -A 1</span><br><span class="line">            - name: CALICO_IPV4POOL_CIDR</span><br><span class="line">              value: &quot;172.16.0.0/12&quot;</span><br><span class="line">[root@k8s-master01 ~]# kubectl apply -f calico.yaml</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="查看POD"><a href="#查看POD" class="headerlink" title="查看POD"></a>查看POD</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master01 ~]# kubectl  get pod -A -w</span><br><span class="line">NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE</span><br><span class="line">kube-system   calico-kube-controllers-56cdb7c587-l8h5k   1/1     Running   0          66s</span><br><span class="line">kube-system   calico-node-b2mpq                          1/1     Running   0          66s</span><br><span class="line">kube-system   calico-node-jlk89                          1/1     Running   0          66s</span><br><span class="line">kube-system   calico-node-nqdc4                          1/1     Running   0          66s</span><br><span class="line">kube-system   calico-node-pjrcn                          1/1     Running   0          66s</span><br><span class="line">kube-system   calico-node-w4gfm                          1/1     Running   0          66s</span><br><span class="line">kube-system   calico-typha-6775694657-vk4ds              1/1     Running   0          66s</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>关于</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/index.php/start-page.html">https://www.oiox.cn/index.php/start-page.html</a></p>
+<p><strong>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、华为云、阿里云、腾讯云、哔哩哔哩、今日头条、新浪微博、个人博客</strong></p>
+<p><strong>全网可搜《小陈运维》</strong></p>
+<p><strong>文章主要发布于微信公众号：《Linux运维交流社区》</strong></p>
+</blockquote>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.oiox.cn/1.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.oiox.cn/2.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class="side">
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes%EF%BC%88k8s%EF%BC%89%E5%AE%89%E8%A3%85BGP%E6%A8%A1%E5%BC%8Fcalico%E7%BD%91%E7%BB%9C%E6%94%AF%E6%8C%81IPV4%E5%92%8CIPV6"><span class="toc-number">1.</span> <span class="toc-text">kubernetes（k8s）安装BGP模式calico网络支持IPV4和IPV6</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AENetworkManager%E9%98%B2%E6%AD%A2%E5%B9%B2%E6%89%B0calico"><span class="toc-number">1.0.1.</span> <span class="toc-text">配置NetworkManager防止干扰calico</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%98%E6%96%B9%E6%9C%80%E6%96%B0calico%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.0.2.</span> <span class="toc-text">下载官方最新calico配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9calico%E9%85%8D%E7%BD%AE%E5%BE%97%E4%BB%A5%E6%94%AF%E6%8C%81IPV6"><span class="toc-number">1.0.3.</span> <span class="toc-text">修改calico配置得以支持IPV6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9calico%E9%85%8D%E7%BD%AE%E5%BE%97%E4%BB%A5%E6%94%AF%E6%8C%81IPV4"><span class="toc-number">1.0.4.</span> <span class="toc-text">修改calico配置得以支持IPV4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8BPOD"><span class="toc-number">1.0.5.</span> <span class="toc-text">查看POD</span></a></li></ol></li></ol></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+
+</html>
