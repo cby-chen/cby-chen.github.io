@@ -1,0 +1,210 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Python 人工智能 5秒钟偷走你的声音 | 小陈运维</title><meta name="author" content="chenby"><meta name="copyright" content="chenby"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="介绍 Python 深度学习AI - 声音克隆、声音模仿，是一个三阶段的深度学习框架，允许从几秒钟的音频中创建语音的数字表示，并用它来调节文本到语音模型，该模型经过培训，可以概括到新的声音。 环境准备与安装 原始英文版地址： https:&#x2F;&#x2F;github.com&#x2F;CorentinJ&#x2F;Real-Time-Voice-Cloning 中文二次开发版（本文使用该版本）： https:&#x2F;&#x2F;github.c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 人工智能 5秒钟偷走你的声音">
+<meta property="og:url" content="http://www.chenby.cn/2021/12/30/6551752320cf/index.html">
+<meta property="og:site_name" content="小陈运维">
+<meta property="og:description" content="介绍 Python 深度学习AI - 声音克隆、声音模仿，是一个三阶段的深度学习框架，允许从几秒钟的音频中创建语音的数字表示，并用它来调节文本到语音模型，该模型经过培训，可以概括到新的声音。 环境准备与安装 原始英文版地址： https:&#x2F;&#x2F;github.com&#x2F;CorentinJ&#x2F;Real-Time-Voice-Cloning 中文二次开发版（本文使用该版本）： https:&#x2F;&#x2F;github.c">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.oiox.cn/images/wallhaven-l3dd1r.jpeg">
+<meta property="article:published_time" content="2021-12-30T09:08:12.000Z">
+<meta property="article:modified_time" content="2021-12-30T09:08:12.000Z">
+<meta property="article:author" content="chenby">
+<meta property="article:tag" content="小陈运维,运维,linux,kubernetes,docker,k8s,容器,博客,文档,技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.oiox.cn/images/wallhaven-l3dd1r.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://www.chenby.cn/2021/12/30/6551752320cf/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Python 人工智能 5秒钟偷走你的声音',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-12-30 17:08:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://www.oiox.cn/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">148</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://www.oiox.cn/images/wallhaven-l3dd1r.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小陈运维</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Python 人工智能 5秒钟偷走你的声音</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-30T09:08:12.000Z" title="发表于 2021-12-30 17:08:12">2021-12-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-30T09:08:12.000Z" title="更新于 2021-12-30 17:08:12">2021-12-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Python 人工智能 5秒钟偷走你的声音"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>介绍</p>
+<p>Python 深度学习AI - 声音克隆、声音模仿，是一个三阶段的深度学习框架，允许从几秒钟的音频中创建语音的数字表示，并用它来调节文本到语音模型，该模型经过培训，可以概括到新的声音。</p>
+<p>环境准备与安装</p>
+<p>原始英文版地址：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/CorentinJ/Real-Time-Voice-Cloning">https://github.com/CorentinJ/Real-Time-Voice-Cloning</a></p>
+<p>中文二次开发版（本文使用该版本）：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/babysor/MockingBird">https://github.com/babysor/MockingBird</a></p>
+<p>pycharm环境下载：</p>
+<p><a target="_blank" rel="noopener" href="https://www.jetbrains.com/pycharm/download/#section=windows">https://www.jetbrains.com/pycharm/download/#section=windows</a></p>
+<p>conda虚拟环境：</p>
+<p><a target="_blank" rel="noopener" href="https://www.anaconda.com/products/individual">https://www.anaconda.com/products/individual</a></p>
+<p>FFmpeg ：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/BtbN/FFmpeg-Builds/releases">https://github.com/BtbN/FFmpeg-Builds/releases</a></p>
+<p>模型文件：</p>
+<p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1PI-hM3sn5wbeChRryX-RCQ">https://pan.baidu.com/s/1PI-hM3sn5wbeChRryX-RCQ</a> 提取码 2021</p>
+<p>在电脑系统上安装 FFmpeg 工具</p>
+<p>下载zip压缩包连接为：<a target="_blank" rel="noopener" href="https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2021-11-09-12-23/ffmpeg-N-104488-ga13646639f-win64-gpl.zip">https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2021-11-09-12-23/ffmpeg-N-104488-ga13646639f-win64-gpl.zip</a></p>
+<p>下载完成后将其解压到一个目录后在系统的环境变量中添加该目录</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc5860656f3b46b987cefc067b5e60e0~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>打开新的cmd中查看是否安装成功</p>
+<p>ffmpeg -version</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1068725e289043d2b8fd0230ade44f17~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>使用打开项目目录后，创建时使用conda的Python 3.9虚拟环境</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eee53b28c5948568b10998b8d55cc34~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>创建完成后，在cmd中查看现有的虚拟环境，并进入刚刚创建的虚拟环境</p>
+<p>conda env list</p>
+<p>activate pythonProject1</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0c1e01a94936403fa8ef3e90c97b8d59~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>进入环境后在进行安装pip所需依赖，并使用国内源进行安装实现下载加速</p>
+<p>pip install -r requirements.txt -i <a target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b83937d957b743de9af41e331846e0fb~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>在虚拟环境下安装pytorch</p>
+<p>pip install torch  -i <a target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/33c3bde9f5d8410aac64af1f9bcc2abf~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>回到pycharm中，将模型导入到项目目录下，把目录复制黏贴到项目中</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/31a4ff2f688b4205835a6ebd3a26b7e4~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>修改一行代码，在 synthesizer&#x2F;utils&#x2F;symbols.py 文件中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">修改为：</span><br><span class="line">_characters = &#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz12340!&#x27;(),-.:;? &#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/410cfa4dedb84fe59b0a676b2292716d~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>之后在terminal中启动工具箱</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4808629d6b5d4bf9ba24d23a397e85b3~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>使用音频合成工具箱</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/36858a67eb56462599197da8a65f91a2~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/57ed8584b0fe4318bd446be059e106e9~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>Linux运维交流社区</strong></p>
+<p>Linux运维交流社区，互联网新闻以及技术交流。</p>
+<p>48篇原创内容</p>
+<p>公众号</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f6d12ef77d354dc6b7e5ada2175dde38~tplv-k3u1fbpfcp-zoom-1.image" alt="图片">  </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33921750">https://blog.csdn.net/qq_33921750</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3981543">https://my.oschina.net/u/3981543</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/chen-bu-yun-2">https://www.zhihu.com/people/chen-bu-yun-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/u/hppyvyv6/articles">https://segmentfault.com/u/hppyvyv6/articles</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/user/3315782802482007">https://juejin.cn/user/3315782802482007</a></p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/352476552/article">https://space.bilibili.com/352476552/article</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/93230">https://cloud.tencent.com/developer/column/93230</a></p>
+<p>知乎、CSDN、开源中国、思否、掘金、哔哩哔哩、腾讯云</p>
+<blockquote>
+<p>本文使用 <a target="_blank" rel="noopener" href="https://juejin.cn/post/6940875049587097631">文章同步助手</a> 同步</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://www.chenby.cn">chenby</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://www.chenby.cn/2021/12/30/6551752320cf/">http://www.chenby.cn/2021/12/30/6551752320cf/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://www.chenby.cn" target="_blank">小陈运维</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://www.oiox.cn/images/wallhaven-l3dd1r.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/30/092db946ae20/"><img class="prev-cover" src="https://www.oiox.cn/images/wallhaven-l3xoor.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">KubeSphere 升级 &amp;amp;&amp;amp; 安装后启用插件</div></div></a></div><div class="next-post pull-right"><a href="/2021/12/30/b85d752dd575/"><img class="next-cover" src="https://www.oiox.cn/images/wallhaven-m9kely.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">kubernetes（k8s）中部署dashboard可视化面板</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://www.oiox.cn/1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">chenby</div><div class="author-info__description">小陈运维，致力于Kubernetes（k8s）与传统运维技术博客文档分享。互相学习，互相进步。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">148</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/27/95aa82e98174/" title="镜像搬运工 skopeo"><img src="https://www.oiox.cn/images/wallhaven-l3xoor.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="镜像搬运工 skopeo"/></a><div class="content"><a class="title" href="/2022/11/27/95aa82e98174/" title="镜像搬运工 skopeo">镜像搬运工 skopeo</a><time datetime="2022-11-27T13:38:50.000Z" title="发表于 2022-11-27 21:38:50">2022-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/23/376987efd3b7/" title="在k8s上安装Harbor"><img src="https://www.oiox.cn/images/wallhaven-e76y7l.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在k8s上安装Harbor"/></a><div class="content"><a class="title" href="/2022/11/23/376987efd3b7/" title="在k8s上安装Harbor">在k8s上安装Harbor</a><time datetime="2022-11-22T16:21:49.000Z" title="发表于 2022-11-23 00:21:49">2022-11-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/16/d9240dc51b85/" title="安装Harbor"><img src="https://www.oiox.cn/images/wallhaven-72g2qo.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="安装Harbor"/></a><div class="content"><a class="title" href="/2022/11/16/d9240dc51b85/" title="安装Harbor">安装Harbor</a><time datetime="2022-11-16T07:18:03.000Z" title="发表于 2022-11-16 15:18:03">2022-11-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/12/752114e7fe6b/" title="Grafana Prometheus Altermanager"><img src="https://www.oiox.cn/images/wallhaven-72gzz3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Grafana Prometheus Altermanager"/></a><div class="content"><a class="title" href="/2022/11/12/752114e7fe6b/" title="Grafana Prometheus Altermanager">Grafana Prometheus Altermanager</a><time datetime="2022-11-12T03:59:09.000Z" title="发表于 2022-11-12 11:59:09">2022-11-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/09/05f3ddcc5772/" title="在Ubuntu中安装Samba文件服务"><img src="https://www.oiox.cn/images/wallhaven-l3xoor.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在Ubuntu中安装Samba文件服务"/></a><div class="content"><a class="title" href="/2022/11/09/05f3ddcc5772/" title="在Ubuntu中安装Samba文件服务">在Ubuntu中安装Samba文件服务</a><time datetime="2022-11-09T10:48:03.000Z" title="发表于 2022-11-09 18:48:03">2022-11-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By chenby</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
