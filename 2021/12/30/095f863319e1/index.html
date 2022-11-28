@@ -1,0 +1,175 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Ansible 安装并简单使用 | 小陈运维</title><meta name="keywords" content="小陈运维,运维,linux,kubernetes,docker,k8s,容器,博客,文档,技术"><meta name="author" content="chenby"><meta name="copyright" content="chenby"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Ansible 简介 Ansible 是一款 IT 自动化工具。主要应用场景有配置系统、软件部署、持续发布及不停服平滑滚动更新的高级任务编排。  Ansible 本身非常简单易用，同时注重安全和可靠性，以最小化变动为特色，使用 OpenSSH 实现数据传输 ( 如果有需要的话也可以使用其它传输模式或者 pull 模式 )，其语言设计非常利于人类阅读，即使是针对不刚接触 Ansible 的新手来讲亦">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ansible 安装并简单使用">
+<meta property="og:url" content="http://www.chenby.cn/2021/12/30/095f863319e1/index.html">
+<meta property="og:site_name" content="小陈运维">
+<meta property="og:description" content="Ansible 简介 Ansible 是一款 IT 自动化工具。主要应用场景有配置系统、软件部署、持续发布及不停服平滑滚动更新的高级任务编排。  Ansible 本身非常简单易用，同时注重安全和可靠性，以最小化变动为特色，使用 OpenSSH 实现数据传输 ( 如果有需要的话也可以使用其它传输模式或者 pull 模式 )，其语言设计非常利于人类阅读，即使是针对不刚接触 Ansible 的新手来讲亦">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.oiox.cn/images/wallhaven-q2k2w7.jpeg">
+<meta property="article:published_time" content="2021-12-30T09:07:00.000Z">
+<meta property="article:modified_time" content="2022-03-25T07:48:24.000Z">
+<meta property="article:author" content="chenby">
+<meta property="article:tag" content="小陈运维,运维,linux,kubernetes,docker,k8s,容器,博客,文档,技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.oiox.cn/images/wallhaven-q2k2w7.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://www.chenby.cn/2021/12/30/095f863319e1/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":"none"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Ansible 安装并简单使用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-03-25 15:48:24'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://www.oiox.cn/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">130</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://www.oiox.cn/images/wallhaven-q2k2w7.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小陈运维</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Ansible 安装并简单使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-30T09:07:00.000Z" title="发表于 2021-12-30 17:07:00">2021-12-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-03-25T07:48:24.000Z" title="更新于 2022-03-25 15:48:24">2022-03-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Ansible 安装并简单使用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>Ansible 简介</p>
+<p>Ansible 是一款 IT 自动化工具。主要应用场景有配置系统、软件部署、持续发布及不停服平滑滚动更新的高级任务编排。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/dc088adca8ce488482700e675f8717c3~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>Ansible 本身非常简单易用，同时注重安全和可靠性，以最小化变动为特色，使用 OpenSSH 实现数据传输 ( 如果有需要的话也可以使用其它传输模式或者 pull 模式 )，其语言设计非常利于人类阅读，即使是针对不刚接触 Ansible 的新手来讲亦是如此。</p>
+<p>我们坚信无论什么范围的环境，简单都是必须的，所以我们的设计尽可能满足各类型的繁忙人群：开发人员、系统管理员、发布工程师、IT 管理员等所有类型的人。同时， Ansible 适用于各种环境，小到几台多到成千上万台的企业实际环境都完全满足。</p>
+<p>Ansible 不使用C&#x2F;S架构管理节点，即没有 Agent 。这样的架构使得 Ansible 不会存在如何升级远程 Agent 管理进程或者因为没有安装 Agent 而无法管理系统。因为 OpenSSH 是非常流行的开源组件，安全问题也非常少 。Ansible 的 去中心化 管理方式深受业内认可， 即它只依赖 OS 的 KEY 认证访问远程主机。如需， Ansible 可以便捷接入 Kerberos, LDAP 或者其它认证系统。</p>
+<p>安装ansible工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@Ansible:~# apt update &amp;&amp; apt install ansible</span><br><span class="line">root@Ansible:~# apt install sshpass</span><br></pre></td></tr></table></figure>
+
+<p>创建秘钥</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">root@Ansible:~# ssh-keygen</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/root/.ssh/id_rsa):</span><br><span class="line">Enter passphrase (empty for no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br><span class="line">Your identification has been saved in /root/.ssh/id_rsa</span><br><span class="line">Your public key has been saved in /root/.ssh/id_rsa.pub</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:ZlnekfYdDkp4AA2zZLysbtr8Epcp6tMgFB2TGEY/zFU root@Ansible</span><br><span class="line">The key&#x27;s randomart image is:</span><br><span class="line">+---[RSA 3072]----+</span><br><span class="line">|.++oo.oE+.       |</span><br><span class="line">|.o+oo o.o.o  .   |</span><br><span class="line">|  .=  .....o+. . |</span><br><span class="line">| .  .  o +oo.oo..|</span><br><span class="line">|.     . S ... ...|</span><br><span class="line">| . . + *         |</span><br><span class="line">|  . = +          |</span><br><span class="line">|   oo=           |</span><br><span class="line">|  .o+oo.         |</span><br><span class="line">+----[SHA256]-----+</span><br><span class="line">root@Ansible:~#</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">批量拷贝脚本</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# vim copy_ssh_id.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# cat copy_ssh_id.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">rm -f ./authorized_keys; touch ./authorized_keys</span><br><span class="line">sed -i &#x27;/StrictHostKeyChecking/s/^#//; /StrictHostKeyChecking/s/ask/no/&#x27; /etc/ssh/ssh_config</span><br><span class="line">sed -i &quot;/#UseDNS/ s/^#//; /UseDNS/ s/yes/no/&quot; /etc/ssh/sshd_config</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cat hostsname.txt | while read host ip pwd; do</span><br><span class="line">  sshpass -p $pwd ssh-copy-id -f $ip 2&gt;/dev/null</span><br><span class="line">  ssh -nq $ip &quot;hostnamectl set-hostname $host&quot;</span><br><span class="line">  ssh -nq $ip &quot;echo -e &#x27;y\n&#x27; | ssh-keygen -q -f ~/.ssh/id_rsa -t rsa -N &#x27;&#x27;&quot;</span><br><span class="line">  echo &quot;===== Copy id_rsa.pub of $ip =====&quot;</span><br><span class="line">  scp $ip:/root/.ssh/id_rsa.pub ./$host-id_rsa.pub</span><br><span class="line">  #cat ./$host-id_rsa.pub &gt;&gt; ./authorized_keys</span><br><span class="line">  echo $ip $host &gt;&gt; /etc/hosts</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~#</span><br></pre></td></tr></table></figure>
+
+<p>添加主机信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@Ansible:~# vim hostsname.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# cat hostsname.txt</span><br><span class="line">node  192.168.1.2    123123</span><br><span class="line">node  192.168.1.3    123123</span><br><span class="line">node  192.168.1.4    123123</span><br><span class="line">node  192.168.1.5    123123</span><br><span class="line">node  192.168.1.6    123123</span><br><span class="line">node  192.168.1.7    123123</span><br><span class="line">node  192.168.1.8    123123</span><br><span class="line">node  192.168.1.9    123123</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">------</span><br></pre></td></tr></table></figure>
+
+<p>fetch模块：</p>
+<p>copy模块：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1、从远程主机获取文件：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# ansible k8s -m fetch -a &quot;src=/root/node.sh dest=/root/test&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2、从本地主机传到远程：</span><br><span class="line">root@Ansible:~# ansible k8s -m copy -a &quot;src=/root/node.sh dest=/root&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">3、远程复制或者本地上传，加上force=yes，则会覆盖掉原来的文件，加上backup=yes，在覆盖的时候会把原来的文件做一个备份：</span><br><span class="line">root@Ansible:~# ansible k8s -m copy -a &quot;src=/root/node.sh dest=/root force=yes backup=yes&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">4、复制的时候可以带参数：owner,group,mode</span><br></pre></td></tr></table></figure>
+
+<p>-——–</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">将本地的源拷贝到服务器上</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# ansible k8s -m copy -a &quot;src=/etc/apt/sources.list dest=/etc/apt/&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">更新源</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# ansible k8s  -m  command -a &#x27;apt update&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">安装ntpdate</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# ansible k8s  -m  command -a &#x27;apt install ntpdate&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">同步时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~# ansible k8s  -m  command -a &#x27;ntpdate -u ntp.aliyun.com&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">修改时区</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~#</span><br><span class="line">root@Ansible:~#</span><br><span class="line">root@Ansible:~# ansible k8s  -m  command -a &#x27;cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">查看是否修改</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@Ansible:~#</span><br><span class="line">root@Ansible:~# ansible k8s  -m  command -a &#x27;date -R &#x27;</span><br><span class="line">192.168.1.13 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.10 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.14 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.12 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.11 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.15 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.51 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.52 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.16 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.53 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:57 +0800</span><br><span class="line">192.168.1.55 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:58 +0800</span><br><span class="line">192.168.1.54 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:58 +0800</span><br><span class="line">192.168.1.57 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:58 +0800</span><br><span class="line">192.168.1.56 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">Thu, 11 Nov 2021 14:52:58 +0800</span><br><span class="line">root@Ansible:~#</span><br><span class="line">root@Ansible:~#</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>关于</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/index.php/start-page.html">https://www.oiox.cn/index.php/start-page.html</a></p>
+<p><strong>CSDN、GitHub、51CTO、知乎、开源中国、思否、掘金、简书、华为云、阿里云、腾讯云、哔哩哔哩、今日头条、新浪微博、个人博客</strong></p>
+<p><strong>全网可搜《小陈运维》</strong></p>
+<p><strong>文章主要发布于微信公众号</strong></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://www.chenby.cn">chenby</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://www.chenby.cn/2021/12/30/095f863319e1/">http://www.chenby.cn/2021/12/30/095f863319e1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://www.chenby.cn" target="_blank">小陈运维</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://www.oiox.cn/images/wallhaven-q2k2w7.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/30/93d8a148b84b/"><img class="prev-cover" src="https://www.oiox.cn/images/wallhaven-xlo73z.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">KubeSphere 高可用集群搭建并启用所有插件</div></div></a></div><div class="next-post pull-right"><a href="/2021/12/30/58386057e3dc/"><img class="next-cover" src="https://www.oiox.cn/images/wallhaven-e76y7l.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">kubernetes(k8s) 存储动态挂载</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://www.oiox.cn/1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">chenby</div><div class="author-info__description">小陈运维，致力于Kubernetes（k8s）与传统运维技术博客文档分享。互相学习，互相进步。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">130</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cby-chen"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/64f3215098b3/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-m9olo8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/64f3215098b3/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/5c9e4c6a7785/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-72g2qo.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/5c9e4c6a7785/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/6482460a5d6d/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-72g2qo.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/6482460a5d6d/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/16/21770783bcd7/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-q2k2w7.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/16/21770783bcd7/" title="无题">无题</a><time datetime="2022-11-16T12:27:40.238Z" title="发表于 2022-11-16 20:27:40">2022-11-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/16/cad574b2aab0/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-6o7md7.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/16/cad574b2aab0/" title="无题">无题</a><time datetime="2022-11-16T10:35:10.113Z" title="发表于 2022-11-16 18:35:10">2022-11-16</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://www.oiox.cn/images/wallhaven-q2k2w7.jpeg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By chenby</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

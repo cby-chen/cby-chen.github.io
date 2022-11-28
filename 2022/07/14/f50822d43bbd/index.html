@@ -1,0 +1,238 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>kubernetes (k8s) 二进制高可用安装 | 小陈运维</title><meta name="keywords" content="小陈运维,小陈,小陈博客,文档,"><meta name="author" content="chenby"><meta name="copyright" content="chenby"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="kubernetes (k8s) 二进制高可用安装">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kubernetes (k8s) 二进制高可用安装">
+<meta property="og:url" content="http://www.chenby.cn/2022/07/14/f50822d43bbd/index.html">
+<meta property="og:site_name" content="小陈运维">
+<meta property="og:description" content="kubernetes (k8s) 二进制高可用安装">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.oiox.cn/images/wallhaven-xlo73z.jpg">
+<meta property="article:published_time" content="2022-07-14T10:26:00.000Z">
+<meta property="article:modified_time" content="2022-07-14T10:26:36.000Z">
+<meta property="article:author" content="chenby">
+<meta property="article:tag" content="小陈运维,运维,linux,kubernetes,docker,k8s,容器,博客,文档,技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.oiox.cn/images/wallhaven-xlo73z.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://www.chenby.cn/2022/07/14/f50822d43bbd/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":"none"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'kubernetes (k8s) 二进制高可用安装',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-07-14 18:26:36'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://www.oiox.cn/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">130</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://www.oiox.cn/images/wallhaven-xlo73z.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小陈运维</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">kubernetes (k8s) 二进制高可用安装</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-14T10:26:00.000Z" title="发表于 2022-07-14 18:26:00">2022-07-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-14T10:26:36.000Z" title="更新于 2022-07-14 18:26:36">2022-07-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="kubernetes (k8s) 二进制高可用安装"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="kubernetes-k8s-二进制高可用安装"><a href="#kubernetes-k8s-二进制高可用安装" class="headerlink" title="kubernetes (k8s) 二进制高可用安装"></a>kubernetes (k8s) 二进制高可用安装</h1><p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes">https://github.com/cby-chen/Kubernetes</a> 开源不易，帮忙点个star，谢谢了</p>
+<p>GitHub访问不通畅可以访问国内GitEE <a target="_blank" rel="noopener" href="https://gitee.com/cby-inc/Kubernetes">https://gitee.com/cby-inc/Kubernetes</a></p>
+<h1 id="常见异常"><a href="#常见异常" class="headerlink" title="常见异常"></a>常见异常</h1><ol>
+<li>安装会出现kubelet异常，无法识别 <code>--node-labels</code> 字段问题，原因如下。</li>
+</ol>
+<p>将 <code>--node-labels=node.kubernetes.io/node=&#39;&#39;</code> 替换为 <code>--node-labels=node.kubernetes.io/node=</code>  将 <code>&#39;&#39;</code> 删除即可。</p>
+<ol start="2">
+<li><p>注意hosts配置文件中主机名和IP地址对应</p>
+</li>
+<li><p>在文档7.2，却记别忘记执行<code>kubectl create -f bootstrap.secret.yaml</code>命令</p>
+</li>
+</ol>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>kubernetes（k8s）二进制高可用安装部署，支持IPv4+IPv6双栈。</p>
+<p>我使用IPV6的目的是在公网进行访问，所以我配置了IPV6静态地址。</p>
+<p>若您没有IPV6环境，或者不想使用IPv6，不对主机进行配置IPv6地址即可。</p>
+<p>不配置IPV6，不影响后续，不过集群依旧是支持IPv6的。为后期留有扩展可能性。</p>
+<p>若不要IPv6 ，不给网卡配置IPv6即可，不要对IPv6相关配置删除或操作，否则会出问题。</p>
+<p>强烈建议在Github上查看文档。Github出问题会更新文档，并且后续尽可能第一时间更新新版本文档。</p>
+<h1 id="当前文档版本"><a href="#当前文档版本" class="headerlink" title="当前文档版本"></a>当前文档版本</h1><p>1.21.13 和 1.22.10 和 1.23.3 和 1.23.4 和 1.23.5 和 1.23.6 和 1.23.7 和 1.24.0 和 1.24.1 和 1.24.2 和 1.24.3 …陆续更新。</p>
+<h1 id="访问地址"><a href="#访问地址" class="headerlink" title="访问地址"></a>访问地址</h1><p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/">https://github.com/cby-chen/Kubernetes/</a></p>
+<p>手动项目地址：<a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes">https://github.com/cby-chen/Kubernetes</a></p>
+<p>脚本项目地址：<a target="_blank" rel="noopener" href="https://github.com/cby-chen/Binary_installation_of_Kubernetes">https://github.com/cby-chen/Binary_installation_of_Kubernetes</a></p>
+<h1 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h1><h2 id="二进制安装每个版本文档"><a href="#二进制安装每个版本文档" class="headerlink" title="二进制安装每个版本文档"></a>二进制安装每个版本文档</h2><h3 id="1-23版本"><a href="#1-23版本" class="headerlink" title="1.23版本"></a>1.23版本</h3><p><a href="./v1.23.3-CentOS-binary-install.md">v1.23.3-CentOS-binary-install</a></p>
+<p><a href="./v1.23.4-CentOS-binary-install.md">v1.23.4-CentOS-binary-install</a></p>
+<p><a href="./v1.23.5-CentOS-binary-install.md">v1.23.5-CentOS-binary-install</a></p>
+<p><a href="./v1.23.6-CentOS-binary-install.md">v1.23.6-CentOS-binary-install</a></p>
+<h3 id="1-24版本"><a href="#1-24版本" class="headerlink" title="1.24版本"></a>1.24版本</h3><p><a href="./v1.24.0-CentOS-binary-install-IPv6-IPv4.md">v1.24.0-CentOS-binary-install-IPv6-IPv4.md</a></p>
+<p><a href="./v1.24.1-CentOS-binary-install-IPv6-IPv4.md">v1.24.1-CentOS-binary-install-IPv6-IPv4.md</a></p>
+<p><a href="./v1.24.2-CentOS-binary-install-IPv6-IPv4.md">v1.24.2-CentOS-binary-install-IPv6-IPv4.md</a></p>
+<p><a href="./v1.24.3-CentOS-binary-install-IPv6-IPv4.md">v1.24.3-CentOS-binary-install-IPv6-IPv4.md</a></p>
+<h3 id="三主俩从版本"><a href="#三主俩从版本" class="headerlink" title="三主俩从版本"></a>三主俩从版本</h3><p><a href="./v1.21.13-CentOS-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md">v1.21.13-CentOS-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md</a></p>
+<p><a href="./v1.22.10-CentOS-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md">v1.22.10-CentOS-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md</a></p>
+<p><a href="./v1.23.7-CentOS-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md">v1.23.7-CentOS-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md</a></p>
+<p><a href="./v1.24.0-CentOS-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md">v1.24.0-CentOS-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md</a></p>
+<p><a href="./v1.24.1-CentOS-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md">v1.24.1-CentOS-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md</a></p>
+<p><a href="./v1.24.1-Ubuntu-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md">v1.24.1-Ubuntu-binary-install-IPv6-IPv4-Three-Masters-Two-Slaves.md</a></p>
+<h2 id="修复kube-proxy证书权限过大问题"><a href="#修复kube-proxy证书权限过大问题" class="headerlink" title="修复kube-proxy证书权限过大问题"></a>修复kube-proxy证书权限过大问题</h2><p><a href="./kube-proxy_permissions.md">kube-proxy_permissions.md</a></p>
+<h2 id="使用kubeadm初始化IPV4-x2F-IPV6集群"><a href="#使用kubeadm初始化IPV4-x2F-IPV6集群" class="headerlink" title="使用kubeadm初始化IPV4&#x2F;IPV6集群"></a>使用kubeadm初始化IPV4&#x2F;IPV6集群</h2><p><a href="./kubeadm-install-IPV6-IPV4.md">kubeadm-install-IPV6-IPV4.md</a></p>
+<h2 id="IPv4集群启用IPv6功能，关闭IPv6则反之"><a href="#IPv4集群启用IPv6功能，关闭IPv6则反之" class="headerlink" title="IPv4集群启用IPv6功能，关闭IPv6则反之"></a>IPv4集群启用IPv6功能，关闭IPv6则反之</h2><p><a href="./Enable-implement-IPv4-IPv6.md">Enable-implement-IPv4-IPv6.md</a></p>
+<h1 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h1><p>（下载更快）我自己的网盘：<a target="_blank" rel="noopener" href="https://pan.oiox.cn/s/PetV">https://pan.oiox.cn/s/PetV</a></p>
+<p>（下载更快）123网盘：<a target="_blank" rel="noopener" href="https://www.123pan.com/s/Z8ArVv-PG60d">https://www.123pan.com/s/Z8ArVv-PG60d</a></p>
+<p>每个初始版本会打上releases，安装包在releases页面</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/releases">https://github.com/cby-chen/Kubernetes/releases</a></p>
+<p>注意：1.23.3 版本当时没想到会后续更新，所以当时命名不太规范。</p>
+<p>wget <a target="_blank" rel="noopener" href="https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/cby/Kubernetes.tar">https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/cby/Kubernetes.tar</a></p>
+<p>wget <a target="_blank" rel="noopener" href="https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.23.4/kubernetes-v1.23.4.tar">https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.23.4/kubernetes-v1.23.4.tar</a></p>
+<p>wget <a target="_blank" rel="noopener" href="https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.23.5/kubernetes-v1.24.5.tar">https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.23.5/kubernetes-v1.24.5.tar</a></p>
+<p>wget <a target="_blank" rel="noopener" href="https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.23.6/kubernetes-v1.23.6.tar">https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.23.6/kubernetes-v1.23.6.tar</a></p>
+<p>wget <a target="_blank" rel="noopener" href="https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.23.7/kubernetes-v1.23.7.tar">https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.23.7/kubernetes-v1.23.7.tar</a></p>
+<p>wget <a target="_blank" rel="noopener" href="https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.24.0/kubernetes-v1.24.0.tar">https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.24.0/kubernetes-v1.24.0.tar</a></p>
+<p>wget <a target="_blank" rel="noopener" href="https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.24.1/kubernetes-v1.24.1.tar">https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.24.1/kubernetes-v1.24.1.tar</a></p>
+<p>wget <a target="_blank" rel="noopener" href="https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.24.2/kubernetes-v1.24.2.tar">https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.24.2/kubernetes-v1.24.2.tar</a></p>
+<p>wget <a target="_blank" rel="noopener" href="https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.24.3/kubernetes-v1.24.3.tar">https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.24.3/kubernetes-v1.24.3.tar</a></p>
+<p>wget <a target="_blank" rel="noopener" href="https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.22.10/kubernetes-v1.22.10.tar">https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.22.10/kubernetes-v1.22.10.tar</a></p>
+<p>wget <a target="_blank" rel="noopener" href="https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.21.13/kubernetes-v1.21.13.tar">https://ghproxy.com/https://github.com/cby-chen/Kubernetes/releases/download/v1.21.13/kubernetes-v1.21.13.tar</a></p>
+<h1 id="旧版本地址"><a href="#旧版本地址" class="headerlink" title="旧版本地址"></a>旧版本地址</h1><p>建议查看main版本中的文档。<a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/">https://github.com/cby-chen/Kubernetes/</a></p>
+<p>若找对应版本文档中的安装包，可以在上方下载安装包，可以在在下方地址中查找。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/tree/cby">https://github.com/cby-chen/Kubernetes/tree/cby</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/tree/v1.23.4">https://github.com/cby-chen/Kubernetes/tree/v1.23.4</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/tree/v1.23.5">https://github.com/cby-chen/Kubernetes/tree/v1.23.5</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/tree/v1.23.6">https://github.com/cby-chen/Kubernetes/tree/v1.23.6</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/tree/v1.23.7">https://github.com/cby-chen/Kubernetes/tree/v1.23.7</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/tree/v1.24.0">https://github.com/cby-chen/Kubernetes/tree/v1.24.0</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/tree/v1.24.1">https://github.com/cby-chen/Kubernetes/tree/v1.24.1</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/tree/v1.24.2">https://github.com/cby-chen/Kubernetes/tree/v1.24.2</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/tree/v1.24.3">https://github.com/cby-chen/Kubernetes/tree/v1.24.3</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/tree/v1.22.10">https://github.com/cby-chen/Kubernetes/tree/v1.22.10</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes/tree/v1.21.13">https://github.com/cby-chen/Kubernetes/tree/v1.21.13</a></p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><ul>
+<li>建议在 <a target="_blank" rel="noopener" href="https://github.com/cby-chen/Kubernetes">Kubernetes</a> 查看文档，后续会陆续更新文档</li>
+<li>小陈网站：</li>
+</ul>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://blog.oiox.cn/">https://blog.oiox.cn/</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a></li>
+<li><a href="https://www.chenby.cn/">https://www.chenby.cn/</a></li>
+<li><a target="_blank" rel="noopener" href="https://cby-chen.github.io/">https://cby-chen.github.io/</a></li>
+</ol>
+<ul>
+<li>关于小陈：<a target="_blank" rel="noopener" href="https://www.oiox.cn/index.php/start-page.html">https://www.oiox.cn/index.php/start-page.html</a></li>
+</ul>
+<h1 id="技术交流"><a href="#技术交流" class="headerlink" title="技术交流"></a>技术交流</h1><p>作者:</p>
+<p><img src="https://www.oiox.cn/about/2.png" alt="avatar">  </p>
+<p>加群:</p>
+<p><img src="https://www.oiox.cn/about/1.png" alt="avatar">  </p>
+<p>其他文档请查看如下，欢迎关注微信：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/index.php/start-page.html">https://www.oiox.cn/index.php/start-page.html</a></p>
+<p><strong>CSDN、GitHub、知乎、开源中国、思否、掘金、简书、华为云、阿里云、腾讯云、哔哩哔哩、今日头条、新浪微博、个人博客</strong></p>
+<p><strong>全网可搜《小陈运维》</strong></p>
+<p><strong>文章主要发布于微信</strong></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://www.chenby.cn">chenby</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://www.chenby.cn/2022/07/14/f50822d43bbd/">http://www.chenby.cn/2022/07/14/f50822d43bbd/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://www.chenby.cn" target="_blank">小陈运维</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://www.oiox.cn/images/wallhaven-xlo73z.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/08/05/3976944a9373/"><img class="prev-cover" src="https://www.oiox.cn/images/wallhaven-q2k2w7.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">安装KubeOperator并导入现有集群进行管理</div></div></a></div><div class="next-post pull-right"><a href="/2022/07/02/8c4b88dd1340/"><img class="next-cover" src="https://www.oiox.cn/images/wallhaven-xlo73z.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">修复Joe主题静态资源为国内地址</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://www.oiox.cn/1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">chenby</div><div class="author-info__description">小陈运维，致力于Kubernetes（k8s）与传统运维技术博客文档分享。互相学习，互相进步。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">130</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cby-chen"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes-k8s-%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">kubernetes (k8s) 二进制高可用安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%BC%82%E5%B8%B8"><span class="toc-number">2.</span> <span class="toc-text">常见异常</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BD%93%E5%89%8D%E6%96%87%E6%A1%A3%E7%89%88%E6%9C%AC"><span class="toc-number">4.</span> <span class="toc-text">当前文档版本</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80"><span class="toc-number">5.</span> <span class="toc-text">访问地址</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%87%E6%A1%A3"><span class="toc-number">6.</span> <span class="toc-text">文档</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85%E6%AF%8F%E4%B8%AA%E7%89%88%E6%9C%AC%E6%96%87%E6%A1%A3"><span class="toc-number">6.1.</span> <span class="toc-text">二进制安装每个版本文档</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-23%E7%89%88%E6%9C%AC"><span class="toc-number">6.1.1.</span> <span class="toc-text">1.23版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-24%E7%89%88%E6%9C%AC"><span class="toc-number">6.1.2.</span> <span class="toc-text">1.24版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E4%B8%BB%E4%BF%A9%E4%BB%8E%E7%89%88%E6%9C%AC"><span class="toc-number">6.1.3.</span> <span class="toc-text">三主俩从版本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8Dkube-proxy%E8%AF%81%E4%B9%A6%E6%9D%83%E9%99%90%E8%BF%87%E5%A4%A7%E9%97%AE%E9%A2%98"><span class="toc-number">6.2.</span> <span class="toc-text">修复kube-proxy证书权限过大问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8kubeadm%E5%88%9D%E5%A7%8B%E5%8C%96IPV4-x2F-IPV6%E9%9B%86%E7%BE%A4"><span class="toc-number">6.3.</span> <span class="toc-text">使用kubeadm初始化IPV4&#x2F;IPV6集群</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPv4%E9%9B%86%E7%BE%A4%E5%90%AF%E7%94%A8IPv6%E5%8A%9F%E8%83%BD%EF%BC%8C%E5%85%B3%E9%97%ADIPv6%E5%88%99%E5%8F%8D%E4%B9%8B"><span class="toc-number">6.4.</span> <span class="toc-text">IPv4集群启用IPv6功能，关闭IPv6则反之</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-number">7.</span> <span class="toc-text">安装包</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%97%A7%E7%89%88%E6%9C%AC%E5%9C%B0%E5%9D%80"><span class="toc-number">8.</span> <span class="toc-text">旧版本地址</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">9.</span> <span class="toc-text">其他</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E4%BA%A4%E6%B5%81"><span class="toc-number">10.</span> <span class="toc-text">技术交流</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/64f3215098b3/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-m9olo8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/64f3215098b3/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/5c9e4c6a7785/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-72g2qo.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/5c9e4c6a7785/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/6482460a5d6d/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-72g2qo.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/6482460a5d6d/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/16/21770783bcd7/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-q2k2w7.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/16/21770783bcd7/" title="无题">无题</a><time datetime="2022-11-16T12:27:40.238Z" title="发表于 2022-11-16 20:27:40">2022-11-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/16/cad574b2aab0/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-6o7md7.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/16/cad574b2aab0/" title="无题">无题</a><time datetime="2022-11-16T10:35:10.113Z" title="发表于 2022-11-16 18:35:10">2022-11-16</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://www.oiox.cn/images/wallhaven-xlo73z.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By chenby</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

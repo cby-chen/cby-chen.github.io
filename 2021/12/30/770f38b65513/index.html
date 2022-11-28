@@ -1,0 +1,313 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>华为人工智能atlasA800-9000物理服务器离线安装及CANN安装和MindSpore安装和Tensorflow安装 | 小陈运维</title><meta name="keywords" content="小陈运维,运维,linux,kubernetes,docker,k8s,容器,博客,文档,技术"><meta name="author" content="chenby"><meta name="copyright" content="chenby"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="目录 华为人工智能atlas A800-9000 物理服务器全程离线安装驱动以及CANN安装部署和MindSpore安装部署和Tensorflow安装部署 A800-9000 物理服务器安装驱动 使用镜像配置本地apt源 创建普通用户并设置密码 安装驱动以及固件 验证是否安装成功 CANN开发环境部署安装 安装环境以及依赖 安装完成后查看版本 安装Python3.7.5 使用Python3.7.5">
+<meta property="og:type" content="article">
+<meta property="og:title" content="华为人工智能atlasA800-9000物理服务器离线安装及CANN安装和MindSpore安装和Tensorflow安装">
+<meta property="og:url" content="http://www.chenby.cn/2021/12/30/770f38b65513/index.html">
+<meta property="og:site_name" content="小陈运维">
+<meta property="og:description" content="目录 华为人工智能atlas A800-9000 物理服务器全程离线安装驱动以及CANN安装部署和MindSpore安装部署和Tensorflow安装部署 A800-9000 物理服务器安装驱动 使用镜像配置本地apt源 创建普通用户并设置密码 安装驱动以及固件 验证是否安装成功 CANN开发环境部署安装 安装环境以及依赖 安装完成后查看版本 安装Python3.7.5 使用Python3.7.5">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.oiox.cn/images/wallhaven-e79v1r.jpg">
+<meta property="article:published_time" content="2021-12-30T09:02:00.000Z">
+<meta property="article:modified_time" content="2022-03-25T07:51:35.000Z">
+<meta property="article:author" content="chenby">
+<meta property="article:tag" content="小陈运维,运维,linux,kubernetes,docker,k8s,容器,博客,文档,技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.oiox.cn/images/wallhaven-e79v1r.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://www.chenby.cn/2021/12/30/770f38b65513/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":"none"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '华为人工智能atlasA800-9000物理服务器离线安装及CANN安装和MindSpore安装和Tensorflow安装',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-03-25 15:51:35'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://www.oiox.cn/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">130</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://www.oiox.cn/images/wallhaven-e79v1r.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小陈运维</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">华为人工智能atlasA800-9000物理服务器离线安装及CANN安装和MindSpore安装和Tensorflow安装</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-30T09:02:00.000Z" title="发表于 2021-12-30 17:02:00">2021-12-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-03-25T07:51:35.000Z" title="更新于 2022-03-25 15:51:35">2022-03-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="华为人工智能atlasA800-9000物理服务器离线安装及CANN安装和MindSpore安装和Tensorflow安装"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>目录</p>
+<p>华为人工智能atlas A800-9000 物理服务器全程离线安装驱动以及CANN安装部署和MindSpore安装部署和Tensorflow安装部署</p>
+<p>A800-9000 物理服务器安装驱动</p>
+<p>使用镜像配置本地apt源</p>
+<p>创建普通用户并设置密码</p>
+<p>安装驱动以及固件</p>
+<p>验证是否安装成功</p>
+<p>CANN开发环境部署安装</p>
+<p>安装环境以及依赖</p>
+<p>安装完成后查看版本</p>
+<p>安装Python3.7.5</p>
+<p>使用Python3.7.5环境安装pip依赖包</p>
+<p>安装开发套件包</p>
+<p>CANN训练环境部署安装</p>
+<p>说明</p>
+<p>安装训练软件包</p>
+<p>安装MindSpore</p>
+<p>安装whl包</p>
+<p>配置环境变量</p>
+<p>测试是否可行</p>
+<p>安装mindinsight</p>
+<p>安装whl包</p>
+<p>配置环境变量</p>
+<p>启动及使用</p>
+<p>安装Tensorflow</p>
+<p>编译hdf5</p>
+<p>配置环境变量及软连接</p>
+<p>安装whl包</p>
+<p>安装Pytorch</p>
+<p><strong>华为人工智能atlas A800-9000 物理服务器全程离线安装驱动以及CANN安装部署和MindSpore安装部署和Tensorflow安装部署</strong></p>
+<p>背景</p>
+<p>Atlas 800 训练服务器（型号：9000）是基于华为鲲鹏920+昇腾910处理器的AI训练服务器，具有最强算力密度、超高能效与高速网络带宽等特点。该服务器广泛应用于深度学习模型开发和训练，适用于智慧城市、智慧医疗、天文探索、石油勘探等需要大算力的行业领域。</p>
+<p>链接：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://e.huawei.com/cn/products/cloud-computing-dc/atlas/atlas-800-training-9000</span><br></pre></td></tr></table></figure>
+
+<p>CANN (Compute Architecture for Neural Networks)</p>
+<p>是华为公司针对AI场景推出的异构计算架构，通过提供多层次的编程接口，支持用户快速构建基于昇腾平台的AI应用和业务。</p>
+<p>链接：  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://e.huawei.com/cn/products/cloud-computing-dc/atlas/cann</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1f089f5ea12d4b2a96f1bc04c4b417d9~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>MindSpore，新一代AI开源计算框架。</p>
+<p>创新编程范式，AI科学家和工程师更易使用，便于开放式创新；该计算框架可满足终端、边缘计算、云全场景需求，能更好保护数据隐私；可开源，形成广阔应用生态。</p>
+<p>链接：  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.mindspore.cn/</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b5b21ad3d5d04fc8816abcd6a6bd80b9~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>TensorFlow最初由谷歌大脑团队开发，用于Google的研究和生产，于2015年11月9日在Apache 2.0开源许可证下发布。  </p>
+<p>链接：  </p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3fcf527d2f6b47a9bdff1e349a3ee280~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.tensorflow.org/</span><br></pre></td></tr></table></figure>
+
+<p><strong>A800-9000****物理服务器安装驱动</strong></p>
+<p><strong>使用镜像配置本地apt源</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/etc/apt# mkdir/media/cdrom</span><br><span class="line">root@ubuntu:/etc/apt# mount/home/cby/ubuntu-18.04.5-server-arm64.iso /media/cdrom</span><br><span class="line">mount: /media/chrom: WARNING:device write-protected, mounted read-only.</span><br><span class="line">root@ubuntu:/etc/apt# apt-cdrom-m -d=/media/cdrom/ add</span><br><span class="line">root@ubuntu:/etc/apt# cat/etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+
+<p><strong>创建普通用户并设置密码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~#groupadd HwHiAiUser</span><br><span class="line">root@ubuntu:~#useradd -g HwHiAiUser -d /home/HwHiAiUser -m HwHiAiUser</span><br><span class="line">root@ubuntu:~#passwd HwHiAiUser</span><br><span class="line">Enter newUNIX password:</span><br><span class="line">Retype newUNIX password:</span><br><span class="line">passwd:password updated successfully</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装驱动以及固件</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# cd /home/cby/</span><br><span class="line">root@ubuntu:/home/cby# ll</span><br><span class="line">total 98324</span><br><span class="line">drwxr-xr-x 4 cby  cby     4096 Apr 21 21:41 ./</span><br><span class="line">drwxr-xr-x 4 root root     4096 Apr 21 21:44 ../</span><br><span class="line">-rw-r--r-- 1 cby  cby 99728721 Apr 21 21:41A800-9000-npu-driver_20.2.0_ubuntu18.04-aarch64.run</span><br><span class="line">-rw-r--r-- 1 cby  cby   912335 Apr 21 21:41 A800-9000-npu-firmware_1.76.22.3.220.run</span><br><span class="line">root@ubuntu:/home/cby# chmod +x\*.run</span><br><span class="line">root@ubuntu:/home/cby# ll</span><br><span class="line">total 98324</span><br><span class="line">drwxr-xr-x 4 cby  cby     4096 Apr 21 21:41 ./</span><br><span class="line">drwxr-xr-x 4 root root     4096 Apr 21 21:44 ../</span><br><span class="line">-rwxr-xr-x 1 cby  cby 99728721 Apr 21 21:41 A800-9000-npu-driver_20.2.0_ubuntu18.04-aarch64.run\*</span><br><span class="line">-rwxr-xr-x 1 cby  cby   912335 Apr 21 21:41 A800-9000-npu-firmware_1.76.22.3.220.run\*</span><br><span class="line">root@ubuntu:/home/cby# aptinstall gcc</span><br><span class="line">root@ubuntu:/home/cby# aptinstall make</span><br><span class="line">root@ubuntu:/home/cby#./A800-9000-npu-driver_20.2.0_ubuntu18.04-aarch64.run –run</span><br><span class="line">root@ubuntu:/home/cby#./A800-9000-npu-firmware_1.76.22.3.220.run –run</span><br></pre></td></tr></table></figure>
+
+<p>*注意：安装完成后需要重启服务器</p>
+<p><strong>验证是否安装成功</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby#npu-smi info</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1066a0a3d8d644b98b26c8196c6044fc~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><strong>CANN****开发环境部署安装</strong>  </p>
+<p><strong>安装环境以及依赖</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby# apt install g++</span><br><span class="line">root@ubuntu:/home/cby# cd cmake/</span><br><span class="line">root@ubuntu:/home/cby/cmake# ll</span><br><span class="line">total 4356</span><br><span class="line">drwxr-xr-x 2 root root    4096 Apr 21 23:48 ./</span><br><span class="line">drwxr-xr-x 7 cby  cby    4096 Apr 21 23:48 ../</span><br><span class="line">-rw-r--r-- 1 cby  cby 2971248 Apr 21 23:45 cmake_3.10.2-1ubuntu2.18.04.1_arm64.deb</span><br><span class="line">-rw-r--r-- 1 cby  cby 1331524 Apr 21 23:45 cmake-data_3.10.2-1ubuntu2.18.04.1_all.deb</span><br><span class="line">-rw-r--r-- 1 cby  cby   69166 Apr 21 23:47 libjsoncpp1_1.7.4-3_arm64.deb</span><br><span class="line">-rw-r--r-- 1 cby  cby   71788 Apr 21 23:48 librhash0_1.3.6-2_arm64.deb</span><br><span class="line">root@ubuntu:/home/cby/cmake# apt install./\*</span><br><span class="line">root@ubuntu:/home/cby/cmake# make–version</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby# apt install./zlib1g-dev_1%3a1.2.11.dfsg-0ubuntu2_arm64.deb</span><br><span class="line">root@ubuntu:/home/cby# apt install./libbz2-dev_1.0.6-8.1ubuntu0.2_arm64.deb</span><br><span class="line">root@ubuntu:/home/cby# apt install ./libsqlite3-dev_3.22.0-1ubuntu0.4_arm64.deb</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby# cd libssl-dev/</span><br><span class="line">root@ubuntu:/home/cby/libssl-dev#apt install ./\*</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby# cd libxslt1-dev/</span><br><span class="line">root@ubuntu:/home/cby/libxslt1-dev#ll</span><br><span class="line">total 13596</span><br><span class="line">drwxr-xr-x  2 root root   4096 Apr 22 00:37 ./</span><br><span class="line">drwxr-xr-x 10 cby  cby    4096 Apr 22 00:37 ../</span><br><span class="line">-rw-r--r--  1 cby cby    18528 Apr 22 00:30gir1.2-harfbuzz-0.0_1.7.2-1ubuntu1_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby   170204 Apr 22 00:27icu-devtools_60.2-3ubuntu3.1_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby   983364 Apr 22 00:37libglib2.0-0_2.56.4-0ubuntu0.18.04.8_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby    61832 Apr 22 00:33libglib2.0-bin_2.56.4-0ubuntu0.18.04.8_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby  1297600 Apr 22 00:31libglib2.0-dev_2.56.4-0ubuntu0.18.04.8_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby    99676 Apr 22 00:31libglib2.0-dev-bin_2.56.4-0ubuntu0.18.04.8_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby    14528 Apr 22 00:32libgraphite2-dev_1.3.11-2_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby   280584 Apr 22 00:28libharfbuzz-dev_1.7.2-1ubuntu1_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby    12556 Apr 22 00:30libharfbuzz-gobject0_1.7.2-1ubuntu1_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby     5348 Apr 22 00:29libharfbuzz-icu0_1.7.2-1ubuntu1_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby  8890124 Apr 22 00:26libicu-dev_60.2-3ubuntu3.1_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby    14412 Apr 22 00:28libicu-le-hb0_1.0.3+git161113-4_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby    29760 Apr 22 00:27libicu-le-hb-dev_1.0.3+git161113-4_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby    18756 Apr 22 00:26libiculx60_60.2-3ubuntu3.1_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby   120696 Apr 22 00:35libpcre16-3_2%3a8.39-9_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby   113240 Apr 22 00:35libpcre32-3_2%3a8.39-9_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby   459316 Apr 22 00:33libpcre3-dev_2%3a8.39-9_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby    15124 Apr 22 00:35libpcrecpp0v5_2%3a8.39-9_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby   673384 Apr 22 00:25libxml2-dev_2.9.4+dfsg1-6.1ubuntu1.3_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby   395564 Apr 22 00:24libxslt1-dev_1.1.29-5ubuntu0.2_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby    42802 Apr 22 00:33pkg-config_0.29.1-0ubuntu2_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby   144176 Apr 22 00:37python3-distutils_3.6.9-1~18.04_all.deb</span><br><span class="line">root@ubuntu:/home/cby/libxslt1-dev#apt install ./\*</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby# cd libffi-dev/</span><br><span class="line">root@ubuntu:/home/cby/libffi-dev#ls</span><br><span class="line">libffi-dev_3.2.1-8_arm64.deb</span><br><span class="line">root@ubuntu:/home/cby/libffi-dev#apt install ./\*</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby#apt install unzip</span><br><span class="line">root@ubuntu:/home/cby# apt install./libblas-dev_3.7.1-4ubuntu1_arm64.deb</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby# cd gfortran/</span><br><span class="line">root@ubuntu:/home/cby/gfortran#ll</span><br><span class="line">total 7844</span><br><span class="line">drwxr-xr-x  2 root root   4096 Apr 22 00:50 ./</span><br><span class="line">drwxr-xr-x 12cby  cby     4096 Apr 22 00:50 ../</span><br><span class="line">-rw-r--r--  1 cby cby     1344 Apr 22 00:48gfortran_4%3a7.4.0-1ubuntu2.3_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby  7464740 Apr 22 00:48gfortran-7_7.5.0-3ubuntu1~18.04_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby   248176 Apr 22 00:50libgfortran4_7.5.0-3ubuntu1~18.04_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby   300500 Apr 22 00:49libgfortran-7-dev_7.5.0-3ubuntu1~18.04_arm64.deb</span><br><span class="line">root@ubuntu:/home/cby/gfortran#apt install ./\*</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby# cd libblas3/</span><br><span class="line">root@ubuntu:/home/cby/libblas3#apt install ./libblas3_3.7.1-4ubuntu1_arm64.deb</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby# cdlibopenblas-dev/</span><br><span class="line">root@ubuntu:/home/cby/libopenblas-dev#ll</span><br><span class="line">total 3412</span><br><span class="line">drwxr-xr-x  2 root root   4096 Apr 22 00:56 ./</span><br><span class="line">drwxr-xr-x 14cby  cby     4096 Apr 22 00:56 ../</span><br><span class="line">-rw-r--r--  1 cby cby  1813748 Apr 22 00:55libopenblas-base_0.2.20+ds-4_arm64.deb</span><br><span class="line">-rw-r--r--  1 cby cby  1668126 Apr 22 00:54libopenblas-dev_0.2.20+ds-4_arm64.deb</span><br><span class="line">root@ubuntu:/home/cby/libopenblas-dev#apt install ./\*</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装完成后查看版本</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">gcc --version</span><br><span class="line">g++ --version</span><br><span class="line">make --version</span><br><span class="line">cmake --version</span><br><span class="line">dpkg -l zlib1g| grepzlib1g| grep ii</span><br><span class="line">dpkg -l zlib1g-dev|grep zlib1g-dev| grep ii</span><br><span class="line">dpkg -l libbz2-dev|grep libbz2-dev| grep ii</span><br><span class="line">dpkg -llibsqlite3-dev| grep libsqlite3-dev| grep ii</span><br><span class="line">dpkg -l openssl| grepopenssl| grep ii</span><br><span class="line">dpkg -l libssl-dev|grep libssl-dev| grep ii</span><br><span class="line">dpkg -l libxslt1-dev|grep libxslt1-dev| grep ii</span><br><span class="line">dpkg -l libffi-dev|grep libffi-dev| grep ii</span><br><span class="line">dpkg -l unzip| grepunzip| grep ii</span><br><span class="line">dpkg -l pciutils|grep pciutils| grep ii</span><br><span class="line">dpkg -l net-tools|grep net-tools| grep ii</span><br><span class="line">dpkg -l libblas-dev|grep libblas-dev| grep ii</span><br><span class="line">dpkg -l gfortran|grep gfortran| grep ii</span><br><span class="line">dpkg -l libblas3|grep libblas3| grep ii</span><br><span class="line">dpkg -llibopenblas-dev| grep libopenblas-dev| grep ii</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装Python3.7.5</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby/python#tar xvf Python3.7.5.tar</span><br><span class="line">root@ubuntu:/home/cby/python# cdPython-3.7.5/</span><br><span class="line">root@ubuntu:/home/cby/python/Python-3.7.5#./configure --prefix=/usr/local/python3.7.5 --enable-loadable-sqlite-extensions--enable-shared</span><br><span class="line">root@ubuntu:/home/cby/python/Python-3.7.5#make</span><br><span class="line">root@ubuntu:/home/cby/python/Python-3.7.5#make install</span><br><span class="line"> </span><br><span class="line">root@ubuntu:/home/cby# sudo ln -s/usr/local/python3.7.5/bin/pip3 /usr/local/bin/pip3.7.5</span><br><span class="line">root@ubuntu:/home/cby# sudo ln-s /usr/local/python3.7.5/bin/python3 /usr/local/bin/python3.7.5</span><br><span class="line">root@ubuntu:/home/cby/cann_xunlian#sudo ln -s /usr/local/python3.7.5/bin/python3 /usr/local/bin/python3.7</span><br><span class="line">root@ubuntu:/home/cby/cann_xunlian#sudo ln -s /usr/local/python3.7.5/bin/pip3 /usr/local/bin/pip3.7</span><br><span class="line"> </span><br><span class="line">root@ubuntu:/home/cby# vim ~/.bashrc</span><br><span class="line">exportLD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH</span><br><span class="line">      </span><br><span class="line">root@ubuntu:/home/cby#python3.7.5 --version</span><br><span class="line">Python 3.7.5</span><br><span class="line">root@ubuntu:/home/cby# pip3.7.5--version</span><br><span class="line">pip 19.2.3 from /usr/local/python3.7.5/lib/python3.7/site-packages/pip(python 3.7)</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用Python3.7.5环境安装pip依赖包</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby/pip-pack# tar xvfpip_pack.tar</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./attrs-20.3.0-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./numpy-1.17.2-cp37-cp37m-linux_aarch64.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./decorator-5.0.6-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./mpmath-1.2.1-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./sympy-1.4-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./pycparser-2.20-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./cffi-1.12.3.tar.gz</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./PyYAML-5.3.1.tar.gz</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./six-1.15.0-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./pathlib2-2.3.5-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./psutil-5.8.0.tar.gz</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./protobuf-3.15.8-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./scipy-1.6.0-cp37-cp37m-linux_aarch64.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./chardet-3.0.4-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./idna-2.10-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./urllib3-1.25.10-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./certifi-2020.6.20-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./certifi-2020.6.20-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./requests-2.24.0-py2.py3-none-any.wh</span><br><span class="line">root@ubuntu:/home/cby/pip-pack/pip_pack#pip3.7.5 install ./xlrd-1.2.0-py2.py3-none-any.whl</span><br></pre></td></tr></table></figure>
+
+<p> <strong>*注意：以上pip包的安装必须以该顺序依次进行安装</strong></p>
+<p><strong>安装开发套件包</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby/cann#./Ascend-cann-tfplugin_20.2.rc1_linux-aarch64.run –install</span><br><span class="line">root@ubuntu:/home/cby/cann#./Ascend-cann-toolkit_20.2.rc1_linux-aarch64.run –install</span><br></pre></td></tr></table></figure>
+
+<p>    出现install success后表示安装成功。  </p>
+<p><strong>CANN****训练环境部署安装</strong></p>
+<p><strong>说明</strong></p>
+<p>       训练环境的Python3.7.5和环境以及依赖，和开发环境下的安装方式一样，可参考《CANN开发环境部署安装》文档进行安装。在已经搭建好的开发环境中，进行安装训练环境仅需安装一下训练软件包和实用工具包即可。</p>
+<p><strong>安装训练软件包</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby/cann_xunlian# chmod+x ./\*.run</span><br><span class="line">root@ubuntu:/home/cby/cann_xunlian# ./Ascend-cann-nnae_20.2.rc1_linux-aarch64.run–install</span><br><span class="line">root@ubuntu:/home/cby/cann_xunlian#./Ascend-cann-toolbox_20.2.rc1_linux-aarch64.run –install</span><br></pre></td></tr></table></figure>
+
+<p>       出现install success后表示安装成功。</p>
+<p><strong>安装MindSpore</strong></p>
+<p><strong>安装whl包</strong></p>
+<p>        安装Ascend 910 AI处理器配套软件包提供的whl包，whl包随配套软件包发布，升级配套软件包之后需要重新安装。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby/mindspore_ascend#pip3.7.5 install /usr/local/Ascend/ascend-toolkit/latest/fwkacllib/lib64/hccl-0.1.0-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindspore_ascend#pip3.7.5 install /usr/local/Ascend/ascend-toolkit/latest/fwkacllib/lib64/te-0.4.0-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindspore_ascend#pip3.7.5 install /usr/local/Ascend/ascend-toolkit/latest/fwkacllib/lib64/topi-0.4.0-py3-none-any.whl</span><br><span class="line"> </span><br><span class="line">root@ubuntu:/home/cby/mindspore_ascend/pip#pip3.7.5 install easydict-1.9.tar.gz</span><br><span class="line">root@ubuntu:/home/cby/mindspore_ascend/pip#pip3.7.5 install ./wheel-0.36.2-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindspore_ascend/pip#pip3.7.5 install ./astunparse-1.6.3-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindspore_ascend/pip#pip3.7.5 install ./Pillow-8.2.0-cp37-cp37m-linux_aarch64.whl</span><br><span class="line">root@ubuntu:/home/cby/mindspore_ascend/pip#pip3.7.5 install ./asttokens-2.0.4-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindspore_ascend/pip#pip3.7.5 install ./cffi-1.14.5-cp37-cp37m-linux_aarch64.whl</span><br><span class="line">root@ubuntu:/home/cby/mindspore_ascend/pip#pip3.7.5 install ./pyparsing-2.4.7-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindspore_ascend/pip#pip3.7.5 install ./packaging-20.9-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindspore_ascend/pip#pip3.7.5 install ../mindspore_ascend-1.1.1-cp37-cp37m-linux_aarch64.whl</span><br></pre></td></tr></table></figure>
+
+<p><strong>*注意：安装时必须以此顺序进行安装</strong></p>
+<p><strong>配置环境变量</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">\# control log level.0-DEBUG, 1-INFO, 2-WARNING, 3-ERROR, default level is WARNING.</span><br><span class="line"> </span><br><span class="line">export GLOG_v=2</span><br><span class="line"> </span><br><span class="line"># Conda environmentaloptions</span><br><span class="line"> </span><br><span class="line">LOCAL_ASCEND=/usr/local/Ascend</span><br><span class="line"> </span><br><span class="line"># the root directoryof run package</span><br><span class="line"> </span><br><span class="line"># lib libraries thatthe run package depends on</span><br><span class="line"> </span><br><span class="line">exportLD_LIBRARY_PATH=$&#123;LOCAL_ASCEND&#125;/add-ons/:$&#123;LOCAL_ASCEND&#125;/ascend-toolkit/latest/fwkacllib/lib64:$&#123;LOCAL_ASCEND&#125;/driver/lib64:$&#123;LOCAL_ASCEND&#125;/opp/op_impl/built-in/ai_core/tbe/op_tiling:$&#123;LD_LIBRARY_PATH&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># Environmentvariables that must be configured</span><br><span class="line"> </span><br><span class="line">exportTBE_IMPL_PATH=$&#123;LOCAL_ASCEND&#125;/ascend-toolkit/latest/opp/op_impl/built-in/ai_core/tbe</span><br><span class="line"> </span><br><span class="line"># TBE operatorimplementation tool path</span><br><span class="line"> </span><br><span class="line">exportASCEND_OPP_PATH=$&#123;LOCAL_ASCEND&#125;/ascend-toolkit/latest/opp</span><br><span class="line"> </span><br><span class="line"># OPP path</span><br><span class="line"> </span><br><span class="line">exportPATH=$&#123;LOCAL_ASCEND&#125;/ascend-toolkit/latest/fwkacllib/ccec_compiler/bin/:$&#123;PATH&#125;</span><br><span class="line"> </span><br><span class="line"># TBE operatorcompilation tool path</span><br><span class="line"> </span><br><span class="line">exportPYTHONPATH=$&#123;TBE_IMPL_PATH&#125;:$&#123;PYTHONPATH&#125;</span><br><span class="line"> </span><br><span class="line"># Python library thatTBE implementation depends on</span><br></pre></td></tr></table></figure>
+
+<p><strong>测试是否可行</strong></p>
+<p>Python代码内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">from mindspore importTensor</span><br><span class="line">import mindspore.opsas ops</span><br><span class="line">importmindspore.context as context</span><br><span class="line"> </span><br><span class="line">context.set_context(device_target=&quot;Ascend&quot;)</span><br><span class="line"> </span><br><span class="line">x =Tensor(np.ones(\[1,3,3,4\]).astype(np.float32))</span><br><span class="line">y =Tensor(np.ones(\[1,3,3,4\]).astype(np.float32))</span><br><span class="line">print(ops.tensor_add(x,y))</span><br></pre></td></tr></table></figure>
+
+<p>出现此结果即是安装部署完成</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">\[\[\[\[2. 2. 2. 2.\]</span><br><span class="line">   \[2. 2. 2. 2.\]</span><br><span class="line">   \[2. 2. 2. 2.\]\]</span><br><span class="line"> </span><br><span class="line">  \[\[2. 2. 2. 2.\]</span><br><span class="line">   \[2. 2. 2. 2.\]</span><br><span class="line">   \[2. 2. 2. 2.\]\]</span><br><span class="line"> </span><br><span class="line">  \[\[2. 2. 2. 2.\]</span><br><span class="line">   \[2. 2. 2. 2.\]</span><br><span class="line">   \[2. 2. 2. 2.\]\]\]\]</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装mindinsight</strong></p>
+<p><strong>安装whl包</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./itsdangerous-1.1.0-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./Werkzeug-1.0.1-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./MarkupSafe-1.1.1-cp37-cp37m-linux_aarch64.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./Jinja2-2.11.3-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./click-7.1.2-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./Flask-1.1.2-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./Flask_Cors-3.0.10-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./yapf-0.31.0-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./future-0.18.2.tar.gz</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./treelib-1.6.1.tar.gz</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./grpcio-1.37.0-cp37-cp37m-linux_aarch64.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./google_pasta-0.2.0-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./pytz-2021.1-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./python_dateutil-2.8.1-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./pandas-1.2.3-cp37-cp37m-linux_aarch64.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./gunicorn-20.1.0.tar.gz</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./marshmallow-3.11.1-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./threadpoolctl-2.1.0-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./joblib-1.0.1-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./scikit_learn-0.24.1-cp37-cp37m-linux_aarch64.whl</span><br><span class="line">root@ubuntu:/home/cby/mindinsight/Mindinsight#pip3.7.5 install ./mindinsight-1.1.1-cp37-cp37m-linux_aarch64.whl</span><br></pre></td></tr></table></figure>
+
+<p><strong>*注意：安装必须以此顺序进安装</strong></p>
+<p><strong>配置环境变量</strong></p>
+<p>在配置文件中配置如下变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PATH=$PATH:/usr/local/python3.7.5/bin/</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby#source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p><strong>启动及使用</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby#mindinsight start</span><br><span class="line">Workspace:/root/mindinsight</span><br><span class="line">Webaddress: http://127.0.0.1:8080</span><br><span class="line">servicestart state: success</span><br></pre></td></tr></table></figure>
+
+<p>    出现该消息后，说明可视化已经启动成功，若需要外机访问的话，需要进行反向代理到0.0.0.0上面即可，比如frp工具即可实现该操作</p>
+<p>    在训练完成的Python代码目录下，使以下命令即可启动并展示该目录下的训练数据，debugger的参数可使用false或者true</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mindinsightstart --summary-base-dir . --port 8080 --enable-debugger True --debugger-port50051</span><br></pre></td></tr></table></figure>
+
+<p>使用如下命令即可启动训练</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby/lenet/lenet#python3.7.5 lenet.py --device_target=Ascend</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装Tensorflow</strong></p>
+<p><strong>编译hdf5</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#cd hdf5-1.10.5/</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow/hdf5-1.10.5#./configure --prefix=/usr/include/hdf5</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow/hdf5-1.10.5#make</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow/hdf5-1.10.5#make install</span><br></pre></td></tr></table></figure>
+
+<p><strong>配置环境变量及软连接</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">exportCPATH=&quot;/usr/include/hdf5/include/:/usr/include/hdf5/lib/&quot;</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow/hdf5-1.10.5#ln -s /usr/include/hdf5/lib/libhdf5.so /usr/lib/libhdf5.so</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow/hdf5-1.10.5#ln -s /usr/include/hdf5/lib/libhdf5_hl.so /usr/lib/libhdf5_hl.so</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装whl包</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./Cython-0.29.21-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./h5py-2.10.0-cp37-cp37m-linux_aarch64.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./grpcio-1.30.0.tar.gz</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./gast-0.2.2.tar.gz</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./opt_einsum-3.3.0-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./Keras_Applications-1.0.8-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./Keras_Preprocessing-1.1.2-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./astor-0.8.1-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./typing_extensions-3.7.4.3-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./zipp-3.4.1-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./importlib_metadata-3.10.1-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./Markdown-3.2.2-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./tensorboard-1.15.0-py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./wrapt-1.12.1.tar.gz</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./tensorflow_estimator-1.15.1-py2.py3-none-any.whl</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./termcolor-1.1.0.tar.gz</span><br><span class="line">root@ubuntu:/home/cby/Tensorflow/Tensorflow#pip3.7.5 install ./tensorflow-1.15.0-cp37-cp37m-linux_aarch64.whl</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：必须依次安装</strong></p>
+<p><strong>安装Pytorch</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/cby/pytorch/Pytorch#pip3.7.5 install ./apex-0.1+ascend-cp37-cp37m-linux_aarch64.whl</span><br><span class="line">root@ubuntu:/home/cby/pytorch/Pytorch#pip3.7.5 install ./torch-1.5.0+ascend.post2-cp37-cp37m-linux_aarch64.whl</span><br><span class="line">root@ubuntu:/home/cby/pytorch/Pytorch#pip3.7.5 install ./future-0.18.2.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>该文章所配套的软件包关注微信回复 ai 即可获取所需要的所有软件包  </p>
+<blockquote>
+<p><strong>关于</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/">https://www.oiox.cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.oiox.cn/index.php/start-page.html">https://www.oiox.cn/index.php/start-page.html</a></p>
+<p><strong>CSDN、GitHub、51CTO、知乎、开源中国、思否、掘金、简书、华为云、阿里云、腾讯云、哔哩哔哩、今日头条、新浪微博、个人博客</strong></p>
+<p><strong>全网可搜《小陈运维》</strong></p>
+<p><strong>文章主要发布于微信公众号</strong></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://www.chenby.cn">chenby</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://www.chenby.cn/2021/12/30/770f38b65513/">http://www.chenby.cn/2021/12/30/770f38b65513/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://www.chenby.cn" target="_blank">小陈运维</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://www.oiox.cn/images/wallhaven-e79v1r.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/30/735c91696885/"><img class="prev-cover" src="https://www.oiox.cn/images/wallhaven-m9kely.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">服务器被入侵，异常进程无法杀掉，随机进程名</div></div></a></div><div class="next-post pull-right"><a href="/2021/12/30/a999669525db/"><img class="next-cover" src="https://www.oiox.cn/images/wallhaven-q2k8yr.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">MINIO搭建单机以及集群</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://www.oiox.cn/1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">chenby</div><div class="author-info__description">小陈运维，致力于Kubernetes（k8s）与传统运维技术博客文档分享。互相学习，互相进步。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">130</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cby-chen"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/64f3215098b3/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-m9olo8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/64f3215098b3/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/5c9e4c6a7785/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-72g2qo.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/5c9e4c6a7785/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/6482460a5d6d/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-72g2qo.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/6482460a5d6d/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/16/21770783bcd7/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-q2k2w7.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/16/21770783bcd7/" title="无题">无题</a><time datetime="2022-11-16T12:27:40.238Z" title="发表于 2022-11-16 20:27:40">2022-11-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/16/cad574b2aab0/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-6o7md7.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/16/cad574b2aab0/" title="无题">无题</a><time datetime="2022-11-16T10:35:10.113Z" title="发表于 2022-11-16 18:35:10">2022-11-16</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://www.oiox.cn/images/wallhaven-e79v1r.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By chenby</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

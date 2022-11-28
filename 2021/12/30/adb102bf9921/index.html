@@ -1,0 +1,252 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Prometheus+Grafana监控系统 | 小陈运维</title><meta name="keywords" content="小陈运维,运维,linux,kubernetes,docker,k8s,容器,博客,文档,技术"><meta name="author" content="chenby"><meta name="copyright" content="chenby"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Prometheus vs Zabbix    Zabbix的客户端更多是只做上报的事情，push模式。而Prometheus则是客户端本地也会存储监控数据，服务端定时来拉取想要的数据。  Zabbix的客户端agent可以比较方便的通过脚本来读取机器内数据库、日志等文件来做上报。zabbix的客户端agent可以比较方便的通过脚本来读取机器内数据库、日志等文件来做上报。Prometheus的上报">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prometheus+Grafana监控系统">
+<meta property="og:url" content="http://www.chenby.cn/2021/12/30/adb102bf9921/index.html">
+<meta property="og:site_name" content="小陈运维">
+<meta property="og:description" content="Prometheus vs Zabbix    Zabbix的客户端更多是只做上报的事情，push模式。而Prometheus则是客户端本地也会存储监控数据，服务端定时来拉取想要的数据。  Zabbix的客户端agent可以比较方便的通过脚本来读取机器内数据库、日志等文件来做上报。zabbix的客户端agent可以比较方便的通过脚本来读取机器内数据库、日志等文件来做上报。Prometheus的上报">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.oiox.cn/images/wallhaven-m91d79.jpeg">
+<meta property="article:published_time" content="2021-12-30T09:03:00.000Z">
+<meta property="article:modified_time" content="2022-11-11T13:36:43.000Z">
+<meta property="article:author" content="chenby">
+<meta property="article:tag" content="小陈运维,运维,linux,kubernetes,docker,k8s,容器,博客,文档,技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.oiox.cn/images/wallhaven-m91d79.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://www.chenby.cn/2021/12/30/adb102bf9921/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":"none"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Prometheus+Grafana监控系统',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-11-11 21:36:43'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://www.oiox.cn/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">130</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://www.oiox.cn/images/wallhaven-m91d79.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小陈运维</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Prometheus+Grafana监控系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-30T09:03:00.000Z" title="发表于 2021-12-30 17:03:00">2021-12-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-11-11T13:36:43.000Z" title="更新于 2022-11-11 21:36:43">2022-11-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Prometheus+Grafana监控系统"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="Prometheus-vs-Zabbix"><a href="#Prometheus-vs-Zabbix" class="headerlink" title="Prometheus vs Zabbix"></a>Prometheus vs Zabbix</h3><p>    Zabbix的客户端更多是只做上报的事情，push模式。而Prometheus则是客户端本地也会存储监控数据，服务端定时来拉取想要的数据。</p>
+<p> Zabbix的客户端agent可以比较方便的通过脚本来读取机器内数据库、日志等文件来做上报。zabbix的客户端agent可以比较方便的通过脚本来读取机器内数据库、日志等文件来做上报。Prometheus的上报客户端则分为不同语言的SDK和不同用途的exporter两种，比如如果你要监控机器状态、mysql性能等，有大量已经成熟的exporter来直接开箱使用，通过http通信来对服务端提供信息上报（server去pull信息）；</p>
+<p>Zabbix’s client is more of only reporting things, push mode. In Prometheus, the client also stores monitoring data locally, and the server regularly pulls the desired data.</p>
+<p>     Zabbix’s client agent can easily read the database, log and other files in the machine through scripts for reporting. The zabbix client agent can easily read the database, log and other files in the machine through scripts for reporting. Prometheus reporting clients are divided into SDKs in different languages and exporters for different purposes. For example, if you want to monitor machine status, mysql performance, etc., there are a large number of mature exporters to use directly out of the box, and serve through HTTP communication. The terminal provides information reporting (server to pull information);</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d1528e9872de49549f77699874d9de9a~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<h3 id="安装Prometheus："><a href="#安装Prometheus：" class="headerlink" title="安装Prometheus："></a>安装Prometheus：</h3><p><strong>install Prometheus</strong></p>
+<p>    官网下载地址：</p>
+<p>Official website download address</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://prometheus.io/download/</span><br></pre></td></tr></table></figure>
+
+<p>    下载您想要的版本后，进行安装使用即可。</p>
+<p>After downloading the version you want, install it and use it</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">cby@cby-Inspiron-7577:~$ wget https://github.com/prometheus/prometheus/releases/download/v2.21.0/prometheus-2.21.0.linux-amd64.tar.gz</span><br><span class="line">cby@cby-Inspiron-7577:~$ tar xvf prometheus-2.21.0.linux-amd64.tar.gz </span><br><span class="line">prometheus-2.21.0.linux-amd64/</span><br><span class="line">prometheus-2.21.0.linux-amd64/LICENSE</span><br><span class="line">prometheus-2.21.0.linux-amd64/prometheus</span><br><span class="line">prometheus-2.21.0.linux-amd64/promtool</span><br><span class="line">prometheus-2.21.0.linux-amd64/prometheus.yml</span><br><span class="line">prometheus-2.21.0.linux-amd64/NOTICE</span><br><span class="line">prometheus-2.21.0.linux-amd64/console_libraries/</span><br><span class="line">prometheus-2.21.0.linux-amd64/console_libraries/menu.lib</span><br><span class="line">prometheus-2.21.0.linux-amd64/console_libraries/prom.lib</span><br><span class="line">prometheus-2.21.0.linux-amd64/consoles/</span><br><span class="line">prometheus-2.21.0.linux-amd64/consoles/node-overview.html</span><br><span class="line">prometheus-2.21.0.linux-amd64/consoles/node.html</span><br><span class="line">prometheus-2.21.0.linux-amd64/consoles/prometheus.html</span><br><span class="line">prometheus-2.21.0.linux-amd64/consoles/node-cpu.html</span><br><span class="line">prometheus-2.21.0.linux-amd64/consoles/index.html.example</span><br><span class="line">prometheus-2.21.0.linux-amd64/consoles/prometheus-overview.html</span><br><span class="line">prometheus-2.21.0.linux-amd64/consoles/node-disk.html</span><br></pre></td></tr></table></figure>
+
+<p>    解压后进入文件夹内即可看到该程序。同时即可使用。</p>
+<p>After decompression, enter the folder to see the program. Can be used at the same time</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cby@cby-Inspiron-7577:~/prometheus-2.21.0.linux-amd64$ ll</span><br><span class="line">总用量 161140</span><br><span class="line">drwxr-xr-x  4 cby cby     4096 9月  11 21:30 ./</span><br><span class="line">drwxr-xr-x 22 cby cby     4096 10月  5 00:18 ../</span><br><span class="line">drwxr-xr-x  2 cby cby     4096 9月  11 21:29 console_libraries/</span><br><span class="line">drwxr-xr-x  2 cby cby     4096 9月  11 21:29 consoles/</span><br><span class="line">-rw-r--r--  1 cby cby    11357 9月  11 21:29 LICENSE</span><br><span class="line">-rw-r--r--  1 cby cby     3420 9月  11 21:29 NOTICE</span><br><span class="line">-rwxr-xr-x  1 cby cby 88471209 9月  11 19:37 prometheus\*</span><br><span class="line">-rw-r--r--  1 cby cby      926 9月  11 21:29 prometheus.yml</span><br><span class="line">-rwxr-xr-x  1 cby cby 76493104 9月  11 19:39 promtool\*</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>    查看一下版本：  </p>
+<p>Check the version</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cby@cby-Inspiron-7577:~/prometheus-2.21.0.linux-amd64$ ./prometheus --version</span><br><span class="line">prometheus, version 2.21.0 (branch: HEAD, revision: e83ef207b6c2398919b69cd87d2693cfc2fb4127)</span><br><span class="line">  build user:       root@a4d9bea8479e</span><br><span class="line">  build date:       20200911-11:35:02</span><br><span class="line">  go version:       go1.15.2</span><br></pre></td></tr></table></figure>
+
+<p>    查看启动sever文件：  </p>
+<p>View startup sever file</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">cby@cby-Inspiron-7577:~/prometheus-2.21.0.linux-amd64$ cat prometheus.yml</span><br><span class="line"># my global config</span><br><span class="line">global:</span><br><span class="line">  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.</span><br><span class="line">  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.</span><br><span class="line">  # scrape_timeout is set to the global default (10s).</span><br><span class="line"></span><br><span class="line"># Alertmanager configuration</span><br><span class="line">alerting:</span><br><span class="line">  alertmanagers:</span><br><span class="line">  - static_configs:</span><br><span class="line">    - targets:</span><br><span class="line">      # - alertmanager:9093</span><br><span class="line"></span><br><span class="line"># Load rules once and periodically evaluate them according to the global &#x27;evaluation_interval&#x27;.</span><br><span class="line">rule_files:</span><br><span class="line">  # - &quot;first_rules.yml&quot;</span><br><span class="line">  # - &quot;second_rules.yml&quot;</span><br><span class="line"></span><br><span class="line"># A scrape configuration containing exactly one endpoint to scrape:</span><br><span class="line"># Here it&#x27;s Prometheus itself.</span><br><span class="line">scrape_configs:</span><br><span class="line">  # The job name is added as a label \`job=&lt;job_name&gt;\` to any timeseries scraped from this config.</span><br><span class="line">  - job_name: &#x27;prometheus&#x27;</span><br><span class="line"></span><br><span class="line">    # metrics_path defaults to &#x27;/metrics&#x27;</span><br><span class="line">    # scheme defaults to &#x27;http&#x27;.</span><br><span class="line"></span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: \[&#x27;localhost:9090&#x27;\]</span><br></pre></td></tr></table></figure>
+
+<p>    其大致分为四部分：</p>
+<p>It is roughly divided into four parts:</p>
+<ul>
+<li><p>global：全局配置，其中scrape_interval表示抓取一次数据的间隔时间，evaluation_interval表示进行告警规则检测的间隔时间；</p>
+</li>
+<li><p>global: global configuration, in which scrape_interval represents the interval of data capture, evaluation_interval represents the interval of alarm rule detection;</p>
+</li>
+<li></li>
+<li><p>alerting：告警管理器（Alertmanager）的配置，目前还没有安装Alertmanager；</p>
+</li>
+<li><p>alerting: The configuration of the alert manager (Alertmanager), Alertmanager is not installed yet;</p>
+</li>
+<li></li>
+<li><p>rule_files：告警规则有哪些；</p>
+</li>
+<li><p>rule_files: what are the alarm rules;</p>
+</li>
+<li></li>
+<li><p>scrape_configs：抓取监控信息的目标。一个job_name就是一个目标，其targets就是采集信息的IP和端口。这里默认监控了Prometheus自己，可以通过修改这里来修改Prometheus的监控端口。Prometheus的每个exporter都会是一个目标，它们可以上报不同的监控信息，比如机器状态，或者mysql性能等等，不同语言sdk也会是一个目标，它们会上报你自定义的业务监控信息。</p>
+</li>
+<li><p>scrape_configs: The goal of grabbing monitoring information. A job_name is a target, and its targets are the IP and port for collecting information. Prometheus itself is monitored by default here, and the monitoring port of Prometheus can be modified by modifying this. Each exporter of Prometheus will be a target, they can report different monitoring information, such as machine status, or mysql performance, etc., different language SDK will also be a target, they will report your customized business monitoring information.</p>
+</li>
+</ul>
+<p>    启动运行sever：</p>
+<p>Start running sever</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cby@cby-Inspiron-7577:~/prometheus-2.21.0.linux-amd64$ ./prometheus --config.file=prometheus.yml</span><br></pre></td></tr></table></figure>
+
+<p>    运行后，使用默认9090端口即可进行访问，若无法访问您可以查看一下是否有防火墙的限制，若没有限制，那就看一下是否正常启动，有端口的监听。  </p>
+<p>    After running, you can use the default port 9090 to access it. If you can’t access it, you can check if there is a firewall restriction. If there is no restriction, check if it is started normally and there is port monitoring.</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1c2fcbebeecc41da9186e09c2721645b~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/836e9218798543c78b610fe580c510f0~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><strong>添加机器的监控器：</strong></p>
+<p><strong>Add machine monitor</strong></p>
+<p>    在官网的下载页面中，可以找到 node_exporter 这个tar包，这个监空插件可以监控基础的硬件信息，例如CPU内存硬盘等信息，node_exporter本身也是一个http服务可以进行直接调用使用哦。</p>
+<p>    On the download page of the official website, you can find the tar package of node_exporter. This plug-in can monitor basic hardware information, such as CPU memory and hard disk information. The node_exporter itself is also an http service that can be used directly.</p>
+<p>    下载最新的此插件，同时进行解压，并运行：</p>
+<p>Download the latest plug-in, unzip at the same time, and run</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cby@cby-Inspiron-7577:~$ wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz</span><br><span class="line">cby@cby-Inspiron-7577:~$ cd node_exporter-1.0.1.linux-amd64/</span><br><span class="line">cby@cby-Inspiron-7577:~/node_exporter-1.0.1.linux-amd64$ ls</span><br><span class="line">LICENSE  node_exporter  NOTICE</span><br><span class="line">cby@cby-Inspiron-7577:~/node_exporter-1.0.1.linux-amd64$ ./node_exporter </span><br><span class="line">level=info ts=2020-10-04T16:31:41.858Z caller=node_exporter.go:177 msg=&quot;Starting node_exporter&quot; version=&quot;(version=1.0.1, branch=HEAD, revision=3715be6ae899f2a9b9dbfd9c39f3e09a7bd4559f)&quot;</span><br><span class="line">level=info ts=2020-10-04T16:31:41.858Z caller=node_exporter.go:178 msg=&quot;Build context&quot; build_context=&quot;(go=go1.14.4, user=root@1f76dbbcfa55, date=20200616-12:44:12)&quot;</span><br><span class="line">level=info ts=2020-10-04T16:31:41.859Z caller=node_exporter.go:105 msg=&quot;Enabled collectors&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>    可以使用curl进行测试一下是否正常启动</p>
+<p> You can use curl to test whether it starts normally</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cby@cby-Inspiron-7577:~$ curl http://localhost:9100/metrics</span><br></pre></td></tr></table></figure>
+
+<p>    若可以正常访问，那就可以在prometheus.yml文件中添加一个target</p>
+<p>If you can access normally, you can add a target in the prometheus.yml file</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">\# my global config</span><br><span class="line">global:</span><br><span class="line">  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.</span><br><span class="line">  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.</span><br><span class="line">  # scrape_timeout is set to the global default (10s).</span><br><span class="line"></span><br><span class="line"># Alertmanager configuration</span><br><span class="line">alerting:</span><br><span class="line">  alertmanagers:</span><br><span class="line">  - static_configs:</span><br><span class="line">    - targets:</span><br><span class="line">      # - alertmanager:9093</span><br><span class="line"></span><br><span class="line"># Load rules once and periodically evaluate them according to the global &#x27;evaluation_interval&#x27;.</span><br><span class="line">rule_files:</span><br><span class="line">  # - &quot;first_rules.yml&quot;</span><br><span class="line">  # - &quot;second_rules.yml&quot;</span><br><span class="line"></span><br><span class="line"># A scrape configuration containing exactly one endpoint to scrape:</span><br><span class="line"># Here it&#x27;s Prometheus itself.</span><br><span class="line">scrape_configs:</span><br><span class="line">  # The job name is added as a label \`job=&lt;job_name&gt;\` to any timeseries scraped from this config.</span><br><span class="line">  - job_name: &#x27;prometheus&#x27;</span><br><span class="line"></span><br><span class="line">    # metrics_path defaults to &#x27;/metrics&#x27;</span><br><span class="line">    # scheme defaults to &#x27;http&#x27;.</span><br><span class="line"></span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: \[&#x27;localhost:9090&#x27;\]</span><br><span class="line"></span><br><span class="line">  - job_name: &#x27;server&#x27;</span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: \[&#x27;localhost:9100&#x27;\]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>    在标签栏的 Status –&gt; Targets 中可以：</p>
+<p>In Status –&gt; Targets in the tab bar, you can</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/548ef0ace1b941d6ac554e5064c5bbce~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<h3 id="安装Grafana："><a href="#安装Grafana：" class="headerlink" title="安装Grafana："></a>安装Grafana：</h3><p><strong>Install Grafana</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">cby@cby-Inspiron-7577:~$ sudo apt-get install -y adduser libfontconfig1</span><br><span class="line">cby@cby-Inspiron-7577:~$ wget https://dl.grafana.com/oss/release/grafana_7.2.0_amd64.deb</span><br><span class="line"></span><br><span class="line">cby@cby-Inspiron-7577:~$ sudo dpkg -i grafana_7.2.0_amd64.deb</span><br><span class="line">正在选中未选择的软件包 grafana。</span><br><span class="line">(正在读取数据库 ... 系统当前共安装有 211277 个文件和目录。)</span><br><span class="line">准备解压 grafana_7.2.0_amd64.deb  ...</span><br><span class="line">正在解压 grafana (7.2.0) ...</span><br><span class="line">正在设置 grafana (7.2.0) ...</span><br><span class="line">正在添加系统用户&quot;grafana&quot; (UID 130)...</span><br><span class="line">正在将新用户&quot;grafana&quot; (UID 130)添加到组&quot;grafana&quot;...</span><br><span class="line">无法创建主目录&quot;/usr/share/grafana&quot;。</span><br><span class="line">### NOT starting on installation, please execute the following statements to configure grafana to start automatically using systemd</span><br><span class="line"> sudo /bin/systemctl daemon-reload</span><br><span class="line"> sudo /bin/systemctl enable grafana-server</span><br><span class="line">### You can start grafana-server by executing</span><br><span class="line"> sudo /bin/systemctl start grafana-server</span><br><span class="line">正在处理用于 systemd (245.4-4ubuntu3.2) 的触发器 ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>    安装完成后，进行启动：  </p>
+<p>After the installation is complete, start</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">cby@cby-Inspiron-7577:~$ sudo systemctl start grafana-server.service</span><br><span class="line">cby@cby-Inspiron-7577:~$ sudo systemctl status grafana-server.service</span><br><span class="line">\[sudo\] cby 的密码：</span><br><span class="line">对不起，请重试。</span><br><span class="line">\[sudo\] cby 的密码：</span><br><span class="line">对不起，请重试。</span><br><span class="line">\[sudo\] cby 的密码：</span><br><span class="line">● grafana-server.service - Grafana instance</span><br><span class="line">     Loaded: loaded (/lib/systemd/system/grafana-server.service; disabled; vendor preset: enabled)</span><br><span class="line">     Active: active (running) since Mon 2020-10-05 00:02:59 CST; 40min ago</span><br><span class="line">       Docs: http://docs.grafana.org</span><br><span class="line">   Main PID: 1521572 (grafana-server)</span><br><span class="line">      Tasks: 14 (limit: 18689)</span><br><span class="line">     Memory: 25.3M</span><br><span class="line">     CGroup: /system.slice/grafana-server.service</span><br><span class="line">             └─1521572 /usr/sbin/grafana-server --config=/etc/grafana/grafana.ini --pidfile=/var/run/grafa</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ca97d6954de84f6bb1b5df3b80b7912f~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>    默认端口为3000 ，使用IP加端口即可进行访问，默认用户名密码是admin，登录后即可看到首页。在设置中进行添加Prometheus监控数据。  </p>
+<p>    The default port is 3000, you can access by using IP plus port, the default user name and password is admin, you can see the home page after logging in. Add Prometheus monitoring data in the settings.</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4c3edba91a864cd998e1e0e53150c403~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/05bbc9bcf4bc46f7b15d7a630a1c8a4d~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>    添加监控数据后，导入一个监控面板，或者勤劳的人们可以自行进行配置面板，哇哈哈哈，同时可以在官方的面板界面中寻找到一个心仪的面板</p>
+<p>地址为：<a target="_blank" rel="noopener" href="https://grafana.com/dashboards">https://grafana.com/dashboards</a></p>
+<p>下载面板的json后，可以进行导入面板。</p>
+<p>    After adding monitoring data, import a monitoring panel, or industrious people can configure the panel by themselves, wow ha ha ha, and you can find a favorite panel in the official panel interface</p>
+<p>The address is: <a target="_blank" rel="noopener" href="https://grafana.com/dashboards">https://grafana.com/dashboards</a></p>
+<p>After downloading the json of the panel, you can import the panel.</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/eadf9f2650ae4a34a923e622219ff3f6~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>导入后即可显示看到花里胡哨的面版了</p>
+<p>After importing, you can see the bells and whistles</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8188207dea0a440481d12f89601f93d7~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>    面板添加后，必然需要报警。可以使用onealert，进行告警。  </p>
+<p><a target="_blank" rel="noopener" href="https://caweb.aiops.com/#/Application/newBuild/grafana/0">https://caweb.aiops.com/#/Application/newBuild/grafana/0</a></p>
+<p>    After the panel is added, an alarm is necessary. You can use onealert to alert.</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4eece143b6e245859c112c2cf08a5d4f~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b202d06e2f964dbebc2528faa54c4779~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/61f421538f5b48a9bf5398a25c510e8c~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>到这里环境已经配置完成</p>
+<p>The environment has been configured here</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bc597a7d80f54efe8b755c0b6e530c51~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://www.chenby.cn">chenby</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://www.chenby.cn/2021/12/30/adb102bf9921/">http://www.chenby.cn/2021/12/30/adb102bf9921/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://www.chenby.cn" target="_blank">小陈运维</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://www.oiox.cn/images/wallhaven-m91d79.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/30/78f0034f952e/"><img class="prev-cover" src="https://www.oiox.cn/images/wallhaven-p8q3k9.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Nginx主要功能</div></div></a></div><div class="next-post pull-right"><a href="/2021/12/30/49eb5bea8919/"><img class="next-cover" src="https://www.oiox.cn/images/wallhaven-l3v8rl.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Python安装-在Linux系统中使用编译进行安装</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://www.oiox.cn/1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">chenby</div><div class="author-info__description">小陈运维，致力于Kubernetes（k8s）与传统运维技术博客文档分享。互相学习，互相进步。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">130</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cby-chen"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Prometheus-vs-Zabbix"><span class="toc-number">1.</span> <span class="toc-text">Prometheus vs Zabbix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Prometheus%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">安装Prometheus：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Grafana%EF%BC%9A"><span class="toc-number">3.</span> <span class="toc-text">安装Grafana：</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/64f3215098b3/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-m9olo8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/64f3215098b3/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/5c9e4c6a7785/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-72g2qo.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/5c9e4c6a7785/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/6482460a5d6d/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-72g2qo.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/6482460a5d6d/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/16/21770783bcd7/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-q2k2w7.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/16/21770783bcd7/" title="无题">无题</a><time datetime="2022-11-16T12:27:40.238Z" title="发表于 2022-11-16 20:27:40">2022-11-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/16/cad574b2aab0/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-6o7md7.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/16/cad574b2aab0/" title="无题">无题</a><time datetime="2022-11-16T10:35:10.113Z" title="发表于 2022-11-16 18:35:10">2022-11-16</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://www.oiox.cn/images/wallhaven-m91d79.jpeg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By chenby</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

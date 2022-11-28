@@ -1,0 +1,389 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>SELinux入门学习总结 | 小陈运维</title><meta name="keywords" content="小陈运维,运维,linux,kubernetes,docker,k8s,容器,博客,文档,技术"><meta name="author" content="chenby"><meta name="copyright" content="chenby"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言 安全增强型 Linux（Security-Enhanced Linux）简称 SELinux，它是一个 Linux 内核模块，也是 Linux 的一个安全子系统。 SELinux 主要由美国国家安全局开发。2.6 及以上版本的 Linux 内核都已经集成了 SELinux 模块。 SELinux 的结构及配置非常复杂，而且有大量概念性的东西，要学精难度较大。很多 Linux 系统管理员嫌麻烦">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SELinux入门学习总结">
+<meta property="og:url" content="http://www.chenby.cn/2021/12/30/ac87e5cffc46/index.html">
+<meta property="og:site_name" content="小陈运维">
+<meta property="og:description" content="前言 安全增强型 Linux（Security-Enhanced Linux）简称 SELinux，它是一个 Linux 内核模块，也是 Linux 的一个安全子系统。 SELinux 主要由美国国家安全局开发。2.6 及以上版本的 Linux 内核都已经集成了 SELinux 模块。 SELinux 的结构及配置非常复杂，而且有大量概念性的东西，要学精难度较大。很多 Linux 系统管理员嫌麻烦">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.oiox.cn/images/wallhaven-l3xoor.jpeg">
+<meta property="article:published_time" content="2021-12-30T09:04:23.000Z">
+<meta property="article:modified_time" content="2021-12-30T09:04:23.000Z">
+<meta property="article:author" content="chenby">
+<meta property="article:tag" content="小陈运维,运维,linux,kubernetes,docker,k8s,容器,博客,文档,技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.oiox.cn/images/wallhaven-l3xoor.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://www.chenby.cn/2021/12/30/ac87e5cffc46/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":"none"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SELinux入门学习总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-12-30 17:04:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://www.oiox.cn/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">130</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://www.oiox.cn/images/wallhaven-l3xoor.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">小陈运维</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">SELinux入门学习总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-30T09:04:23.000Z" title="发表于 2021-12-30 17:04:23">2021-12-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-30T09:04:23.000Z" title="更新于 2021-12-30 17:04:23">2021-12-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/">默认分类</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="SELinux入门学习总结"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><strong>前言</strong></p>
+<p>安全增强型 Linux（Security-Enhanced Linux）简称 SELinux，它是一个 Linux 内核模块，也是 Linux 的一个安全子系统。</p>
+<p>SELinux 主要由美国国家安全局开发。2.6 及以上版本的 Linux 内核都已经集成了 SELinux 模块。</p>
+<p>SELinux 的结构及配置非常复杂，而且有大量概念性的东西，要学精难度较大。很多 Linux 系统管理员嫌麻烦都把 SELinux 关闭了。</p>
+<p>如果可以熟练掌握 SELinux 并正确运用，我觉得整个系统基本上可以到达“坚不可摧”的地步了（请永远记住没有绝对的安全）。</p>
+<p>掌握 SELinux 的基本概念以及简单的配置方法是每个 Linux 系统管理员的必修课。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/33a7ae230f5d409fb7f165b0010ff55e~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><strong>一、基本概念</strong></p>
+<p><strong>1、TE模型的安全上下文</strong></p>
+<p>所有的操作系统访问控制都基于主体、客体，以及与他们相关的访问控制属性。</p>
+<p>在selinux中，<strong>访问控制属性叫做安全上下文。</strong>所有对象(文件、进程间通信通道、套接字、网络主机等)和主体(进程)都有一个与之关联的安全上下文。</p>
+<p><strong>一个安全上下文包含三个元素：</strong>用户（user）、角色（role）和类型标识符（type identifiers）</p>
+<p><strong>安全上下文的形式如下：</strong>user：role：type</p>
+<p><strong>对进程来说：</strong>分别表示用户、角色、类型标识符也被称为域</p>
+<p><strong>对客体来说：</strong>前两项基本没有实际用途，role通常为object_r，user通常位创建这个对象的进程的user，对访问控制没有影响</p>
+<p><strong>总结：</strong></p>
+<p>SELinux是通过MAC(Mandatory Access Control)方式来控管进程，它控制的主体是进程，而目标则是该进程能否读取的”文件资源”。</p>
+<p><strong>主体</strong></p>
+<p>SELinux 主要是想管理控制进程。</p>
+<p>注*：为了方便理解，如无特别说明，以下均把进程视为主体。</p>
+<p><strong>目标</strong></p>
+<p>主体进程能否访问的”目标资源”一般是文件系统。</p>
+<p><strong>对象</strong></p>
+<p>被主体访问的资源。可以是文件、目录、端口、设备等。</p>
+<p>注*：为了方便理解，如无特别说明，以下均把文件或者目录视为对象。</p>
+<p><strong>策略</strong></p>
+<p>因为进程和文件的数量庞大，因此 SELiunx会根据某些服务来制定基本的访问安全性策略。</p>
+<p>这些策略内部还有详细的规则来指定不同的服务开放某些资源的访问与否。</p>
+<p>系统中通常有大量的文件和进程，为了节省时间和开销，通常我们只是选择性地对某些进程进行管制。</p>
+<p>而哪些进程需要管制、要怎么管制是由政策决定的。</p>
+<p>一套政策里面有多个规则。部分规则可以按照需求启用或禁用（以下把该类型的规则称为布尔型规则）。</p>
+<p>规则是模块化、可扩展的。在安装新的应用程序时，应用程序可通过添加新的模块来添加规则。用户也可以手动地增减规则。</p>
+<p><strong>SELINUX参数值：</strong></p>
+<p>enforcing:强制执行SELinux功能；</p>
+<p>permissive:只显示警告信息；</p>
+<p>disabled:停用SELinux功能。</p>
+<p>SELINUXTYPE参数值：</p>
+<p>targeted:针对网络服务限制较多，针对本机限制较少，是默认的策略；</p>
+<p>strict:完整的保护功能，包括网络服务、一般指令、应用程序，限制方面较为严格。</p>
+<p><strong>安全上下文</strong></p>
+<p>安全上下文是 SELinux 的核心。</p>
+<p>安全上下文我自己把它分为「进程安全上下文」和「文件安全上下文」。</p>
+<p>一个「进程安全上下文」一般对应多个「文件安全上下文」。</p>
+<p>只有两者的安全上下文对应上了，进程才能访问文件。它们的对应关系由政策中的规则决定。</p>
+<p>文件安全上下文由文件创建的位置和创建文件的进程所决定。而且系统有一套默认值，用户也可以对默认值进行设定。</p>
+<p>需要注意的是，单纯的移动文件操作并不会改变文件的安全上下文。</p>
+<p>安全上下文的结构及含义</p>
+<p>安全上下文有四个字段，分别用冒号隔开。形如：system_u:object_r:admin_home_t:s0。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6fd13628198b4df29e5b5b497955a78d~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><strong>SELinux 的工作模式</strong></p>
+<p>SELinux 有三种工作模式，分别是：</p>
+<p>enforcing：强制模式。违反 SELinux 规则的行为将被阻止并记录到日志中。</p>
+<p>permissive：宽容模式。违反 SELinux 规则的行为只会记录到日志中。一般为调试用。</p>
+<p>disabled：关闭 SELinux。</p>
+<p>SELinux 工作模式可以在 &#x2F;etc&#x2F;selinux&#x2F;config 中设定。</p>
+<p>如果想从 disabled 切换到 enforcing 或者 permissive 的话，需要重启系统。反过来也一样。</p>
+<p>enforcing 和 permissive 模式可以通过 setenforce 1|0 命令快速切换。</p>
+<p>需要注意的是，如果系统已经在关闭 SELinux 的状态下运行了一段时间，在打开 SELinux 之后的第一次重启速度可能会比较慢。因为系统必须为磁盘中的文件创建安全上下文。</p>
+<p>SELinux 日志的记录需要借助 auditd.service 这个服务，请不要禁用它。</p>
+<p><strong>SELinux 工作流程</strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5281d13148334d958546b13cbbd26914~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p><strong>显示安全上下文</strong></p>
+<p>加上-Z能显示主体、客体的上下文</p>
+<p>ls -Z能显示文件系统的安全上下文</p>
+<p>ps -Z能显示进程的安全上下文</p>
+<p>id -Z能显示shell的安全上下文：joe：usr_r：usr_t</p>
+<p><strong>2、TE访问控制</strong></p>
+<p>在SELinux中，默认时没有允许规则的，也没有超级用户。被允许的访问必须由规则给出。</p>
+<p>一条规则如下：</p>
+<p>allow Source type(s) Target type(s): Object class(es) Permission(s)</p>
+<p>比如这样的访问规则：</p>
+<p>allow user_t bin_t : file {read execute getattr};</p>
+<p>表示允许域为user_t的进程对type为bin_t的文件具有读、执行、得到属性的操作</p>
+<p><strong>3、角色的作用</strong></p>
+<p>SELinux也提供基于角色的访问控制</p>
+<p>通过以下语句指定role的type：</p>
+<p>role user_r type passwd_t;</p>
+<p>如果没有以上这条语句，则：</p>
+<p>安全上下文joe：user_r：passwd_t则不能被创建</p>
+<p>exec调用则失败，即便策略允许</p>
+<p><strong>二、架构</strong></p>
+<p><strong>1、内核架构</strong></p>
+<p>基于LSM（linux security module），为所有的内核的资源提供强制访问控制</p>
+<p><strong>注*：LSM（linux security module）一种轻量级的安全访问控制框架，主要利用Hook函数对权限进行访问控制，并在部分对象中内置了透明的安全属性。</strong></p>
+<p>LSM提供了一系列的钩子函数</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4f19f42d70854b0d852dae925d4a2fbc~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>如果访问被DAC拒绝，则会影响审计结果</p>
+<p><strong>SELinux的架构如下所示：</strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4f42877ac2734297b0a6910d6b3f07cb~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>策略决定包含在安全服务器中，与具体架构无关，便于移植</p>
+<p>对象管理者时各对象的管理者，在LSM架构中，是一系列的LSM钩子，遍布在内核的子系统中。</p>
+<p><strong>注*：Linux安全模块（LSM）提供的接口就是钩子，其初始化时所指向的虚拟函数实现了缺省的传统UNIX超级用户机制，模块编写者必须重新实现这些钩子函数来满足自己的安全策略。</strong></p>
+<p><strong>2、用户空间的对象管理器</strong></p>
+<p>SELinux支持将对象管理器放到用户态，使用内核的对象管理策略服务器来管理用户态的对象</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7b3a83bda020406ca8995d7478e2528a~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>然而，支持用户空间的对象管理器有一些弱点：</p>
+<p>对于TE模型，还需要定义class</p>
+<p>对于对象管理器的管理策略不再内核之中</p>
+<p><strong>策略服务架构如下：</strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/78acf33ec8ff4ff7ab7324697bfce65d~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>AVC表示各种缓存</p>
+<p><strong>三、SELinux 的作用及权限管理机制</strong></p>
+<p><strong>1 SELinux 的作用</strong></p>
+<p>SELinux 主要作用就是最大限度地减小系统中服务进程可访问的资源（最小权限原则）。</p>
+<p>设想一下，如果一个以 root 身份运行的网络服务存在 0day 漏洞，黑客就可以利用这个漏洞，以 root 的身份在您的服务器上为所欲为了。是不是很可怕？</p>
+<p>SELinux 就是来解决这个问题的。</p>
+<p><strong>2 DAC</strong></p>
+<p>在没有使用 SELinux 的操作系统中，决定一个资源是否能被访问的因素是：某个资源是否拥有对应用户的权限（读、写、执行）。</p>
+<p>只要访问这个资源的进程符合以上的条件就可以被访问。</p>
+<p>而最致命问题是，root 用户不受任何管制，系统上任何资源都可以无限制地访问。</p>
+<p>这种权限管理机制的主体是用户，也称为自主访问控制（DAC）。</p>
+<p><strong>3 MAC</strong></p>
+<p>在使用了 SELinux 的操作系统中，决定一个资源是否能被访问的因素除了上述因素之外，还需要判断每一类进程是否拥有对某一类资源的访问权限。</p>
+<p>这样一来，即使进程是以 root 身份运行的，也需要判断这个进程的类型以及允许访问的资源类型才能决定是否允许访问某个资源。进程的活动空间也可以被压缩到最小。</p>
+<p>即使是以 root 身份运行的服务进程，一般也只能访问到它所需要的资源。即使程序出了漏洞，影响范围也只有在其允许访问的资源范围内。安全性大大增加。</p>
+<p>这种权限管理机制的主体是进程，也称为强制访问控制（MAC）。</p>
+<p>而 MAC 又细分为了两种方式，一种叫类别安全（MCS）模式，另一种叫多级安全（MLS）模式。</p>
+<p>下文中的操作均为 MCS 模式。</p>
+<p><strong>4 DAC 和 MAC 的对比</strong></p>
+<p>这里引用一张图片来说明。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/36cc4e3257814439ba62c13bb69d0379~tplv-k3u1fbpfcp-zoom-1.image" alt="图片"></p>
+<p>可以看到，在 DAC 模式下，只要相应目录有相应用户的权限，就可以被访问。而在 MAC 模式下，还要受进程允许访问目录范围的限制。</p>
+<p><strong>四、SELinux 基本操作</strong></p>
+<p><strong>1 查询文件或目录的安全上下文</strong></p>
+<p>命令基本用法</p>
+<p>ls -Z能显示文件系统的安全上下文</p>
+<p>ps -Z能显示进程的安全上下文</p>
+<p>id -Z能显示shell的安全上下文：joe：usr_r：usr_t</p>
+<p>用法举例</p>
+<p>查询 &#x2F;etc&#x2F;hosts 的安全上下文。</p>
+<p>ls -Z &#x2F;etc&#x2F;hosts</p>
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# ls -Z /etc/hosts</span><br><span class="line">-rw-r--r--. root root system_u:object_r:net_conf_t:s0  /etc/hosts</span><br><span class="line">[root@localhost ~]# </span><br></pre></td></tr></table></figure>
+
+<p><strong>2 查询进程的安全上下文</strong></p>
+<p>命令基本用法</p>
+<p>ps auxZ | grep -v grep | grep &lt;进程名&gt;</p>
+<p>用法举例</p>
+<p>查询 Nginx 相关进程的安全上下文。</p>
+<p>ps auxZ | grep -v grep | grep sshd</p>
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# ps auxZ | grep -v grep | grep sshd</span><br><span class="line">system_u:system_r:sshd_t:s0-s0:c0.c1023 root 1454 0.0  0.0 112940 4324 ?        Ss   Sep03   0:00 /usr/sbin/sshd -D</span><br><span class="line">unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 root 11664 0.0  0.0 158944 5596 ? Ss 10:34   0:00 sshd: root@pts/0</span><br><span class="line">unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 root 11668 0.0  0.0 156812 5444 ? Ss 10:34   0:00 sshd: root@notty</span><br><span class="line">[root@localhost ~]#</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>3 手动修改文件或目录的安全上下文</strong></p>
+<p>命令基本用法</p>
+<p>chcon &lt;选项&gt; &lt;文件或目录 1&gt; [&lt;文件或目录 2&gt;…]</p>
+<p>用法举例</p>
+<p>修改 test 的安全上下文为 system_u:object_r:httpd_sys_content_t:s0。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">chcon -u system_u -r object_r -t httpd_sys_content_t html2/*</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost nginx]# ls -Z</span><br><span class="line">drwxr-xr-x. root root system_u:object_r:httpd_sys_content_t:s0 html</span><br><span class="line">drwxr-xr-x. root root unconfined_u:object_r:usr_t:s0   html2</span><br><span class="line">[root@localhost nginx]# ls -Z html2</span><br><span class="line">-rw-r--r--. root root unconfined_u:object_r:usr_t:s0   404.html</span><br><span class="line">-rw-r--r--. root root unconfined_u:object_r:usr_t:s0   50x.html</span><br><span class="line">-rwxr-xr-x. root root unconfined_u:object_r:usr_t:s0   index.html</span><br><span class="line">-rw-r--r--. root root unconfined_u:object_r:usr_t:s0   nginx-logo.png</span><br><span class="line">-rw-r--r--. root root unconfined_u:object_r:usr_t:s0   poweredby.png</span><br><span class="line"></span><br><span class="line">[root@localhost nginx]# chcon -u system_u -r object_r -t httpd_sys_content_t html2/*</span><br><span class="line">[root@localhost nginx]# ls -Z html2</span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 404.html</span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 50x.html</span><br><span class="line">-rwxr-xr-x. root root system_u:object_r:httpd_sys_content_t:s0 index.html</span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 nginx-logo.png</span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 poweredby.png</span><br><span class="line">[root@localhost nginx]# </span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>4 把文件或目录的安全上下文恢复到默认值</strong></p>
+<p>命令基本用法</p>
+<p>restorecon [选项] &lt;文件或目录 1&gt; [&lt;文件或目录 2&gt;…]</p>
+<p>用法举例</p>
+<p>添加一些网页文件到 Nginx 服务器的目录之后，为这些新文件设置正确的安全上下文。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# restorecon -R /root/test/</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# ls -Z </span><br><span class="line">-rw-------. root root system_u:object_r:admin_home_t:s0 anaconda-ks.cfg</span><br><span class="line">drwxr-xr-x. root root unconfined_u:object_r:admin_home_t:s0 test</span><br><span class="line">[root@localhost ~]# </span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>5 查询系统中的布尔型规则及其状态</strong></p>
+<p>命令基本用法</p>
+<p>getsebool -a</p>
+<p>由于该命令要么查询所有规则，要么只查询一个规则，所以一般都是先查询所有规则然后用 grep 筛选。</p>
+<p>用法举例</p>
+<p>查询与 httpd 有关的布尔型规则。</p>
+<p>getsebool -a | grep ssh</p>
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# getsebool -a | grep ssh</span><br><span class="line">fenced_can_ssh --&gt; off</span><br><span class="line">selinuxuser_use_ssh_chroot --&gt; off</span><br><span class="line">ssh_chroot_rw_homedirs --&gt; off</span><br><span class="line">ssh_keysign --&gt; off</span><br><span class="line">ssh_sysadm_login --&gt; off</span><br><span class="line">[root@localhost ~]#</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>6 开关一个布尔型规则</strong>  </p>
+<p>命令基本用法</p>
+<p>setsebool [选项] &lt;规则名称&gt; &lt;on|off&gt;</p>
+<p>用法举例</p>
+<p>开启 httpd_anon_write 规则。</p>
+<p>setsebool -P httpd_anon_write on</p>
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]#  getsebool -a | grep ssh</span><br><span class="line">fenced_can_ssh --&gt; off</span><br><span class="line">selinuxuser_use_ssh_chroot --&gt; off</span><br><span class="line">ssh_chroot_rw_homedirs --&gt; off</span><br><span class="line">ssh_keysign --&gt; off</span><br><span class="line">ssh_sysadm_login --&gt; off</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# </span><br></pre></td></tr></table></figure>
+
+<p>修改布尔型规则</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# setsebool -P ssh_sysadm_login on</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]#  getsebool -a | grep ssh</span><br><span class="line">fenced_can_ssh --&gt; off</span><br><span class="line">selinuxuser_use_ssh_chroot --&gt; off</span><br><span class="line">ssh_chroot_rw_homedirs --&gt; off</span><br><span class="line">ssh_keysign --&gt; off</span><br><span class="line">ssh_sysadm_login --&gt; on</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]# setsebool -P ssh_sysadm_login off</span><br><span class="line">[root@localhost ~]# </span><br><span class="line">[root@localhost ~]#  getsebool -a | grep ssh</span><br><span class="line">fenced_can_ssh --&gt; off</span><br><span class="line">selinuxuser_use_ssh_chroot --&gt; off</span><br><span class="line">ssh_chroot_rw_homedirs --&gt; off</span><br><span class="line">ssh_keysign --&gt; off</span><br><span class="line">ssh_sysadm_login --&gt; off</span><br><span class="line">[root@localhost ~]# </span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>配置文件目录即文件内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost booleans]# pwd</span><br><span class="line">/sys/fs/selinux/booleans</span><br><span class="line">[root@localhost booleans]# cat mpd_use_cifs</span><br><span class="line">0 0</span><br></pre></td></tr></table></figure>
+
+<p><strong>7 添加目录的默认安全上下文</strong></p>
+<p>命令基本用法</p>
+<p>（如果提示找不到命令的话请安装 <code>policycoreutils-python</code> 软件包，下同。）</p>
+<p>semanage fcontext -a -t &lt;文件安全上下文中的类型字段&gt; “&lt;目录（后面不加斜杠）&gt;(&#x2F;.*)?”</p>
+<p>注：目录或文件的默认安全上下文可以通过 semanage fcontext -l 命令配合 grep 过滤查看。</p>
+<p>用法举例</p>
+<p>为 Nginx 新增一个网站目录 &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html2 之后，需要为其设置与原目录相同的默认安全上下文。</p>
+<p>semanage fcontext -a -t httpd_sys_content_t “ &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html2(&#x2F;.*)?”</p>
+<p><strong>8 添加某类进程允许访问的端口</strong></p>
+<p>命令基本用法</p>
+<p>semanage port -a -t &lt;服务类型&gt; -p &lt;协议&gt; &lt;端口号&gt;</p>
+<p>注：各种服务类型所允许的端口号可以通过 semanage port -l 命令配合 grep 过滤查看。</p>
+<p>用法举例</p>
+<p>为 Nginx 需要使用 10080 的端口用于 HTTP 服务。</p>
+<p>semanage port -a -t http_port_t -p tcp 10080</p>
+<p><strong>9 参考其它进行修改</strong></p>
+<p>命令基本用法</p>
+<p>chcon –reference&#x3D;&lt;源文件&gt;  &lt;要修改的文件&gt;</p>
+<p>修改 1.txt文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost html]# ll -Z</span><br><span class="line">-rw-r--r--. root root unconfined_u:object_r:usr_t:s0   1.txt</span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 404.html</span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 50x.html</span><br><span class="line">lrwxrwxrwx. root root system_u:object_r:httpd_sys_content_t:s0 en-US -&gt; ../../doc/HTML/en-US</span><br><span class="line">drwxr-xr-x. root root system_u:object_r:httpd_sys_content_t:s0 icons</span><br><span class="line">lrwxrwxrwx. root root system_u:object_r:httpd_sys_content_t:s0 img -&gt; ../../doc/HTML/img</span><br><span class="line">lrwxrwxrwx. root root system_u:object_r:httpd_sys_content_t:s0 index.html -&gt; ../../doc/HTML/index.h</span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 nginx-logo.png</span><br><span class="line">lrwxrwxrwx. root root system_u:object_r:httpd_sys_content_t:s0 poweredby.png -&gt; nginx-logo.png</span><br></pre></td></tr></table></figure>
+
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost html]# chcon --reference=404.html 1.txt </span><br><span class="line">[root@localhost html]# </span><br><span class="line">[root@localhost html]# </span><br><span class="line">[root@localhost html]# ll -Z</span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 1.txt</span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 404.html</span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 50x.html</span><br><span class="line">lrwxrwxrwx. root root system_u:object_r:httpd_sys_content_t:s0 en-US -&gt; ../../doc/HTML/en-US</span><br><span class="line">drwxr-xr-x. root root system_u:object_r:httpd_sys_content_t:s0 icons</span><br><span class="line">lrwxrwxrwx. root root system_u:object_r:httpd_sys_content_t:s0 img -&gt; ../../doc/HTML/img</span><br><span class="line">lrwxrwxrwx. root root system_u:object_r:httpd_sys_content_t:s0 index.html -&gt; ../../doc/HTML/index.html</span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_sys_content_t:s0 nginx-logo.png</span><br><span class="line">lrwxrwxrwx. root root system_u:object_r:httpd_sys_content_t:s0 poweredby.png -&gt; nginx-logo.png</span><br></pre></td></tr></table></figure>
+
+<p><strong>10 修改后的权限，恢复到原始的</strong></p>
+<p>命令基本用法</p>
+<p>restorecon -v &lt;文件&gt;</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost files]# ls -Z /etc/yum.conf </span><br><span class="line">-rw-r--r--. root root system_u:object_r:etc_t:s0       /etc/yum.conf</span><br><span class="line">[root@localhost files]# </span><br><span class="line">[root@localhost files]# </span><br><span class="line">[root@localhost files]# chcon -t httpd_config_t /etc/yum.conf</span><br><span class="line">[root@localhost files]# </span><br><span class="line">[root@localhost files]# ls -Z /etc/yum.conf </span><br><span class="line">-rw-r--r--. root root system_u:object_r:httpd_config_t:s0 /etc/yum.conf</span><br><span class="line">[root@localhost files]# </span><br></pre></td></tr></table></figure>
+
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost files]# restorecon -v /etc/yum.conf </span><br><span class="line">restorecon reset /etc/yum.conf context system_u:object_r:httpd_config_t:s0-&gt;system_u:object_r:etc_t:s0</span><br><span class="line">[root@localhost files]# ls -Z /etc/yum.conf </span><br><span class="line">-rw-r--r--. root root system_u:object_r:etc_t:s0       /etc/yum.conf</span><br><span class="line">[root@localhost files]# </span><br></pre></td></tr></table></figure>
+
+<p><strong>11 查看身份角色类似</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# yum install setools-console</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# seinfo [选项]</span><br><span class="line">选项：</span><br><span class="line">-u： 列出SELinux中所有的身份（user）；</span><br><span class="line">-r： 列出SELinux中所有的角色（role）；</span><br><span class="line">-t： 列出SELinux中所有的类型（type）；</span><br><span class="line">-b： 列出所有的布尔值（也就是策略中的具体规则名称）；</span><br><span class="line">-x： 显示更多的信息；</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>五、SELinux 错误分析和解决</strong></p>
+<p><strong>1 认识 SELinux 日志</strong></p>
+<p>当开启了 SELinux 之后，很多服务的一些正常行为都会被视为违规行为（标题及下文中的错误均指违规行为）。</p>
+<p>这时候我们就需要借助 SELinux 违规日志来分析解决。</p>
+<p>SELinux 违规日志保存在 &#x2F;var&#x2F;log&#x2F;audit&#x2F;audit.log 中。</p>
+<p>&#x2F;var&#x2F;log&#x2F;audit&#x2F;audit.log 的内容大概是这样的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# tailf /var/log/audit/audit.log</span><br><span class="line">type=GRP_MGMT msg=audit(1630901844.207:878): pid=11979 uid=0 auid=0 ses=76 subj=unconfined_u:unconfined_r:groupadd_t:s0-s0:c0.c1023 msg=&#x27;op=add-shadow-group id=994 exe=&quot;/usr/sbin/groupadd&quot; hostname=? addr=? terminal=? res=success&#x27;</span><br><span class="line">type=ADD_USER msg=audit(1630901844.247:879): pid=11984 uid=0 auid=0 ses=76 subj=unconfined_u:unconfined_r:useradd_t:s0-s0:c0.c1023 msg=&#x27;op=add-user id=997 exe=&quot;/usr/sbin/useradd&quot; hostname=? addr=? terminal=? res=success&#x27;</span><br><span class="line">type=USER_MGMT msg=audit(1630901844.288:880): pid=11989 uid=0 auid=0 ses=76 subj=unconfined_u:unconfined_r:useradd_t:s0-s0:c0.c1023 msg=&#x27;op=pam_tally2 reset=0 id=997 exe=&quot;/usr/sbin/pam_tally2&quot; hostname=? addr=? terminal=? res=success&#x27;</span><br><span class="line">type=SOFTWARE_UPDATE msg=audit(1630901844.314:881): pid=11968 uid=0 auid=0 ses=76 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg=&#x27;sw=&quot;nginx-filesystem-1:1.20.1-2.el7.noarch&quot; sw_type=rpm key_enforce=0 gpg_res=1 root_dir=&quot;/&quot; comm=&quot;yum&quot; exe=&quot;/usr/bin/python2.7&quot; hostname=localhost.localdomain addr=? terminal=pts/0 res=success&#x27;</span><br><span class="line">type=SOFTWARE_UPDATE msg=audit(1630901844.581:882): pid=11968 uid=0 auid=0 ses=76 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg=&#x27;sw=&quot;nginx-1:1.20.1-2.el7.x86_64&quot; sw_type=rpm key_enforce=0 gpg_res=1 root_dir=&quot;/&quot; comm=&quot;yum&quot; exe=&quot;/usr/bin/python2.7&quot; hostname=localhost.localdomain addr=? terminal=pts/0 res=success&#x27;</span><br><span class="line">type=USER_AVC msg=audit(1630904068.840:883): pid=1053 uid=81 auid=4294967295 ses=4294967295 subj=system_u:system_r:system_dbusd_t:s0-s0:c0.c1023 msg=&#x27;avc:  received policyload notice (seqno=7)  exe=&quot;/usr/bin/dbus-daemon&quot; sauid=81 hostname=? addr=? terminal=?&#x27;</span><br><span class="line">type=MAC_POLICY_LOAD msg=audit(1630904065.495:884): policy loaded auid=0 ses=76</span><br><span class="line">type=SYSCALL msg=audit(1630904065.495:884): arch=c000003e syscall=1 success=yes exit=3881672 a0=4 a1=7f3cf9ca2000 a2=3b3ac8 a3=7ffd6fe646a0 items=0 ppid=12014 pid=12019 auid=0 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=76 comm=&quot;load_policy&quot; exe=&quot;/usr/sbin/load_policy&quot; subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=(null)</span><br><span class="line">type=PROCTITLE msg=audit(1630904065.495:884): proctitle=&quot;/sbin/load_policy&quot;</span><br><span class="line">type=USER_MAC_CONFIG_CHANGE msg=audit(1630904068.901:885): pid=12014 uid=0 auid=0 ses=76 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg=&#x27;resrc=port op=add lport=10080 proto=6 tcontext=system_u:object_r:http_port_t:s0 comm=&quot;semanage&quot; exe=&quot;/usr/bin/python2.7&quot; hostname=? addr=? terminal=? res=success&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>该文件的内容很多，而且混有很多与 SELinux 错误无关的系统审计日志。我们要借助 sealert 这个实用工具来帮忙分析（如果提示找不到命令的话请安装 setroubleshoot 软件包）。</p>
+<p><strong>2 使用 sealert 分析错误</strong></p>
+<p>命令基本用法</p>
+<p>sealert -a &#x2F;var&#x2F;log&#x2F;audit&#x2F;audit.log</p>
+<p>执行完命令之后，系统需要花一段时间去分析日志中的违规行为并给出分析报告。分析报告的结构讲解请看下图：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# yum install setroubleshoot-server python3-pydbus</span><br></pre></td></tr></table></figure>
+
+<p><strong>3  SELinux 错误的思路</strong></p>
+<p>当发现一个服务出现错误的时候，请先检查一下 sealert 的分析报告里面是否有该服务进程名称的关键字。如果没有，说明不是 SELinux 造成的错误，请往其他方面排查。</p>
+<p>文件目录默认的权限在这个文件下，具体文件是file_contexts</p>
+<p>&#x2F;etc&#x2F;selinux&#x2F;targeted&#x2F;contexts&#x2F;files&#x2F;</p>
+<p>接下来就是阅读 sealert 的分析报告了。</p>
+<p>首先需要了解的就是违规原因。如果违规原因里面出现了该服务不该访问的文件或资源，那就要小心了。有可能是服务的配置有问题或者服务本身存在漏洞，请优先排查服务的配置文件。</p>
+<p>在分析报告中，对于一个违规行为，通常会有 2~3 个解决方案。请优先选择修改布尔值、设置默认安全上下文之类操作简单、容易理解的解决方案。</p>
+<p>如果没有这种操作简单、容易理解的解决方案，请先去搜索引擎搜索一下有没有其他更好的解决方案。</p>
+<p>需要注意的是，可信度只是一个参考值，并不代表使用可信度最高的解决方案就一定可以解决问题。我个人感觉使用可信度越高的解决方案对系统的改动就越小。</p>
+<p>不过请记住，在执行解决方案之前，一定要先搞清楚解决方案中的命令是干什么的！</p>
+<p>最后，请谨慎使用 audit2allow 这个命令。这个命令的作用非常简单粗暴，就是强制允许所遇到的错误然后封装成一个 SELinux 模块，接着让 SELinux 加载这个模块来达到消除错误的目的。不是万不得已建议不要随便使用 audit2allow。</p>
+<p>&#96;&#96;&#96;</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://www.chenby.cn">chenby</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://www.chenby.cn/2021/12/30/ac87e5cffc46/">http://www.chenby.cn/2021/12/30/ac87e5cffc46/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://www.chenby.cn" target="_blank">小陈运维</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://www.oiox.cn/images/wallhaven-l3xoor.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/30/4f86153c1cdb/"><img class="prev-cover" src="https://www.oiox.cn/images/wallhaven-6o7md7.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">PVE开启硬件显卡直通功能</div></div></a></div><div class="next-post pull-right"><a href="/2021/12/30/ac1ddaa0ad6f/"><img class="next-cover" src="https://www.oiox.cn/images/wallhaven-g7m7xe.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">使用frp进行内网穿透</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://www.oiox.cn/1.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">chenby</div><div class="author-info__description">小陈运维，致力于Kubernetes（k8s）与传统运维技术博客文档分享。互相学习，互相进步。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">130</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cby-chen"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/64f3215098b3/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-m9olo8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/64f3215098b3/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/5c9e4c6a7785/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-72g2qo.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/5c9e4c6a7785/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/6482460a5d6d/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-72g2qo.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/28/6482460a5d6d/" title="无题">无题</a><time datetime="2022-11-28T02:24:38.856Z" title="发表于 2022-11-28 10:24:38">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/16/21770783bcd7/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-q2k2w7.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/16/21770783bcd7/" title="无题">无题</a><time datetime="2022-11-16T12:27:40.238Z" title="发表于 2022-11-16 20:27:40">2022-11-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/16/cad574b2aab0/" title="无题"><img src="https://www.oiox.cn/images/wallhaven-6o7md7.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2022/11/16/cad574b2aab0/" title="无题">无题</a><time datetime="2022-11-16T10:35:10.113Z" title="发表于 2022-11-16 18:35:10">2022-11-16</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://www.oiox.cn/images/wallhaven-l3xoor.jpeg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By chenby</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
